@@ -342,14 +342,22 @@ var CS=[
   ]}
 ];
 
-// ── API calls via fetch (not google.script.run) ──────────
+// ── API calls via JSONP (bypasses CORS for Google Apps Script) ──
+var _cbCount = 0;
 function api(action, params, cb) {
-  var url = GAS_URL + '?action=' + action;
+  var cbName = '_gasCb' + (++_cbCount);
+  var url = GAS_URL + '?action=' + action + '&callback=' + cbName;
   Object.keys(params).forEach(function(k){ url += '&' + k + '=' + encodeURIComponent(params[k]); });
-  fetch(url)
-    .then(function(r){ return r.json(); })
-    .then(function(d){ cb(null, d); })
-    .catch(function(e){ cb(e, null); });
+  window[cbName] = function(data) {
+    delete window[cbName];
+    document.head.removeChild(document.getElementById(cbName));
+    cb(null, data);
+  };
+  var script = document.createElement('script');
+  script.id = cbName;
+  script.src = url;
+  script.onerror = function() { cb(new Error('Request failed'), null); };
+  document.head.appendChild(script);
 }
 
 function doLogin(){
