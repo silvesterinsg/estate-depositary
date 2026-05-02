@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)file:///Users/silvesterchua/Downloads/Index_2.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--<base target="_top">--><base href="." target="_top">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Estate Planning with Silvester</title>
+<link href="./Estate Planning with Silvester_files/css2" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{width:100%;overflow-x:hidden}
+body{width:100%;max-width:100%;overflow-x:hidden;font-family:'DM Sans',sans-serif;font-size:15px;background:#FAF7F2;color:#1C1410;-webkit-text-size-adjust:100%}
+
+:root{
+  --gold:#B8962E;--gold-light:#D4AF5A;--gold-pale:#F5EDD6;
+  --maroon:#6B1A2A;--maroon-dark:#4A1019;--maroon-light:#8B2235;
+  --cream:#FAF7F2;--ink:#1C1410;--ink-mid:#4A3728;--ink-soft:#7A6455;
+  --border:#E8DFD0;--white:#FFFFFF;--success:#2D7A4A;--error:#B0312A;
+}
+
+/* SCREENS */
+.screen{display:none;width:100%}
+.screen.active{display:block;width:100%}
+
+/* LOGIN */
+.login-bg{
+  min-height:100vh;width:100%;
+  background:var(--maroon-dark);
+  display:flex;align-items:center;justify-content:center;padding:24px 20px;
+}
+.login-card{
+  background:#fff;border-radius:6px;padding:32px 24px;
+  width:100%;max-width:380px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.brand-crest{
+  width:42px;height:42px;min-width:42px;background:var(--maroon);color:var(--gold-light);
+  border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;
+}
+.brand-crest.sm{width:30px;height:30px;min-width:30px;font-size:16px}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:#1C1410;line-height:1.3}
+.brand-sub{font-size:10px;color:#7A6455;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}
+.login-intro{font-size:13px;color:#7A6455;line-height:1.6;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #E8DFD0}
+.fgroup{margin-bottom:14px}
+.fgroup label{display:block;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#4A3728;margin-bottom:5px}
+input[type=text],input[type=password],textarea{
+  display:block;width:100%;padding:13px 14px;
+  border:1px solid #E8DFD0;border-radius:4px;
+  background:#FAF7F2;font-family:'DM Sans',sans-serif;font-size:16px;color:#1C1410;
+  outline:none;-webkit-appearance:none;appearance:none;
+}
+input:focus,textarea:focus{border-color:#B8962E;background:#fff}
+textarea{resize:vertical;min-height:80px}
+.err{background:#FEF2F2;border:1px solid #FECACA;color:#B0312A;padding:10px 14px;border-radius:4px;font-size:13px;margin-bottom:14px}
+.btn{
+  display:block;width:100%;padding:15px;
+  background:var(--maroon);color:var(--gold-light);
+  border:none;border-radius:4px;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;
+  letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;
+  -webkit-appearance:none;appearance:none;text-align:center;
+}
+.btn:active{background:var(--maroon-light)}
+.login-footer{margin-top:16px;text-align:center;font-size:12px;color:#7A6455}
+
+/* APP */
+#appScreen{width:100%;display:block}
+
+/* TOPBAR */
+.topbar{
+  width:100%;background:var(--maroon-dark);
+  padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.topbar-brand{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold-light);font-weight:500;line-height:1.2}
+.hamburger{background:none;border:none;color:var(--gold-light);font-size:26px;cursor:pointer;padding:0 4px;line-height:1;-webkit-appearance:none}
+
+/* DRAWER */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:90}
+.overlay.open{display:block}
+.drawer{
+  position:fixed;top:0;left:0;bottom:0;width:75%;max-width:280px;
+  background:var(--maroon-dark);z-index:100;
+  transform:translateX(-100%);transition:transform 0.28s ease;
+  display:flex;flex-direction:column;
+}
+.drawer.open{transform:translateX(0)}
+.drawer-top{padding:20px 16px;border-bottom:1px solid rgba(184,150,46,0.2);display:flex;align-items:center;gap:10px}
+.drawer-brand{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--gold-light);line-height:1.3}
+.drawer-nav{flex:1;padding:10px 0}
+.ditem{padding:15px 16px;color:rgba(255,255,255,0.6);cursor:pointer;font-size:14px;display:flex;align-items:center;gap:10px;border-left:3px solid transparent}
+.ditem.active{color:var(--gold-light);background:rgba(184,150,46,0.1);border-left-color:var(--gold)}
+.drawer-foot{padding:16px;border-top:1px solid rgba(184,150,46,0.15)}
+.dc-name{font-family:'Cormorant Garamond',serif;font-size:15px;color:#fff;margin-bottom:3px}
+.dc-advisor{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:12px}
+.btn-out{width:100%;padding:10px;background:transparent;border:1px solid rgba(184,150,46,0.3);color:var(--gold-light);border-radius:4px;font-size:12px;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;-webkit-appearance:none}
+
+/* MAIN */
+.main{width:100%;padding:18px 16px 80px;overflow-x:hidden}
+
+/* SECTIONS */
+.sec{display:none;width:100%}
+.sec.active{display:block}
+.ph{margin-bottom:18px}
+.ph h1{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;color:#1C1410;margin-bottom:4px}
+.ph p{font-size:13px;color:#7A6455;line-height:1.5}
+
+/* DASHBOARD */
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;width:100%}
+.dc{background:#fff;border:1px solid #E8DFD0;border-radius:4px;padding:14px 12px;cursor:pointer}
+.dc.full{grid-column:1/-1}
+.dc.hl{background:var(--maroon);border-color:var(--maroon)}
+.dc.hl .dcl,.dc.hl .dch{color:rgba(255,255,255,0.6)}
+.dc.hl .dcv{color:var(--gold-light)}
+.dc.hl .dci{color:var(--gold-light)}
+.dci{font-size:13px;color:var(--gold);margin-bottom:6px}
+.dcl{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:#7A6455;margin-bottom:3px}
+.dcv{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--maroon);margin-bottom:2px}
+.dch{font-size:11px;color:#7A6455}
+.sbox{background:#fff;border:1px solid #E8DFD0;border-radius:4px;padding:16px;width:100%}
+.st{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:#1C1410;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #E8DFD0}
+.alist{display:flex;flex-wrap:wrap;gap:7px}
+.atag{background:var(--gold-pale);border:1px solid rgba(184,150,46,0.3);color:#4A3728;padding:5px 10px;border-radius:3px;font-size:12px;font-weight:500}
+.ndm{color:#7A6455;font-size:13px;font-style:italic}
+
+/* FORM */
+.fcard{background:#fff;border:1px solid #E8DFD0;border-radius:4px;padding:18px 16px;margin-bottom:14px;width:100%}
+.ftitle{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--maroon);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #E8DFD0}
+.mt14{margin-top:14px}
+.flabel{font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#4A3728;margin-bottom:8px;display:block}
+
+/* ASSET ITEMS */
+.agrid{display:flex;flex-direction:column;gap:8px;width:100%}
+.aitem{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid #E8DFD0;border-radius:4px;cursor:pointer;background:#fff;width:100%}
+.aitem.checked{border-color:var(--gold);background:var(--gold-pale)}
+.aitem input[type=checkbox]{width:20px;height:20px;min-width:20px;margin-top:1px;accent-color:var(--maroon);cursor:pointer;-webkit-appearance:auto}
+.an{font-weight:500;font-size:14px;color:#1C1410;display:block}
+.as{font-size:12px;color:#7A6455;margin-top:2px;display:block}
+.ao{margin-top:8px;width:100%;padding:9px 10px;border:1px solid #E8DFD0;border-radius:4px;font-size:14px;background:#fff;font-family:'DM Sans',sans-serif;-webkit-appearance:none}
+
+/* CHECKLIST */
+.clist{display:flex;flex-direction:column;gap:8px;margin-top:8px;width:100%}
+.crow{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #E8DFD0;border-radius:4px;background:#fff;cursor:pointer;font-size:14px;color:#4A3728;width:100%}
+.crow input[type=checkbox],.crow input[type=radio]{width:20px;height:20px;min-width:20px;accent-color:var(--maroon);-webkit-appearance:auto;flex-shrink:0}
+.ii{flex:1;border:none;border-bottom:1px solid #E8DFD0;background:transparent;font-size:14px;padding:2px 4px;outline:none;font-family:'DM Sans',sans-serif;color:#1C1410;min-width:0}
+
+/* SAVE */
+.srow{display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid #E8DFD0;width:100%}
+.smsg{font-size:13px;color:#2D7A4A;font-style:italic;text-align:center}
+
+/* ACCORDION */
+.acc{background:#fff;border:1px solid #E8DFD0;border-radius:4px;margin-bottom:8px;overflow:hidden;width:100%}
+.ah{padding:14px 12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;width:100%}
+.ah:active{background:var(--gold-pale)}
+.al{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.ai{font-size:16px;flex-shrink:0}
+.at{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--maroon);white-space:nowrap}
+.ar2{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.as2{font-size:10px;color:#7A6455;white-space:nowrap}
+.aarrow{color:var(--gold);font-size:14px;transition:transform 0.3s;flex-shrink:0}
+.acc.open .aarrow{transform:rotate(180deg)}
+.ab{display:none;padding:0 12px 14px;border-top:1px solid #E8DFD0;width:100%}
+.acc.open .ab{display:block}
+.sgb{font-size:10px;color:#5a7a9a;background:rgba(90,122,154,0.1);border:1px solid rgba(90,122,154,0.25);padding:2px 5px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+
+/* QUESTIONS */
+.qst{padding:10px 0;font-size:13px;font-weight:600;color:#4A3728;font-style:italic;border-bottom:1px solid #E8DFD0}
+.qg{padding:12px 0;border-bottom:1px solid #E8DFD0;width:100%}
+.qg:last-child{border-bottom:none}
+.ql{font-size:13px;color:#1C1410;margin-bottom:10px;line-height:1.5}
+.ynr{display:flex;flex-wrap:wrap;gap:8px}
+.yn{padding:10px 14px;border:1px solid #E8DFD0;border-radius:4px;background:#FAF7F2;font-size:13px;font-weight:500;color:#4A3728;cursor:pointer;-webkit-appearance:none;font-family:'DM Sans',sans-serif}
+.yn:active{background:var(--gold-pale)}
+.yn.sy{background:var(--maroon);border-color:var(--maroon);color:#fff}
+.yn.sn{background:#4A3728;border-color:#4A3728;color:#fff}
+.yn.so{background:var(--gold);border-color:var(--gold);color:#fff}
+.qoi{margin-top:10px;width:100%;padding:10px 12px;border:1px solid #E8DFD0;border-radius:4px;font-size:14px;font-family:'DM Sans',sans-serif;background:#FAF7F2;-webkit-appearance:none}
+.qoi:focus{border-color:var(--gold);background:#fff;outline:none}
+
+/* BOTTOM NAV */
+.bnav{
+  position:fixed;bottom:0;left:0;right:0;width:100%;
+  background:var(--maroon-dark);display:flex;
+  border-top:1px solid rgba(184,150,46,0.2);z-index:50;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.bni{flex:1;padding:10px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;color:rgba(255,255,255,0.5);cursor:pointer;font-size:11px;border:none;background:none;font-family:'DM Sans',sans-serif;-webkit-appearance:none}
+.bni.active{color:var(--gold-light)}
+.bni span.ico{font-size:20px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="screen active">
+  <div class="login-bg">
+    <div class="login-card">
+      <div class="brand">
+        <div class="brand-crest">S</div>
+        <div>
+          <div class="brand-name">Estate Planning with Silvester</div>
+          <div class="brand-sub">Client Planning Portal</div>
+        </div>
+      </div>
+      <p class="login-intro">Your private estate planning depositary. Securely maintained by your advisor.</p>
+      <div class="fgroup">
+        <label>Username</label>
+        <input type="text" id="lu" placeholder="Enter your username" autocomplete="username">
+      </div>
+      <div class="fgroup">
+        <label>Password</label>
+        <input type="password" id="lp" placeholder="Enter your password" autocomplete="current-password">
+      </div>
+      <div id="lerr" class="err" style="display:none"></div>
+      <button class="btn" onclick="doLogin()">Sign In</button>
+      <div class="login-footer">Don't have access? Contact Silvester to get set up.</div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">Estate Planning with Silvester</div>
+    <button class="hamburger" onclick="openD()">☰</button>
+  </div>
+
+  <div class="overlay" id="ov" onclick="closeD()"></div>
+  <div class="drawer" id="dr">
+    <div class="drawer-top">
+      <div class="brand-crest sm">S</div>
+      <div class="drawer-brand">Estate Planning<br>with Silvester</div>
+    </div>
+    <div class="drawer-nav">
+      <div class="ditem active" id="di-d" onclick="goSec(&#39;d&#39;)">◈ &nbsp;Dashboard</div>
+      <div class="ditem" id="di-a" onclick="goSec(&#39;a&#39;)">◇ &nbsp;Asset Inventory</div>
+      <div class="ditem" id="di-c" onclick="goSec(&#39;c&#39;)">◉ &nbsp;Asset Complexity</div>
+    </div>
+    <div class="drawer-foot">
+      <div id="dcn" class="dc-name"></div>
+      <div class="dc-advisor">Advisor: <span id="dca"></span></div>
+      <button class="btn-out" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- DASHBOARD -->
+    <div id="sd" class="sec active">
+      <div class="ph"><h1>Welcome, <span id="dn"></span></h1><p>Your estate planning progress at a glance.</p></div>
+      <div class="dgrid">
+        <div class="dc" onclick="goSec(&#39;a&#39;)"><div class="dci">◇</div><div class="dcl">Asset Inventory</div><div id="dac" class="dcv">—</div><div class="dch">types recorded</div></div>
+        <div class="dc hl" onclick="goSec(&#39;c&#39;)"><div class="dci">◉</div><div class="dcl">Complexity</div><div id="dcc" class="dcv">—</div><div class="dch">sections done</div></div>
+        <div class="dc full"><div class="dcl">Overall Progress</div><div id="ds" class="dcv">—</div><div class="dch">completion</div></div>
+      </div>
+      <div class="sbox"><div class="st">Your Assets</div><div id="dal" class="alist"></div></div>
+    </div>
+
+    <!-- ASSETS -->
+    <div id="sa" class="sec">
+      <div class="ph"><h1>Asset Inventory</h1><p>Tick all asset types that apply to you.</p></div>
+      <div class="fcard">
+        <div class="ftitle">Step 1 — Identify Your Assets</div>
+        <div class="agrid" id="ach"></div>
+        <div class="mt14"><span class="flabel">Location of my assets</span>
+          <div class="clist">
+            <label class="crow"><input type="checkbox" id="lsg"> Singapore</label>
+            <label class="crow"><input type="checkbox" id="los"> Overseas</label>
+            <label class="crow"><input type="checkbox" id="lot"> Others: <input type="text" class="ii" id="lotx" placeholder="specify..." onclick="event.stopPropagation()"></label>
+          </div>
+        </div>
+        <div class="mt14"><span class="flabel">Planning scope</span>
+          <div class="clist">
+            <label class="crow"><input type="radio" name="sc" value="Worldwide" id="sww"> Worldwide (Primary Will)</label>
+            <label class="crow"><input type="radio" name="sc" value="Singapore Only" id="ssg"> Singapore Only</label>
+            <label class="crow"><input type="radio" name="sc" value="Others" id="sot"> Others: <input type="text" class="ii" id="sotx" placeholder="specify..." onclick="event.stopPropagation()"></label>
+          </div>
+        </div>
+        <div class="mt14"><span class="flabel">Additional notes</span>
+          <textarea id="an" placeholder="Any other details you&#39;d like to add..."></textarea>
+        </div>
+        <div class="srow"><div id="asm" class="smsg"></div><button class="btn" onclick="saveA()">Save Inventory</button></div>
+      </div>
+    </div>
+
+    <!-- COMPLEXITY -->
+    <div id="sc" class="sec">
+      <div class="ph"><h1>Asset Complexity</h1><p>Answer the following to help determine the complexity of your estate.</p></div>
+      <div id="ca"></div>
+      <div class="srow mt14"><div id="csm" class="smsg"></div><button class="btn" onclick="saveC()">Save Responses</button></div>
+    </div>
+  </div>
+
+  <div class="bnav">
+    <button class="bni active" id="bn-d" onclick="goSec(&#39;d&#39;)"><span class="ico">◈</span>Dashboard</button>
+    <button class="bni" id="bn-a" onclick="goSec(&#39;a&#39;)"><span class="ico">◇</span>Assets</button>
+    <button class="bni" id="bn-c" onclick="goSec(&#39;c&#39;)"><span class="ico">◉</span>Complexity</button>
+  </div>
+</div>
+
+<script>
+var CC=null,AD={},CD={};
+var AT=[
+  {k:'property',n:'Property',s:'Family home, rental property, land, vacation home'},
+  {k:'vehicles',n:'Vehicles',s:'Cars, boats, motorcycles'},
+  {k:'bankAccounts',n:'Bank Accounts',s:'Savings, fixed deposits'},
+  {k:'business',n:'Business Ownership',s:'Sole proprietorship, partnership, company shares'},
+  {k:'safeDeposit',n:'Safe Deposit Box',s:'Bank, home, office'},
+  {k:'collectibles',n:'Collectibles & Valuables',s:'Jewellery, art, antiques, gold, watches, wine'},
+  {k:'investments',n:'Investment Accounts',s:'Stocks, bonds, unit trusts, REITs'},
+  {k:'digital',n:'Digital Assets',s:'Cryptocurrency, online business, e-wallets'},
+  {k:'retirement',n:'Retirement Accounts',s:'CPF, annuities'},
+  {k:'ip',n:'Intellectual Property',s:'Patents, copyrights, trademarks, royalties'},
+  {k:'insurance',n:'Life Insurance Policies',s:'Term, whole life, endowment, ILP'},
+  {k:'others',n:'Others',s:'',oth:true}
+];
+var CS=[
+  {k:'property',i:'🏠',t:'Property',q:[
+    {k:'ph',l:'How is your property being owned?',st:true},
+    {k:'pt',l:'Type of property',o:['HDB','Private','Overseas','Multiple']},
+    {k:'po',l:'Ownership structure',o:['Sole','Joint Tenancy','Tenancy-in-Common']},
+    {k:'at',l:'Does your ownership type allow for automatic transfer upon your passing?',o:['Yes','No']},
+    {k:'ol',l:'Any outstanding loan on the property?',o:['Yes','No']},
+    {k:'fh',l:'Will you like it to remain as a family home?',o:['Yes','No']},
+    {k:'cd',l:'In a common disaster, who should own the property?',o:['Yes','No','Unsure']},
+    {k:'fm',l:'Will your beneficiaries have the financial means to maintain the property?',o:['Yes','No']},
+    {k:'lm',l:'Are there any limitations to transferring your property?',o:['Yes','No']},
+    {k:'rl',l:'Will transferring the property affect the relationship between your beneficiaries?',o:['Yes','No']}
+  ]},
+  {k:'joint',i:'🤝',t:'Joint Account',q:[
+    {k:'hj',l:'Do you own any assets in joint names?',o:['Yes','No']},
+    {k:'ct',l:'Who contributed to the joint account?',o:['Myself','Shared Equally','Other']},
+    {k:'so',l:'Would you like to give to the surviving joint owner?',o:['Yes','No']}
+  ]},
+  {k:'loans',i:'💳',t:'Loans & Liabilities',q:[
+    {k:'hl',l:'Do you have outstanding debts or liabilities that should be planned for?',o:['Yes','No']},
+    {k:'st',l:'Have you considered how loans, credit card balances, and mortgages will be settled?',o:['Yes','No']},
+    {k:'di',l:'Do you have insurance policies that cover your debts?',o:['Yes','No']}
+  ]},
+  {k:'invest',i:'📈',t:'Investment Accounts',q:[
+    {k:'ih',l:'How would you like your investments to be managed?',st:true},
+    {k:'il',l:'Where are these investments based?',o:['Singapore','Overseas','Both']},
+    {k:'iw',l:'May certain investments be subject to different inheritance laws?',o:['Yes','No','Unsure']},
+    {k:'ib',l:'Do your beneficiaries know how to manage these investments?',o:['Yes','No']}
+  ]},
+  {k:'overseas',i:'✈️',t:'Overseas Assets',q:[
+    {k:'ho',l:'Do you own assets in multiple countries?',o:['Yes','No']},
+    {k:'fh2',l:'Have you checked if the country has forced heirship laws?',o:['Yes','No','N/A']},
+    {k:'sw',l:'Is the value significant for you to have separate Wills for each country?',o:['Yes','No']}
+  ]},
+  {k:'cpf',i:'🏦',t:'CPF',sg:true,q:[
+    {k:'ch',l:'How would you like your CPF monies to be distributed?',st:true},
+    {k:'cn',l:'Have you done your CPF nomination?',o:['Yes','No']},
+    {k:'cp',l:'Do you prefer payout in a lump sum or through a Trust?',o:['Lump Sum','Trust']}
+  ]},
+  {k:'ins',i:'🛡️',t:'Life Insurance',q:[
+    {k:'ish',l:'How would you like your insurance payout to be distributed?',st:true},
+    {k:'in',l:'Have you done any nominations for your insurance policies?',o:['Yes','No','Partial']},
+    {k:'ic',l:'Do you prefer for the insurance payout to be consolidated and paid out through your Will?',o:['Yes','No']}
+  ]},
+  {k:'col',i:'💎',t:'Collectibles & Valuables',q:[
+    {k:'coh',l:'How will your beneficiaries manage each item?',st:true},
+    {k:'inf',l:"Have you informed the beneficiary or labelled the item with the beneficiary's name?",o:['Yes','No']},
+    {k:'apr',l:'Will your beneficiary appreciate or value the item you intend to give?',o:['Yes','No','Unsure']}
+  ]},
+  {k:'biz',i:'🏢',t:'Business',q:[
+    {k:'hb',l:'Do you have a business that needs succession planning?',o:['Yes','No']},
+    {k:'sc2',l:'Have you identified any successor?',o:['Yes','No','In Progress']},
+    {k:'bs',l:'Have you considered a business succession plan or a buy-sell agreement?',o:['Yes','No','Considering']},
+    {k:'ke',l:'Are there any key employees or partners who should inherit shares or ownership?',o:['Yes','No']}
+  ]},
+  {k:'dig',i:'💻',t:'Digital Assets',q:[
+    {k:'dh',l:'How will your beneficiaries know the existence of these accounts?',st:true},
+    {k:'ac',l:'Have you written down the access codes or set up legacy contacts?',o:['Yes','No','In Progress']}
+  ]}
+];
+
+function doLogin(){
+  var u=document.getElementById('lu').value.trim();
+  var p=document.getElementById('lp').value;
+  var e=document.getElementById('lerr');
+  e.style.display='none';
+  if(!u||!p){e.textContent='Please enter your username and password.';e.style.display='block';return;}
+  google.script.run
+    .withSuccessHandler(function(r){
+      if(r.success){CC=r;initApp();}
+      else{e.textContent=r.message||'Invalid username or password.';e.style.display='block';}
+    })
+    .withFailureHandler(function(){e.textContent='Connection error. Please try again.';e.style.display='block';})
+    .login(u,p);
+}
+
+function doLogout(){
+  CC=null;AD={};CD={};
+  document.getElementById('appScreen').style.display='none';
+  document.getElementById('loginScreen').classList.add('active');
+  document.getElementById('appScreen').classList.remove('active');
+  document.getElementById('lu').value='';
+  document.getElementById('lp').value='';
+  closeD();
+}
+
+function openD(){document.getElementById('dr').classList.add('open');document.getElementById('ov').classList.add('open');}
+function closeD(){document.getElementById('dr').classList.remove('open');document.getElementById('ov').classList.remove('open');}
+
+function initApp(){
+  document.getElementById('loginScreen').classList.remove('active');
+  document.getElementById('appScreen').classList.add('active');
+  document.getElementById('appScreen').style.display='block';
+  document.getElementById('dn').textContent=CC.name;
+  document.getElementById('dcn').textContent=CC.name;
+  document.getElementById('dca').textContent=CC.advisorName;
+  buildA();buildCA();
+  google.script.run.withSuccessHandler(function(d){AD=d||{};popA();updD();}).getAssets(CC.clientId);
+  google.script.run.withSuccessHandler(function(d){CD=d||{};popC();updD();}).getComplexity(CC.clientId);
+}
+
+function goSec(n){
+  ['d','a','c'].forEach(function(x){
+    document.getElementById('s'+x).classList.remove('active');
+    var di=document.getElementById('di-'+x);if(di)di.classList.remove('active');
+    var bn=document.getElementById('bn-'+x);if(bn)bn.classList.remove('active');
+  });
+  document.getElementById('s'+n).classList.add('active');
+  var di=document.getElementById('di-'+n);if(di)di.classList.add('active');
+  var bn=document.getElementById('bn-'+n);if(bn)bn.classList.add('active');
+  closeD();window.scrollTo(0,0);
+}
+
+function buildA(){
+  document.getElementById('ach').innerHTML=AT.map(function(a){
+    return '<div class="aitem" id="ai-'+a.k+'" onclick="tgA(\''+a.k+'\',this)">'
+      +'<input type="checkbox" id="ac-'+a.k+'" onclick="event.stopPropagation();tgA(\''+a.k+'\',document.getElementById(\'ai-'+a.k+'\'))">'
+      +'<div><span class="an">'+a.n+'</span>'+(a.s?'<span class="as">'+a.s+'</span>':'')
+      +(a.oth?'<input type="text" class="ao" id="aot" placeholder="Please specify..." onclick="event.stopPropagation()"/>':'')
+      +'</div></div>';
+  }).join('');
+}
+
+function tgA(k,el){
+  var cb=document.getElementById('ac-'+k);
+  if(event.target!==cb&&event.target.tagName!=='INPUT')cb.checked=!cb.checked;
+  el.classList.toggle('checked',cb.checked);
+}
+
+function popA(){
+  (AD.types||[]).forEach(function(k){
+    var cb=document.getElementById('ac-'+k);
+    if(cb){cb.checked=true;document.getElementById('ai-'+k).classList.add('checked');}
+  });
+  var aot=document.getElementById('aot');if(aot&&AD.ot)aot.value=AD.ot;
+  if(AD.lsg)document.getElementById('lsg').checked=true;
+  if(AD.los)document.getElementById('los').checked=true;
+  if(AD.lot)document.getElementById('lot').checked=true;
+  var lotx=document.getElementById('lotx');if(lotx&&AD.lotx)lotx.value=AD.lotx;
+  if(AD.sc){var sm={'Worldwide':'sww','Singapore Only':'ssg','Others':'sot'};var el=document.getElementById(sm[AD.sc]);if(el)el.checked=true;}
+  var sotx=document.getElementById('sotx');if(sotx&&AD.sotx)sotx.value=AD.sotx;
+  var an=document.getElementById('an');if(an&&AD.notes)an.value=AD.notes;
+}
+
+function saveA(){
+  var types=AT.filter(function(a){var cb=document.getElementById('ac-'+a.k);return cb&&cb.checked;}).map(function(a){return a.k;});
+  var aot=document.getElementById('aot');
+  AD={
+    types:types,ot:aot?aot.value:'',
+    lsg:document.getElementById('lsg').checked,
+    los:document.getElementById('los').checked,
+    lot:document.getElementById('lot').checked,
+    lotx:document.getElementById('lotx').value||'',
+    sc:(document.querySelector('input[name="sc"]:checked')||{}).value||'',
+    sotx:document.getElementById('sotx').value||'',
+    notes:document.getElementById('an').value
+  };
+  google.script.run.withSuccessHandler(function(){msg('asm','Saved successfully.');updD();}).saveAssets(CC.clientId,JSON.stringify(AD));
+}
+
+function buildCA(){
+  document.getElementById('ca').innerHTML=CS.map(function(sec){
+    var qs=sec.q.map(function(q){
+      if(q.st)return '<div class="qst">'+q.l+'</div>';
+      var hoo=q.o&&q.o.some(function(o){return o==='Other'||o==='Others';});
+      return '<div class="qg"><div class="ql">'+q.l+'</div><div class="ynr">'
+        +q.o.map(function(opt){
+          var id='q-'+sec.k+'-'+q.k+'-'+opt.replace(/ /g,'_').replace(/\//g,'-');
+          return '<button class="yn" id="'+id+'" onclick="selA(\''+sec.k+'\',\''+q.k+'\',\''+opt+'\',this)">'+opt+'</button>';
+        }).join('')+'</div>'
+        +(hoo?'<input type="text" class="qoi" id="qo-'+sec.k+'-'+q.k+'" placeholder="Please specify..." style="display:none"/>':'')
+        +'</div>';
+    }).join('');
+    return '<div class="acc" id="acc-'+sec.k+'">'
+      +'<div class="ah" onclick="tgAcc(\''+sec.k+'\')">'
+      +'<div class="al"><span class="ai">'+sec.i+'</span><span class="at">'+sec.t+'</span>'
+      +(sec.sg?'<span class="sgb">🇸🇬 SG only</span>':'')+'</div>'
+      +'<div class="ar2"><span class="as2" id="acs-'+sec.k+'">Not started</span><span class="aarrow">▾</span></div>'
+      +'</div><div class="ab">'+qs+'</div></div>';
+  }).join('');
+}
+
+function tgAcc(k){document.getElementById('acc-'+k).classList.toggle('open');}
+
+function selA(sk,qk,val,btn){
+  var sec=CS.find(function(s){return s.k===sk;});
+  var q=sec.q.find(function(q){return q.k===qk;});
+  q.o.forEach(function(opt){
+    var b=document.getElementById('q-'+sk+'-'+qk+'-'+opt.replace(/ /g,'_').replace(/\//g,'-'));
+    if(b)b.className='yn';
+  });
+  btn.className='yn '+(val==='Yes'?'sy':val==='No'?'sn':'so');
+  if(!CD[sk])CD[sk]={};CD[sk][qk]=val;
+  var oi=document.getElementById('qo-'+sk+'-'+qk);
+  if(oi)oi.style.display=(val==='Other'||val==='Others')?'block':'none';
+  updAcs(sk);
+}
+
+function updAcs(sk){
+  var sec=CS.find(function(s){return s.k===sk;});
+  var qs=sec.q.filter(function(q){return !q.st;});
+  var d=CD[sk]||{};
+  var ans=qs.filter(function(q){return d[q.k];}).length;
+  var el=document.getElementById('acs-'+sk);
+  if(ans===0){el.textContent='Not started';el.style.color='';}
+  else if(ans<qs.length){el.textContent=ans+'/'+qs.length+' answered';el.style.color='#B8962E';}
+  else{el.textContent='Complete ✓';el.style.color='#2D7A4A';}
+}
+
+function popC(){
+  CS.forEach(function(sec){
+    var d=CD[sec.k]||{};
+    sec.q.filter(function(q){return !q.st;}).forEach(function(q){
+      var val=d[q.k];
+      if(val){
+        var b=document.getElementById('q-'+sec.k+'-'+q.k+'-'+val.replace(/ /g,'_').replace(/\//g,'-'));
+        if(b)b.className='yn '+(val==='Yes'?'sy':val==='No'?'sn':'so');
+        var oi=document.getElementById('qo-'+sec.k+'-'+q.k);
+        if(oi&&(val==='Other'||val==='Others')){oi.style.display='block';oi.value=d[q.k+'_o']||'';}
+      }
+    });
+    updAcs(sec.k);
+  });
+}
+
+function saveC(){
+  CS.forEach(function(sec){
+    sec.q.filter(function(q){return !q.st;}).forEach(function(q){
+      var oi=document.getElementById('qo-'+sec.k+'-'+q.k);
+      if(oi&&oi.style.display!=='none'){if(!CD[sec.k])CD[sec.k]={};CD[sec.k][q.k+'_o']=oi.value;}
+    });
+  });
+  google.script.run.withSuccessHandler(function(){msg('csm','Saved successfully.');updD();}).saveComplexity(CC.clientId,JSON.stringify(CD));
+}
+
+function updD(){
+  var ac=(AD.types||[]).length;
+  document.getElementById('dac').textContent=ac||'—';
+  var done=CS.filter(function(sec){
+    var qs=sec.q.filter(function(q){return !q.st;});
+    var d=CD[sec.k]||{};
+    return qs.length>0&&qs.every(function(q){return d[q.k];});
+  }).length;
+  document.getElementById('dcc').textContent=done+'/'+CS.length;
+  document.getElementById('ds').textContent=Math.round(((ac>0?1:0)+(done===CS.length?1:0))/2*100)+'%';
+  var el=document.getElementById('dal');
+  if(ac===0){el.innerHTML='<span class="ndm">No assets recorded yet. Tap Asset Inventory to get started.</span>';}
+  else{el.innerHTML=(AD.types||[]).map(function(k){var a=AT.find(function(x){return x.k===k;});return'<span class="atag">'+(a?a.n:k)+'</span>';}).join('');}
+}
+
+function msg(id,t){
+  var el=document.getElementById(id);el.textContent=t;
+  setTimeout(function(){el.textContent='';},3000);
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var lp=document.getElementById('lp');
+  if(lp)lp.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  var lu=document.getElementById('lu');
+  if(lu)lu.addEventListener('keydown',function(e){if(e.key==='Enter')lp.focus();});
+});
+</script>
+
+
+</body></html>
