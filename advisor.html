@@ -3,498 +3,169 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Estate Planning with Silvester</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advisor Dashboard — Estate Planning with Silvester</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;min-height:100%;overflow-x:hidden;font-family:'DM Sans',sans-serif;font-size:15px;background:#FAF7F2;color:#1C1410;-webkit-text-size-adjust:100%}
-:root{
-  --gold:#B8962E;--gold-light:#D4AF5A;--gold-pale:#F5EDD6;--gold-border:rgba(184,150,46,0.25);
-  --maroon:#6B1A2A;--maroon-dark:#4A1019;--maroon-light:#8B2235;
-  --cream:#FAF7F2;--ink:#1C1410;--ink-mid:#4A3728;--ink-soft:#7A6455;
-  --border:#E8DFD0;--success:#2D7A4A;--error:#B0312A;--radius:8px;--radius-sm:4px;
-}
-.screen{display:none}.screen.active{display:block}
-input[type=text],input[type=password],input[type=number],textarea,select{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--cream);font-family:'DM Sans',sans-serif;font-size:15px;color:var(--ink);outline:none;-webkit-appearance:none;appearance:none}
-input:focus,textarea:focus,select:focus{border-color:var(--gold);background:#fff}
-textarea{resize:vertical;min-height:70px;line-height:1.5}
-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A6455' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
-.fl{display:block;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:6px}
-.fg{margin-bottom:14px}
-.btn-p{display:block;width:100%;padding:14px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;text-align:center}
-.btn-p:active{background:var(--maroon-light)}
-.btn-s{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink-soft);cursor:pointer;-webkit-appearance:none}
-.btn-d{display:inline-flex;align-items:center;gap:5px;padding:7px 11px;background:transparent;border:1px solid #FECACA;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--error);cursor:pointer;-webkit-appearance:none}
-
-/* LOGIN */
-.login-bg{min-height:100vh;background:var(–maroon-dark);background-image:radial-gradient(ellipse at 25% 75%,rgba(184,150,46,0.12) 0%,transparent 55%);display:flex;align-items:center;justify-content:center;padding:24px}
-.login-card{background:#fff;border-radius:var(–radius);padding:36px 28px;width:100%;max-width:400px;box-shadow:0 24px 80px rgba(0,0,0,0.4)}
-.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.crest{width:46px;height:46px;min-width:46px;background:var(–maroon);color:var(–gold-light);border-radius:var(–radius-sm);display:flex;align-items:center;justify-content:center;font-family:‘Cormorant Garamond’,serif;font-size:24px;font-weight:500}
-.crest.sm{width:32px;height:32px;min-width:32px;font-size:17px}
-.brand-name{font-family:‘Cormorant Garamond’,serif;font-size:16px;font-weight:600;color:var(–ink);line-height:1.3}
-.brand-sub{font-size:10px;color:var(–ink-soft);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}
-.login-intro{font-size:13px;color:var(–ink-soft);line-height:1.6;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(–border)}
-.err-msg{background:#FEF2F2;border:1px solid #FECACA;color:var(–error);padding:10px 14px;border-radius:var(–radius-sm);font-size:13px;margin-bottom:14px;display:none}
-.login-footer{margin-top:16px;text-align:center;font-size:12px;color:var(–ink-soft)}
-
-/* APP */
-#appScreen{min-height:100vh;display:flex;flex-direction:column}
-.topbar{background:var(–maroon-dark);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:60;width:100%}
-.topbar-brand{font-family:‘Cormorant Garamond’,serif;font-size:15px;color:var(–gold-light);font-weight:500}
-.topbar-r{display:flex;align-items:center;gap:10px}
-.vtag{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.05em}
-.hbg{background:none;border:none;color:var(–gold-light);font-size:26px;cursor:pointer;padding:0 4px;line-height:1;-webkit-appearance:none}
-.prog-wrap{background:rgba(0,0,0,0.25);height:3px;width:100%}
-.prog-fill{height:100%;background:var(–gold);transition:width 0.4s ease}
-.autosave{position:fixed;top:54px;right:14px;background:rgba(45,122,74,0.92);color:#fff;padding:5px 12px;border-radius:20px;font-size:12px;z-index:65;opacity:0;transition:opacity 0.3s;pointer-events:none}
-.autosave.show{opacity:1}
-
-/* DRAWER */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:90}
-.overlay.open{display:block}
-.drawer{position:fixed;top:0;left:0;bottom:0;width:78%;max-width:280px;background:var(–maroon-dark);z-index:100;transform:translateX(-100%);transition:transform 0.28s ease;display:flex;flex-direction:column}
-.drawer.open{transform:translateX(0)}
-.dr-top{padding:20px 16px;border-bottom:1px solid rgba(184,150,46,0.2);display:flex;align-items:center;gap:10px}
-.dr-brand{font-family:‘Cormorant Garamond’,serif;font-size:14px;color:var(–gold-light);line-height:1.3}
-.dr-nav{flex:1;padding:10px 0;overflow-y:auto}
-.di{padding:13px 16px;color:rgba(255,255,255,0.55);cursor:pointer;font-size:14px;display:flex;align-items:center;gap:10px;border-left:3px solid transparent;transition:all 0.15s}
-.di.active,.di:hover{color:var(–gold-light);background:rgba(184,150,46,0.08);border-left-color:var(–gold)}
-.di .sn{width:20px;height:20px;border-radius:50%;background:rgba(184,150,46,0.15);color:var(–gold-light);font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.di.active .sn{background:var(–gold);color:var(–maroon-dark)}
-.di .schk{color:#2D7A4A;font-size:12px;margin-left:auto}
-.dr-foot{padding:16px;border-top:1px solid rgba(184,150,46,0.15)}
-.dc-nm{font-family:‘Cormorant Garamond’,serif;font-size:15px;color:#fff;margin-bottom:3px}
-.dc-adv{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:12px}
-.btn-out{width:100%;padding:10px;background:transparent;border:1px solid rgba(184,150,46,0.3);color:var(–gold-light);border-radius:var(–radius-sm);font-size:11px;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;font-family:‘DM Sans’,sans-serif;-webkit-appearance:none}
-
-/* MAIN */
-.main{flex:1;padding:18px 16px 100px;width:100%}
-.sec{display:none}.sec.active{display:block}
-.ph{margin-bottom:20px}
-.ph h1{font-family:‘Cormorant Garamond’,serif;font-size:26px;font-weight:500;color:var(–ink);margin-bottom:4px}
-.ph p{font-size:13px;color:var(–ink-soft);line-height:1.5}
-.step-badge{display:inline-flex;align-items:center;gap:6px;background:var(–maroon);color:var(–gold-light);padding:4px 10px;border-radius:20px;font-size:11px;letter-spacing:0.05em;margin-bottom:10px}
-
-/* CARDS */
-.card{background:#fff;border:1px solid var(–border);border-radius:var(–radius);padding:18px 16px;margin-bottom:14px}
-.card-title{font-family:‘Cormorant Garamond’,serif;font-size:18px;font-weight:500;color:var(–maroon);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(–border)}
-.card-sub{font-size:12px;color:var(–ink-soft);margin-bottom:12px;line-height:1.5}
-
-/* DASHBOARD */
-.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.dc{background:#fff;border:1px solid var(–border);border-radius:var(–radius);padding:15px 13px;cursor:pointer}
-.dc:active{border-color:var(–gold)}
-.dc.full{grid-column:1/-1}
-.dc.hl{background:var(–maroon);border-color:var(–maroon)}
-.dc.hl .dcl,.dc.hl .dch{color:rgba(255,255,255,0.6)}
-.dc.hl .dcv,.dc.hl .dci{color:var(–gold-light)}
-.dci{font-size:13px;color:var(–gold);margin-bottom:5px}
-.dcl{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(–ink-soft);margin-bottom:3px}
-.dcv{font-family:‘Cormorant Garamond’,serif;font-size:28px;font-weight:500;color:var(–maroon);margin-bottom:2px}
-.dch{font-size:11px;color:var(–ink-soft)}
-.sbox{background:#fff;border:1px solid var(–border);border-radius:var(–radius);padding:15px;margin-bottom:12px}
-.sbox-t{font-family:‘Cormorant Garamond’,serif;font-size:16px;font-weight:500;color:var(–ink);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(–border)}
-.alist{display:flex;flex-wrap:wrap;gap:6px}
-.atag{background:var(–gold-pale);border:1px solid var(–gold-border);color:var(–ink-mid);padding:4px 9px;border-radius:var(–radius-sm);font-size:12px;font-weight:500}
-.ndm{color:var(–ink-soft);font-size:13px;font-style:italic}
-
-/* STEP SECTIONS (accordion) */
-.ssec{background:#fff;border:1px solid var(–border);border-radius:var(–radius);margin-bottom:10px;overflow:hidden}
-.ssec-h{padding:15px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;-webkit-tap-highlight-color:transparent}
-.ssec-h:active{background:var(–gold-pale)}
-.ssec-l{display:flex;align-items:center;gap:9px}
-.ssec-icon{font-size:17px}
-.ssec-title{font-family:‘Cormorant Garamond’,serif;font-size:17px;font-weight:500;color:var(–maroon)}
-.ssec-r{display:flex;align-items:center;gap:7px;flex-shrink:0}
-.ssec-stat{font-size:10px;color:var(–ink-soft);white-space:nowrap}
-.ssec-arr{color:var(–gold);font-size:14px;transition:transform 0.3s}
-.ssec.open .ssec-arr{transform:rotate(180deg)}
-.ssec-body{display:none;padding:0 14px 14px;border-top:1px solid var(–border)}
-.ssec.open .ssec-body{display:block}
-.sg-badge{font-size:10px;color:#5a7a9a;background:rgba(90,122,154,0.1);border:1px solid rgba(90,122,154,0.25);padding:2px 5px;border-radius:3px;margin-left:4px}
-
-/* ASSET ITEMS */
-.agrid{display:flex;flex-direction:column;gap:7px}
-.aitem{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border:1px solid var(–border);border-radius:var(–radius-sm);cursor:pointer;background:#fff;-webkit-tap-highlight-color:transparent}
-.aitem.checked{border-color:var(–gold);background:var(–gold-pale)}
-.aitem input[type=checkbox]{width:20px;height:20px;min-width:20px;margin-top:1px;accent-color:var(–maroon);cursor:pointer;-webkit-appearance:auto;flex-shrink:0}
-.an{font-weight:500;font-size:14px;color:var(–ink);display:block}
-.as{font-size:11px;color:var(–ink-soft);margin-top:1px;display:block}
-
-/* ENTRY CARDS */
-.entry-card{background:var(–cream);border:1px solid var(–border);border-radius:var(–radius-sm);padding:13px;margin-bottom:10px}
-.entry-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.entry-num{font-family:‘Cormorant Garamond’,serif;font-size:15px;font-weight:500;color:var(–maroon)}
-.egrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.egrid .fg{margin-bottom:0}
-.egrid .full{grid-column:1/-1}
-.add-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border:1px dashed var(–border);border-radius:var(–radius-sm);background:transparent;font-family:‘DM Sans’,sans-serif;font-size:13px;color:var(–ink-soft);cursor:pointer;margin-top:8px;-webkit-appearance:none}
-.add-btn:active{background:var(–gold-pale);border-color:var(–gold);color:var(–ink)}
-.entry-cmt{margin-top:10px;padding-top:10px;border-top:1px solid var(–border)}
-
-/* CHECKLISTS */
-.clist{display:flex;flex-direction:column;gap:7px;margin-top:8px}
-.crow{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(–border);border-radius:var(–radius-sm);background:#fff;cursor:pointer;font-size:14px;color:var(–ink-mid);-webkit-tap-highlight-color:transparent}
-.crow.checked{border-color:var(–gold);background:var(–gold-pale)}
-.crow input[type=checkbox],.crow input[type=radio]{width:20px;height:20px;min-width:20px;accent-color:var(–maroon);-webkit-appearance:auto;flex-shrink:0}
-.ii{flex:1;border:none;border-bottom:1px solid var(–border);background:transparent;font-size:14px;padding:2px 4px;outline:none;font-family:‘DM Sans’,sans-serif;color:var(–ink);min-width:0}
-
-/* YN */
-.yn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.yn-btn{padding:9px 14px;border:1px solid var(–border);border-radius:var(–radius-sm);background:var(–cream);font-size:13px;font-weight:500;color:var(–ink-mid);cursor:pointer;-webkit-appearance:none;font-family:‘DM Sans’,sans-serif}
-.yn-btn.sy{background:var(–maroon);border-color:var(–maroon);color:#fff}
-.yn-btn.sn{background:var(–ink-mid);border-color:var(–ink-mid);color:#fff}
-.yn-btn.so{background:var(–gold);border-color:var(–gold);color:#fff}
-
-/* BENEFICIARIES */
-.ben-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.ben-item{display:flex;align-items:flex-start;gap:8px;padding:10px 11px;border:1px solid var(–border);border-radius:var(–radius-sm);cursor:pointer;background:#fff;-webkit-tap-highlight-color:transparent}
-.ben-item.checked{border-color:var(–gold);background:var(–gold-pale)}
-.ben-item input[type=checkbox]{width:18px;height:18px;min-width:18px;margin-top:1px;accent-color:var(–maroon);-webkit-appearance:auto;flex-shrink:0}
-.ben-name{font-weight:500;font-size:13px;color:var(–ink);display:block}
-.ben-sub{font-size:11px;color:var(–ink-soft);display:block;margin-top:1px}
-.consider-box{background:var(–gold-pale);border:1px solid var(–gold-border);border-radius:var(–radius-sm);padding:13px;margin-top:14px}
-.consider-title{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(–maroon);margin-bottom:8px}
-.consider-item{font-size:12px;color:var(–ink-mid);line-height:1.5;padding:4px 0;border-bottom:1px solid rgba(184,150,46,0.2)}
-.consider-item:last-child{border-bottom:none}
-
-/* FAMILY TREE */
-.ft-wrap{background:var(–cream);border:1px solid var(–border);border-radius:var(–radius-sm);padding:13px;min-height:120px}
-.ft-row{margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed var(–border)}
-.ft-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.ft-row-lbl{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(–ink-soft);margin-bottom:7px}
-.ft-tags{display:flex;flex-wrap:wrap;gap:6px}
-.ft-person{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border:1px solid var(–border);border-radius:var(–radius-sm);background:#fff;font-size:13px;color:var(–ink)}
-.gm{color:#3B82F6}.gf{color:#EC4899}.go{color:#8B5CF6}
-.rm-person{background:none;border:none;color:var(–ink-soft);cursor:pointer;font-size:14px;padding:0 0 0 3px;line-height:1}
-.ft-form{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
-.ft-form input{flex:1;min-width:100px;padding:9px 12px;font-size:14px}
-.ft-form select{width:90px;padding:9px 10px;font-size:13px}
-.ft-form button{padding:9px 13px;background:var(–maroon);color:var(–gold-light);border:none;border-radius:var(–radius-sm);font-family:‘DM Sans’,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;-webkit-appearance:none}
-
-/* APPOINTMENTS */
-.apt-tbl{width:100%;border-collapse:collapse;margin-bottom:10px}
-.apt-tbl td{padding:9px 11px;border:1px solid var(–border);font-size:13px;vertical-align:top}
-.apt-tbl td:first-child{font-size:11px;font-weight:500;color:var(–ink-soft);width:38%;background:var(–cream)}
-.apt-tbl td:last-child{background:#fff}
-.apt-lbl{font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(–maroon);margin:14px 0 8px}
-.apt-lbl:first-child{margin-top:0}
-.prec-opt{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(–gold-pale);border:1px solid var(–gold-border);border-radius:var(–radius-sm);margin-top:7px;font-size:13px;color:var(–ink-mid)}
-.prec-opt input{width:18px;height:18px;accent-color:var(–maroon);-webkit-appearance:auto;flex-shrink:0}
-
-/* WEALTH */
-.wealth-opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
-.w-opt{padding:10px 12px;border:1px solid var(–border);border-radius:var(–radius-sm);font-size:13px;color:var(–ink-mid);cursor:pointer;text-align:center;background:#fff;-webkit-tap-highlight-color:transparent}
-.w-opt.sel{border-color:var(–gold);background:var(–gold-pale);color:var(–ink)}
-
-/* NOTES FIELD */
-.nf{margin-top:13px;padding-top:13px;border-top:1px solid var(–border)}
-.nf label{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(–ink-soft);margin-bottom:6px;display:block}
-
-/* BOTTOM NAV */
-.bnav{position:fixed;bottom:0;left:0;right:0;background:var(–maroon-dark);display:flex;border-top:1px solid rgba(184,150,46,0.2);z-index:55;padding-bottom:env(safe-area-inset-bottom,0px)}
-.bni{flex:1;padding:9px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;color:rgba(255,255,255,0.45);cursor:pointer;font-size:10px;border:none;background:none;font-family:‘DM Sans’,sans-serif;-webkit-appearance:none;-webkit-tap-highlight-color:transparent;position:relative}
-.bni.active{color:var(–gold-light)}
-.bni .ico{font-size:17px;line-height:1}
-.bni .dot{width:5px;height:5px;border-radius:50%;background:var(–success);position:absolute;top:6px;right:calc(50% - 16px);display:none}
-.bni.done .dot{display:block}
-
-@media(max-width:400px){
-.ben-grid{grid-template-columns:1fr}
-.egrid{grid-template-columns:1fr}
-.egrid .full{grid-column:1}
-.wealth-opts{grid-template-columns:1fr}
+html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:15px;background:#FAF7F2;color:#1C1410}
+:root{--gold:#B8962E;--gold-light:#D4AF5A;--gold-pale:#F5EDD6;--gold-border:rgba(184,150,46,0.25);--maroon:#6B1A2A;--maroon-dark:#4A1019;--border:#E8DFD0;--ink:#1C1410;--ink-soft:#7A6455;--ink-mid:#4A3728;--success:#2D7A4A;--error:#B0312A;--radius:8px;--radius-sm:4px}
+.topbar{background:var(--maroon-dark);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-brand{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold-light);font-weight:500}
+.topbar-sub{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.05em;text-transform:uppercase;margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.refresh-btn{padding:7px 14px;background:transparent;border:1px solid rgba(184,150,46,0.3);color:var(--gold-light);border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.refresh-btn:hover{background:rgba(184,150,46,0.1)}
+.main{padding:20px 16px 40px;max-width:960px;margin:0 auto}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.stat{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.stat-label{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:var(--maroon)}
+/* SEARCH */
+.search-wrap{margin-bottom:12px}
+.search-bar{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none}
+.search-bar:focus{border-color:var(--gold)}
+/* CLIENT LIST */
+.client-list{display:flex;flex-direction:column;gap:8px}
+.client-row{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:border-color 0.15s}
+.client-row:hover{border-color:var(--gold)}
+.client-name{font-weight:500;font-size:15px;color:var(--ink);margin-bottom:2px}
+.client-meta{font-size:12px;color:var(--ink-soft)}
+.badges{display:flex;gap:6px;flex-shrink:0;margin-left:12px;align-items:center}
+.badge{padding:3px 8px;border-radius:3px;font-size:11px;font-weight:500}
+.b-done{background:#D1FAE5;color:#065F46}
+.b-part{background:#FEF3C7;color:#92400E}
+.b-none{background:#F3F4F6;color:#6B7280}
+.chev{color:var(--ink-soft);font-size:16px}
+/* DETAIL */
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-size:13px;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:16px}
+.client-hdr{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:12px}
+.client-hdr-name{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;color:var(--ink);margin-bottom:3px}
+.client-hdr-email{font-size:13px;color:var(--ink-soft);margin-bottom:12px}
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:12px;border-top:1px solid var(--border)}
+.cred-item label{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:2px}
+.cred-item span{font-size:13px;color:var(--ink);font-family:monospace}
+/* DETAIL CARDS */
+.det-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px}
+.det-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--maroon);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.det-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
+.det-row:last-child{border-bottom:none}
+.det-lbl{color:var(--ink-soft);flex-shrink:0;margin-right:12px}
+.det-val{font-weight:500;text-align:right}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tag{background:var(--gold-pale);border:1px solid var(--gold-border);color:var(--ink-mid);padding:3px 8px;border-radius:var(--radius-sm);font-size:12px;font-weight:500}
+.ndm{color:var(--ink-soft);font-size:13px;font-style:italic}
+/* ENTRY TABLES */
+.etbl{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:13px}
+.etbl th{padding:7px 10px;background:var(--gold-pale);border:1px solid var(--border);font-size:11px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-mid);text-align:left}
+.etbl td{padding:7px 10px;border:1px solid var(--border);color:var(--ink);vertical-align:top}
+.etbl tr:nth-child(even) td{background:#FAFAF8}
+/* ACCORDION */
+.acc{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;background:#fff}
+.acc-h{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.acc-h:hover{background:var(--gold-pale)}
+.acc-t{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;color:var(--maroon);display:flex;align-items:center;gap:8px}
+.acc-arr{color:var(--gold);transition:transform 0.25s;font-size:14px}
+.acc.open .acc-arr{transform:rotate(180deg)}
+.acc-body{display:none;padding:4px 14px 14px;border-top:1px solid var(--border)}
+.acc.open .acc-body{display:block}
+.qa{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
+.qa:last-child{border-bottom:none}
+.qa-q{color:var(--ink-soft);flex:1;padding-right:10px;font-style:italic;font-size:12px}
+.qa-a{font-weight:500;flex-shrink:0}
+.qa-a.yes{color:#065F46}.qa-a.no{color:var(--error)}.qa-a.oth{color:var(--gold)}
+/* FAMILY TREE CANVAS */
+.ft-canvas-wrap{border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--gold-pale);overflow:hidden;height:300px;position:relative}
+.ft-mini{position:absolute;inset:0;width:100%;height:100%}
+/* LOADING */
+.loading{text-align:center;padding:40px;color:var(--ink-soft);font-size:14px;font-style:italic}
+.no-data{text-align:center;padding:40px;color:var(--ink-soft);font-size:14px;font-style:italic}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .cred-grid{grid-template-columns:1fr}
 }
 </style>
-
 </head>
 <body>
-
-<!-- LOGIN -->
-
-<div id="loginScreen" class="screen active">
-  <div class="login-bg">
-    <div class="login-card">
-      <div class="brand">
-        <div class="crest">S</div>
-        <div>
-          <div class="brand-name">Estate Planning with Silvester</div>
-          <div class="brand-sub">Client Planning Portal · v1.1</div>
-        </div>
-      </div>
-      <p class="login-intro">Your private estate planning depositary. Securely maintained by your advisor.</p>
-      <div class="fg"><label class="fl">Username</label><input type="text" id="lu" placeholder="Enter your username" autocomplete="username"/></div>
-      <div class="fg"><label class="fl">Password</label><input type="password" id="lp" placeholder="Enter your password" autocomplete="current-password"/></div>
-      <div id="lerr" class="err-msg"></div>
-      <button class="btn-p" onclick="doLogin()">Sign In</button>
-      <div class="login-footer">Don't have access? Contact Silvester to get set up.</div>
-    </div>
+<div class="topbar">
+  <div>
+    <div class="topbar-brand">Advisor Dashboard</div>
+    <div class="topbar-sub">Estate Planning with Silvester · v1.2</div>
+  </div>
+  <div class="topbar-right">
+    <button class="refresh-btn" onclick="loadClients()">↻ Refresh</button>
   </div>
 </div>
 
-<!-- APP -->
-
-<div id="appScreen" class="screen">
-  <div class="topbar">
-    <div class="topbar-brand">Estate Planning with Silvester</div>
-    <div class="topbar-r"><span class="vtag">v1.1</span><button class="hbg" onclick="openD()">☰</button></div>
-  </div>
-  <div class="prog-wrap"><div class="prog-fill" id="progBar" style="width:0%"></div></div>
-  <div class="autosave" id="asMsg">✓ Saved</div>
-
-  <div class="overlay" id="ov" onclick="closeD()"></div>
-  <div class="drawer" id="dr">
-    <div class="dr-top"><div class="crest sm">S</div><div class="dr-brand">Estate Planning<br>with Silvester</div></div>
-    <div class="dr-nav">
-      <div class="di active" id="di-dash" onclick="goSec('dash')"><span class="sn">◈</span>Dashboard</div>
-      <div class="di" id="di-s1" onclick="goSec('s1')"><span class="sn">1</span>Asset Inventory<span class="schk" id="chk-s1" style="display:none">✓</span></div>
-      <div class="di" id="di-s2" onclick="goSec('s2')"><span class="sn">2</span>Beneficiaries<span class="schk" id="chk-s2" style="display:none">✓</span></div>
-      <div class="di" id="di-s3" onclick="goSec('s3')"><span class="sn">3</span>Key Appointments<span class="schk" id="chk-s3" style="display:none">✓</span></div>
-      <div class="di" id="di-s4" onclick="goSec('s4')"><span class="sn">4</span>Asset Complexity<span class="schk" id="chk-s4" style="display:none">✓</span></div>
+<div class="main">
+  <div id="listView">
+    <div class="stats-grid">
+      <div class="stat"><div class="stat-label">Total Clients</div><div id="stTotal" class="stat-val">—</div></div>
+      <div class="stat"><div class="stat-label">Assets Filed</div><div id="stAssets" class="stat-val">—</div></div>
+      <div class="stat"><div class="stat-label">Beneficiaries Set</div><div id="stBen" class="stat-val">—</div></div>
+      <div class="stat"><div class="stat-label">Appointments Set</div><div id="stAppt" class="stat-val">—</div></div>
     </div>
-    <div class="dr-foot">
-      <div id="dcn" class="dc-nm"></div>
-      <div class="dc-adv">Advisor: <span id="dca"></span></div>
-      <button class="btn-out" onclick="doLogout()">Sign Out</button>
+    <div class="search-wrap">
+      <input type="text" class="search-bar" placeholder="Search by name or email..." oninput="filterClients(this.value)" id="searchBar"/>
     </div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--ink);margin-bottom:10px">All Clients</div>
+    <div class="client-list" id="clientList"><div class="loading">Loading clients...</div></div>
   </div>
 
-  <div class="main">
-
-```
-<!-- DASHBOARD -->
-<div id="sec-dash" class="sec active">
-  <div class="ph"><h1>Welcome, <span id="dn"></span></h1><p>Your estate planning progress at a glance.</p></div>
-  <div class="dgrid">
-    <div class="dc" onclick="goSec('s1')"><div class="dci">📋</div><div class="dcl">Assets</div><div id="dac" class="dcv">—</div><div class="dch">types recorded</div></div>
-    <div class="dc" onclick="goSec('s2')"><div class="dci">👨‍👩‍👧</div><div class="dcl">Beneficiaries</div><div id="dbc" class="dcv">—</div><div class="dch">identified</div></div>
-    <div class="dc" onclick="goSec('s3')"><div class="dci">⚖️</div><div class="dcl">Appointments</div><div id="dappt" class="dcv">—</div><div class="dch">roles filled</div></div>
-    <div class="dc hl" onclick="goSec('s4')"><div class="dci">◉</div><div class="dcl">Complexity</div><div id="dcc" class="dcv">—</div><div class="dch">sections done</div></div>
-    <div class="dc full"><div class="dcl">Overall Progress</div><div id="ds" class="dcv">—</div><div class="dch">completion</div></div>
-  </div>
-  <div class="sbox"><div class="sbox-t">Recorded Assets</div><div id="dal" class="alist"></div></div>
-  <div class="sbox"><div class="sbox-t">Planning Scope</div><div id="dscope" class="ndm">Not yet specified</div></div>
-</div>
-
-<!-- STEP 1 -->
-<div id="sec-s1" class="sec">
-  <div class="step-badge">📋 Step 1</div>
-  <div class="ph"><h1>Asset Inventory</h1><p>Identify and record all your assets. Add as many entries as needed.</p></div>
-
-  <div class="card">
-    <div class="card-title">What assets do you have?</div>
-    <div class="agrid" id="ach"></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">Location & Planning Scope</div>
-    <div class="fg"><label class="fl">Location of assets (select all that apply)</label>
-      <div class="clist">
-        <label class="crow" id="cr-lsg"><input type="checkbox" id="lsg"> Singapore</label>
-        <label class="crow" id="cr-los"><input type="checkbox" id="los"> Overseas</label>
-        <label class="crow" id="cr-lot"><input type="checkbox" id="lot"> Others: <input type="text" class="ii" id="lotx" placeholder="specify..." onclick="event.stopPropagation()"/></label>
+  <div id="detailView" style="display:none">
+    <button class="back-btn" onclick="showList()">← Back to all clients</button>
+    <div class="client-hdr">
+      <div id="dName" class="client-hdr-name"></div>
+      <div id="dEmail" class="client-hdr-email"></div>
+      <div class="cred-grid">
+        <div class="cred-item"><label>Username</label><span id="dUser"></span></div>
+        <div class="cred-item"><label>Password</label><span id="dPass"></span></div>
+        <div class="cred-item"><label>Client ID</label><span id="dId"></span></div>
+        <div class="cred-item"><label>Created</label><span id="dCreated"></span></div>
       </div>
     </div>
-    <div class="fg" style="margin-top:14px"><label class="fl">Planning scope</label>
-      <div class="clist">
-        <label class="crow"><input type="radio" name="sc" id="sww" value="Worldwide"> Worldwide — Primary Will</label>
-        <label class="crow"><input type="radio" name="sc" id="ssg" value="Singapore Only"> Singapore Only</label>
-        <label class="crow"><input type="radio" name="sc" id="sot" value="Others"> Others: <input type="text" class="ii" id="sotx" placeholder="specify..." onclick="event.stopPropagation()"/></label>
-      </div>
-    </div>
-    <div class="fg" style="margin-top:14px"><label class="fl">Estimated net worth (optional)</label>
-      <div class="wealth-opts">
-        <div class="w-opt" onclick="selW(this,'lt1M')">Below S$1M</div>
-        <div class="w-opt" onclick="selW(this,'1M-5M')">S$1M – S$5M</div>
-        <div class="w-opt" onclick="selW(this,'5M-20M')">S$5M – S$20M</div>
-        <div class="w-opt" onclick="selW(this,'gt20M')">Above S$20M</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCHEDULE SECTIONS -->
-  <div class="ssec" id="ss-property">
-    <div class="ssec-h" onclick="tgSS('property')"><div class="ssec-l"><span class="ssec-icon">🏠</span><span class="ssec-title">Properties</span></div><div class="ssec-r"><span class="ssec-stat" id="st-property">0 recorded</span><span class="ssec-arr">▾</span></div></div>
-    <div class="ssec-body"><div class="card-sub">Record each property separately, including overseas and investment properties.</div><div id="en-property"></div><button class="add-btn" onclick="addE('property')">+ Add Property</button></div>
-  </div>
-  <div class="ssec" id="ss-bank">
-    <div class="ssec-h" onclick="tgSS('bank')"><div class="ssec-l"><span class="ssec-icon">🏦</span><span class="ssec-title">Bank Accounts</span></div><div class="ssec-r"><span class="ssec-stat" id="st-bank">0 recorded</span><span class="ssec-arr">▾</span></div></div>
-    <div class="ssec-body"><div class="card-sub">Include all accounts across all countries and currencies.</div><div id="en-bank"></div><button class="add-btn" onclick="addE('bank')">+ Add Bank Account</button></div>
-  </div>
-  <div class="ssec" id="ss-invest">
-    <div class="ssec-h" onclick="tgSS('invest')"><div class="ssec-l"><span class="ssec-icon">📈</span><span class="ssec-title">Investment Accounts</span></div><div class="ssec-r"><span class="ssec-stat" id="st-invest">0 recorded</span><span class="ssec-arr">▾</span></div></div>
-    <div class="ssec-body"><div class="card-sub">Stocks, bonds, unit trusts, REITs, ETFs, crypto, and other investments.</div><div id="en-invest"></div><button class="add-btn" onclick="addE('invest')">+ Add Investment</button></div>
-  </div>
-  <div class="ssec" id="ss-insurance">
-    <div class="ssec-h" onclick="tgSS('insurance')"><div class="ssec-l"><span class="ssec-icon">🛡️</span><span class="ssec-title">Life Insurance Policies</span></div><div class="ssec-r"><span class="ssec-stat" id="st-insurance">0 recorded</span><span class="ssec-arr">▾</span></div></div>
-    <div class="ssec-body"><div class="card-sub">All life, endowment, ILP, and universal life policies.</div><div id="en-insurance"></div><button class="add-btn" onclick="addE('insurance')">+ Add Policy</button></div>
-  </div>
-  <div class="ssec" id="ss-loans">
-    <div class="ssec-h" onclick="tgSS('loans')"><div class="ssec-l"><span class="ssec-icon">💳</span><span class="ssec-title">Loans & Liabilities</span></div><div class="ssec-r"><span class="ssec-stat" id="st-loans">0 recorded</span><span class="ssec-arr">▾</span></div></div>
-    <div class="ssec-body"><div class="card-sub">Mortgages, car loans, personal loans, credit cards, and business loans.</div><div id="en-loans"></div><button class="add-btn" onclick="addE('loans')">+ Add Liability</button></div>
-  </div>
-  <div class="ssec" id="ss-digital">
-    <div class="ssec-h" onclick="tgSS('digital')"><div class="ssec-l"><span class="ssec-icon">💻</span><span class="ssec-title">Digital Assets</span></div><div class="ssec-r"><span class="ssec-stat" id="st-digital">0 recorded</span><span class="ssec-arr">▾</span></div></div>
-    <div class="ssec-body"><div class="card-sub">Cryptocurrency, online businesses, e-wallets, and digital accounts.</div><div id="en-digital"></div><button class="add-btn" onclick="addE('digital')">+ Add Digital Asset</button></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">Other Assets & Notes</div>
-    <div class="fg"><label class="fl">Vehicles, collectibles, intellectual property, safe deposit boxes, etc.</label><textarea id="otherAssets" placeholder="Describe any other assets..."></textarea></div>
-    <div class="fg"><label class="fl">Notes for your advisor</label><textarea id="assetNotes" placeholder="Any additional context or instructions..."></textarea></div>
-  </div>
-</div>
-
-<!-- STEP 2 -->
-<div id="sec-s2" class="sec">
-  <div class="step-badge">👨‍👩‍👧 Step 2</div>
-  <div class="ph"><h1>Identify Beneficiaries</h1><p>Who do you plan to leave your assets to?</p></div>
-  <div class="card">
-    <div class="card-title">Beneficiary Types</div>
-    <div class="card-sub">Check all that apply.</div>
-    <div class="ben-grid" id="benGrid"></div>
-    <div class="fg" style="margin-top:14px"><label class="fl">Any beneficiaries located overseas?</label>
-      <div class="yn-row">
-        <button class="yn-btn" id="bov-y" onclick="selYN('bov','Yes',this)">Yes</button>
-        <button class="yn-btn" id="bov-n" onclick="selYN('bov','No',this)">No</button>
-      </div>
-    </div>
-    <div class="consider-box">
-      <div class="consider-title">Points to Consider</div>
-      <div class="consider-item">Any dependents needing long-term financial or caregiving support (minors, elderly, special needs)?</div>
-      <div class="consider-item">Any strained relationships or past disputes that could lead to conflict?</div>
-      <div class="consider-item">Anyone financially reliant on you who may not be included in your estate distribution?</div>
-    </div>
-    <div class="nf"><label>Beneficiary notes</label><textarea id="benNotes" placeholder="Any specific wishes, concerns, or considerations about your beneficiaries..."></textarea></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Family Tree</div>
-    <div class="card-sub">Add family members to help identify potential conflicts and planning considerations. Be as comprehensive as possible.</div>
-    <div class="ft-wrap" id="ftWrap"><div class="ndm" style="text-align:center;padding:16px">No family members added yet. Use the form below.</div></div>
-    <div style="margin-top:12px"><label class="fl">Add family member</label>
-      <div class="ft-form">
-        <input type="text" id="ftName" placeholder="Full name"/>
-        <select id="ftRel">
-          <option value="grandparents">Grandparent</option>
-          <option value="parents">Parent</option>
-          <option value="siblings">Sibling</option>
-          <option value="spouse">Spouse/Partner</option>
-          <option value="children" selected>Child</option>
-          <option value="grandchildren">Grandchild</option>
-          <option value="nieces_nephews">Niece/Nephew</option>
-          <option value="others">Others</option>
-        </select>
-        <select id="ftGen">
-          <option value="M">Male ♂</option>
-          <option value="F">Female ♀</option>
-          <option value="O">Other ⚬</option>
-        </select>
-        <button onclick="addFT()">Add</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- STEP 3 -->
-<div id="sec-s3" class="sec">
-  <div class="step-badge">⚖️ Step 3</div>
-  <div class="ph"><h1>Key Appointments</h1><p>Identify who will carry out your wishes.</p></div>
-
-  <div class="card">
-    <div class="card-title">3.1 Executor</div>
-    <div class="card-sub">The Executor gathers your assets and ensures your Will instructions are carried out. Consider expertise, availability, independence, and reliability.</div>
-    <div class="fg"><label class="fl">Have you appointed an Executor?</label>
-      <div class="yn-row"><button class="yn-btn" id="ex-y" onclick="selYN('ex','Yes',this)">Yes</button><button class="yn-btn" id="ex-n" onclick="selYN('ex','No',this)">No</button></div>
-    </div>
-    <div class="apt-lbl">Executor #1 — PRIMARY</div>
-    <table class="apt-tbl"><tr><td>Full Name</td><td><input type="text" id="e1n" placeholder="Full legal name"/></td></tr><tr><td>Relationship</td><td><input type="text" id="e1r" placeholder="e.g. Spouse, Sibling"/></td></tr></table>
-    <div class="apt-lbl">Executor #2 — SUBSTITUTE</div>
-    <div class="fg"><label class="fl">Role</label>
-      <div class="yn-row"><button class="yn-btn" id="esub-j" onclick="selYNM('esub','Jointly',this)">Jointly with Executor #1</button><button class="yn-btn" id="esub-s" onclick="selYNM('esub','Substitute',this)">Substitute</button></div>
-    </div>
-    <table class="apt-tbl"><tr><td>Full Name</td><td><input type="text" id="e2n" placeholder="Full legal name"/></td></tr><tr><td>Relationship</td><td><input type="text" id="e2r" placeholder="e.g. Sibling, Adult Child"/></td></tr></table>
-    <div class="prec-opt"><input type="checkbox" id="ep1"><label for="ep1" style="font-size:13px;cursor:pointer"><strong>Precepts Trustee Ltd</strong> — Sole Executor & Trustee</label></div>
-    <div class="prec-opt" style="margin-top:6px"><input type="checkbox" id="ep2"><label for="ep2" style="font-size:13px;cursor:pointer"><strong>Precepts Trustee Ltd</strong> — Final Substitute Executor & Trustee</label></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">3.2 Trustee</div>
-    <div class="card-sub">The Trustee holds and manages money on behalf of your beneficiary.</div>
-    <div class="fg"><label class="fl">Trustee selection</label>
-      <div class="clist">
-        <label class="crow"><input type="radio" name="tc" id="tc-same" value="same"> Same as appointed Executor(s)</label>
-        <label class="crow"><input type="radio" name="tc" id="tc-diff" value="different"> As appointed below</label>
-      </div>
-    </div>
-    <div class="fg"><label class="fl">Have you appointed a Trustee?</label>
-      <div class="yn-row"><button class="yn-btn" id="tr-y" onclick="selYN('tr','Yes',this)">Yes</button><button class="yn-btn" id="tr-n" onclick="selYN('tr','No',this)">No</button></div>
-    </div>
-    <div class="apt-lbl">Trustee #1 — PRIMARY</div>
-    <table class="apt-tbl"><tr><td>Full Name</td><td><input type="text" id="t1n" placeholder="Full legal name"/></td></tr><tr><td>Relationship</td><td><input type="text" id="t1r" placeholder="e.g. Spouse, Sibling"/></td></tr></table>
-    <div class="apt-lbl">Trustee #2 — SUBSTITUTE</div>
-    <div class="fg"><label class="fl">Role</label>
-      <div class="yn-row"><button class="yn-btn" id="tsub-j" onclick="selYNM('tsub','Jointly',this)">Jointly with Trustee #1</button><button class="yn-btn" id="tsub-s" onclick="selYNM('tsub','Substitute',this)">Substitute</button></div>
-    </div>
-    <table class="apt-tbl"><tr><td>Full Name</td><td><input type="text" id="t2n" placeholder="Full legal name"/></td></tr><tr><td>Relationship</td><td><input type="text" id="t2r" placeholder="e.g. Sibling, Adult Child"/></td></tr></table>
-    <div class="prec-opt"><input type="checkbox" id="tp1"><label for="tp1" style="font-size:13px;cursor:pointer"><strong>Precepts Trustee Ltd</strong> — Trustee</label></div>
-    <div class="prec-opt" style="margin-top:6px"><input type="checkbox" id="tp2"><label for="tp2" style="font-size:13px;cursor:pointer"><strong>Precepts Trustee Ltd</strong> — Final Substitute Trustee</label></div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">3.3 Guardian (if applicable)</div>
-    <div class="card-sub">A Guardian provides care for your children if both biological parents are unable to.</div>
-    <div class="fg"><label class="fl">Have you appointed a Guardian?</label>
-      <div class="yn-row"><button class="yn-btn" id="gu-y" onclick="selYN('gu','Yes',this)">Yes</button><button class="yn-btn" id="gu-n" onclick="selYN('gu','No',this)">No</button><button class="yn-btn" id="gu-na" onclick="selYN('gu','N/A',this)">Not Applicable</button></div>
-    </div>
-    <div class="apt-lbl">Guardian #1</div>
-    <div class="fg"><label class="fl">When to act</label>
-      <div class="yn-row"><button class="yn-btn" id="g1w-sv" onclick="selYNM('g1w','Surviving',this)">Act with surviving parent</button><button class="yn-btn" id="g1w-dm" onclick="selYNM('g1w','Demise',this)">Act on demise of both parents</button></div>
-    </div>
-    <table class="apt-tbl"><tr><td>Full Name</td><td><input type="text" id="g1n" placeholder="Full legal name"/></td></tr><tr><td>Relationship</td><td><input type="text" id="g1r" placeholder="e.g. Sibling, Trusted Friend"/></td></tr></table>
-    <div class="apt-lbl">Guardian #2 — SUBSTITUTE</div>
-    <div class="fg"><label class="fl">Role</label>
-      <div class="yn-row"><button class="yn-btn" id="g2r-j" onclick="selYNM('g2r','Jointly',this)">Jointly with Guardian #1</button><button class="yn-btn" id="g2r-s" onclick="selYNM('g2r','Substitute',this)">Substitute</button></div>
-    </div>
-    <table class="apt-tbl"><tr><td>Full Name</td><td><input type="text" id="g2n" placeholder="Full legal name"/></td></tr><tr><td>Relationship</td><td><input type="text" id="g2r" placeholder="e.g. Sibling, Trusted Friend"/></td></tr></table>
-    <div class="nf"><label>Appointment notes</label><textarea id="apptNotes" placeholder="Any notes about your appointments or considerations..."></textarea></div>
-  </div>
-</div>
-
-<!-- STEP 4 -->
-<div id="sec-s4" class="sec">
-  <div class="step-badge">◉ Step 4</div>
-  <div class="ph"><h1>Asset Complexity</h1><p>Help us understand the complexity of your estate. All responses are confidential.</p></div>
-  <div id="cxAcc"></div>
-</div>
-```
-
-  </div><!-- end main -->
-
-  <div class="bnav">
-    <button class="bni active" id="bn-dash" onclick="goSec('dash')"><span class="ico">◈</span>Home</button>
-    <button class="bni" id="bn-s1" onclick="goSec('s1')"><span class="ico">📋</span>Assets<span class="dot"></span></button>
-    <button class="bni" id="bn-s2" onclick="goSec('s2')"><span class="ico">👥</span>People<span class="dot"></span></button>
-    <button class="bni" id="bn-s3" onclick="goSec('s3')"><span class="ico">⚖️</span>Appts<span class="dot"></span></button>
-    <button class="bni" id="bn-s4" onclick="goSec('s4')"><span class="ico">◉</span>Details<span class="dot"></span></button>
+    <div id="dContent"></div>
   </div>
 </div>
 
 <script>
 var GAS_URL='https://script.google.com/macros/s/AKfycbx2BScnbDAYx9nfGrLLFyxv7LiHa5o3H8xmcaeWSkQ7LzjE1V7gh04JdcSElnznK-8n/exec';
-var CC=null,SD={a:{},c:{}},AST=null,WV='',YNS={},FTD={grandparents:[],parents:[],siblings:[],spouse:[],children:[],grandchildren:[],nieces_nephews:[],others:[]},EN={property:[],bank:[],invest:[],insurance:[],loans:[],digital:[]},CQD={};
+var ALL=[];
 
-var AT=[{k:'property',n:'Property',s:'Family home, rental, land, vacation home'},{k:'vehicles',n:'Vehicles',s:'Cars, boats, motorcycles'},{k:'bankAccounts',n:'Bank Accounts',s:'Savings, fixed deposits, current accounts'},{k:'business',n:'Business Ownership',s:'Sole proprietorship, partnership, shares'},{k:'safeDeposit',n:'Safe Deposit Box',s:'Bank, home, office'},{k:'collectibles',n:'Collectibles & Valuables',s:'Jewellery, art, antiques, gold, watches'},{k:'investments',n:'Investment Accounts',s:'Stocks, bonds, unit trusts, REITs, crypto'},{k:'digital',n:'Digital Assets',s:'Cryptocurrency, online business, e-wallets'},{k:'retirement',n:'Retirement Accounts',s:'CPF, annuities'},{k:'ip',n:'Intellectual Property',s:'Patents, copyrights, trademarks, royalties'},{k:'insurance',n:'Life Insurance Policies',s:'Term, whole life, endowment, ILP, UL'},{k:'others',n:'Others',s:''}];
+var AT_LABELS={property:'Property',vehicles:'Vehicles',bankAccounts:'Bank Accounts',business:'Business Ownership',safeDeposit:'Safe Deposit Box',collectibles:'Collectibles & Valuables',investments:'Investment Accounts',digital:'Digital Assets',retirement:'Retirement Accounts',ip:'Intellectual Property',insurance:'Life Insurance Policies',others:'Others'};
+var BT_LABELS={spouse:'Spouse',children_bio:'Children (Bio)',children_adopted:'Children (Adopted)',parents:'Parents',siblings:'Siblings',extended:'Extended Family',legally_entitled:'Legally Entitled',charity:'Charity',business_partners:'Business Partners',friends:'Friends/Others',special_needs:'Special Needs',others:'Others'};
 
-var BT=[{k:'spouse',n:'Spouse',s:'Legally married partner'},{k:'children_bio',n:'Children (Biological)',s:'Biological children'},{k:'children_adopted',n:'Children (Adopted/Step)',s:'Adopted or stepchildren'},{k:'parents',n:'Parents',s:'Are they financially dependent on you?'},{k:'siblings',n:'Siblings',s:'Do they require financial support?'},{k:'extended',n:'Extended Family',s:'Nieces, nephews, cousins, etc.'},{k:'legally_entitled',n:'Legally Entitled Person',s:'Whom you do not intend to include'},{k:'charity',n:'Charity / Non-Profit',s:'Which causes matter to you?'},{k:'business_partners',n:'Business Partners',s:'Exit or succession plan in place?'},{k:'friends',n:'Friends or Others',s:'Non-relatives you like to give to'},{k:'special_needs',n:'Special Needs Dependents',s:'Requiring lifelong care or assistance?'},{k:'others',n:'Others',s:''}];
+var ENTRY_DEFS={
+  property:{label:'Properties',headers:['Country','Type','Ownership','Co-owner','Loan','Value','Currency'],keys:['country','type','ownership','coowner','loan','value','currency']},
+  bank:{label:'Bank Accounts',headers:['Bank','Type','Country','Currency','Ownership','Balance'],keys:['bank','type','country','currency','ownership','value']},
+  joint:{label:'Joint Accounts',headers:['Institution','Type','Joint Owner','Country','Currency','Contribution'],keys:['institution','type','jointOwner','country','currency','contribution']},
+  invest:{label:'Investments',headers:['Institution','Type','Country','Currency','Value','Bens Aware'],keys:['institution','type','country','currency','value','aware']},
+  insurance:{label:'Insurance Policies',headers:['Insurer','Type','Policy No.','Sum Assured','Currency','Nomination','Nominee'],keys:['insurer','type','policy_no','sum','currency','nomination','nominee']},
+  business:{label:'Business Interests',headers:['Name','Type','Country','Role','Ownership %','Co-owners','Value','Currency'],keys:['name','type','country','role','ownership_pct','coowners','value','currency']},
+  loans:{label:'Loans & Liabilities',headers:['Type','Institution','Country','Outstanding','Currency','Covered'],keys:['type','institution','country','outstanding','currency','covered']},
+  digital:{label:'Digital Assets',headers:['Platform','Type','Value','Currency','Access'],keys:['platform','type','value','currency','access']}
+};
 
-var CS=[{k:'property',i:'🏠',t:'Property',q:[{k:'ph',l:'How is your property being owned?',st:1},{k:'pt',l:'Type of property',o:['HDB','Private','Landed','Overseas','Multiple']},{k:'po',l:'Ownership structure',o:['Sole','Joint Tenancy','Tenancy-in-Common']},{k:'at2',l:'Does your ownership type allow for automatic transfer upon your passing?',o:['Yes','No']},{k:'ol',l:'Any outstanding loan on the property?',o:['Yes','No']},{k:'fh',l:'Will you like it to remain as a family home?',o:['Yes','No']},{k:'cd',l:'In a common disaster, who should own the property?',o:['Yes','No','Unsure']},{k:'fm',l:'Will your beneficiaries have the financial means to maintain the property?',o:['Yes','No']},{k:'lm',l:'Are there any limitations to transferring your property?',o:['Yes','No']},{k:'rl',l:'Will transferring the property affect the relationship between your beneficiaries?',o:['Yes','No']}]},{k:'joint',i:'🤝',t:'Joint Accounts',q:[{k:'hj',l:'Do you own any assets in joint names?',o:['Yes','No']},{k:'ct',l:'Who contributed to the joint account?',o:['Myself','Shared Equally','Other']},{k:'so',l:'Would you like to give to the surviving joint owner?',o:['Yes','No']}]},{k:'loans',i:'💳',t:'Loans & Liabilities',q:[{k:'hl',l:'Do you have outstanding debts or liabilities that should be planned for?',o:['Yes','No']},{k:'st2',l:'Have you considered how loans, credit cards, and mortgages will be settled?',o:['Yes','No']},{k:'di',l:'Do you have insurance policies that cover your debts?',o:['Yes','No']}]},{k:'invest',i:'📈',t:'Investment Accounts',q:[{k:'ih',l:'How would you like your investments to be managed?',st:1},{k:'il',l:'Where are these investments based?',o:['Singapore','Overseas','Both']},{k:'iw',l:'May certain investments be subject to different inheritance laws?',o:['Yes','No','Unsure']},{k:'ib',l:'Do your beneficiaries know how to manage these investments?',o:['Yes','No']}]},{k:'overseas',i:'✈️',t:'Overseas Assets',q:[{k:'ho',l:'Do you own assets in multiple countries?',o:['Yes','No']},{k:'fh2',l:'Have you checked if the country has forced heirship laws?',o:['Yes','No','N/A']},{k:'sw',l:'Is the value significant for you to have separate Wills for each country?',o:['Yes','No']}]},{k:'cpf',i:'🏦',t:'CPF',sg:1,q:[{k:'ch',l:'How would you like your CPF monies to be distributed?',st:1},{k:'cn',l:'Have you done your CPF nomination?',o:['Yes','No']},{k:'cp',l:'Do you prefer payout in a lump sum or through a Trust?',o:['Lump Sum','Trust']}]},{k:'ins',i:'🛡️',t:'Life Insurance',q:[{k:'ish',l:'How would you like your insurance payout to be distributed?',st:1},{k:'in2',l:'Have you done any nominations for your insurance policies?',o:['Yes','No','Partial']},{k:'ic',l:'Do you prefer for the insurance payout to be consolidated and paid out through your Will?',o:['Yes','No']}]},{k:'col',i:'💎',t:'Collectibles & Valuables',q:[{k:'coh',l:'How will your beneficiaries manage each item?',st:1},{k:'inf',l:"Have you informed the beneficiary or labelled the item with the beneficiary's name?",o:['Yes','No']},{k:'apr',l:'Will your beneficiary appreciate or value the item you intend to give?',o:['Yes','No','Unsure']}]},{k:'biz',i:'🏢',t:'Business',q:[{k:'hb',l:'Do you have a business that needs succession planning?',o:['Yes','No']},{k:'sc3',l:'Have you identified any successor?',o:['Yes','No','In Progress']},{k:'bs',l:'Have you considered a business succession plan or a buy-sell agreement?',o:['Yes','No','Considering']},{k:'ke',l:'Are there any key employees or partners who should inherit shares or ownership?',o:['Yes','No']}]},{k:'dig',i:'💻',t:'Digital Assets',q:[{k:'dh',l:'How will your beneficiaries know the existence of these accounts?',st:1},{k:'ac2',l:'Have you written down the access codes or set up legacy contacts?',o:['Yes','No','In Progress']}]}];
+var PQ_LABELS={
+  property:{autoTransfer:'Auto-transfer on passing?',familyHome:'Remain as family home?',commonDisaster:'Common disaster plan',maintainMeans:'Beneficiaries can maintain?',transferLimit:'Legal transfer limits?',relationshipEffect:'Will affect relationships?'},
+  bank:{beneficiaryAware:'Beneficiaries aware?',nomination:'Nomination done?'},
+  joint:{survivorWish:'Give to surviving joint owner?',conflictRisk:'Conflict risk?'},
+  invest:{differentLaw:'Subject to different inheritance laws?',canManage:'Beneficiaries can manage?',managePref:'Management preference'},
+  insurance:{throughWill:'Payout through Will?',trustPayout:'Hold in trust?'},
+  business:{successor:'Successor identified?',buySell:'Buy-sell agreement?',keyPerson:'Key persons to inherit?',continuity:'If you pass away preference'},
+  loans:{settlement:'Settlement planned?'},
+  digital:{beneficiaryAware:'Beneficiaries know it exists?',legacyContact:'Legacy contact set up?'}
+};
 
-var SCH={property:[{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'type',l:'Property Type',t:'sel',o:['HDB','Private Condo','Landed','Commercial','Overseas — Other']},{k:'ownership',l:'Ownership',t:'sel',o:['Sole','Joint Tenancy','Tenancy-in-Common']},{k:'coowner',l:'Co-owner Name',t:'text',p:'Full name (if any)'},{k:'loan',l:'Outstanding Loan',t:'sel',o:['Yes','No']},{k:'value',l:'Estimated Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','USD','THB','IDR','AUD','GBP','EUR','HKD','Other']}],bank:[{k:'bank',l:'Bank Name',t:'text',p:'e.g. DBS, UOB, Bangkok Bank'},{k:'type',l:'Account Type',t:'sel',o:['Savings','Current','Fixed Deposit','Joint']},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','USD','THB','IDR','AUD','GBP','EUR','HKD','Other']},{k:'ownership',l:'Sole or Joint',t:'sel',o:['Sole','Joint']},{k:'value',l:'Approximate Balance',t:'num',p:'Amount'}],invest:[{k:'institution',l:'Institution / Platform',t:'text',p:'e.g. Phillip Securities, Binance'},{k:'type',l:'Investment Type',t:'sel',o:['Stocks','Bonds','Unit Trusts','REITs','ETFs','Cryptocurrency','Options','Others']},{k:'country',l:'Country / Exchange',t:'text',p:'e.g. Singapore, US, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','USD','THB','IDR','AUD','GBP','EUR','HKD','Other']},{k:'value',l:'Approximate Value',t:'num',p:'Amount'},{k:'aware',l:'Beneficiaries Aware',t:'sel',o:['Yes','No','Partially']}],insurance:[{k:'insurer',l:'Insurance Company',t:'text',p:'e.g. AIA, Prudential, Great Eastern'},{k:'type',l:'Policy Type',t:'sel',o:['Term','Whole Life','Endowment','ILP','Universal Life','Group Insurance']},{k:'policy_no',l:'Policy Number',t:'text',p:'Optional'},{k:'sum',l:'Sum Assured / Death Benefit',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','USD','THB','IDR','AUD','GBP','EUR','Other']},{k:'nomination',l:'Nomination Done',t:'sel',o:['Yes','No','Partial']},{k:'nominee',l:'Nominee Name',t:'text',p:'Full name of nominee'}],loans:[{k:'type',l:'Loan Type',t:'sel',o:['Mortgage','Car Loan','Personal Loan','Credit Card','Business Loan','Student Loan','Other']},{k:'institution',l:'Institution',t:'text',p:'e.g. DBS, OCBC, Bangkok Bank'},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'outstanding',l:'Outstanding Amount',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','USD','THB','IDR','AUD','GBP','EUR','Other']},{k:'covered',l:'Insurance Covering This',t:'sel',o:['Yes','No']}],digital:[{k:'platform',l:'Platform / Exchange',t:'text',p:'e.g. Coinbase, MetaMask, PayPal'},{k:'type',l:'Asset Type',t:'sel',o:['Cryptocurrency','NFT','Online Business','E-wallet','Social Media Account','Domain/Website','Other']},{k:'value',l:'Approximate Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','USD','BTC','ETH','Other']},{k:'access',l:'Access Codes Stored',t:'sel',o:['Yes — Securely stored','Yes — Written down','No','In Progress']}]};
+var CX_SECTIONS=[
+  {k:'cpf',i:'🏦',t:'CPF',q:[{k:'ch',l:'How would you like CPF monies distributed?',st:1},{k:'cn',l:'CPF nomination done?'},{k:'cp',l:'Lump sum or Trust?'}]},
+  {k:'overseas',i:'✈️',t:'Overseas Assets',q:[{k:'ho',l:'Assets in multiple countries?'},{k:'fh2',l:'Checked forced heirship laws?'},{k:'sw',l:'Separate Wills per country?'}]},
+  {k:'col',i:'💎',t:'Collectibles & Valuables',q:[{k:'coh',l:'How will beneficiaries manage items?',st:1},{k:'inf',l:'Beneficiary informed/labelled?'},{k:'apr',l:'Beneficiary will appreciate item?'}]},
+  {k:'dig',i:'💻',t:'Digital Assets — General',q:[{k:'dh',l:'How will beneficiaries know about accounts?',st:1},{k:'ac2',l:'Access codes written down?'}]}
+];
 
-var ELABELS={property:'Property',bank:'Account',invest:'Investment',insurance:'Policy',loans:'Liability',digital:'Asset'};
-var FTLABELS={grandparents:'Grandparents',parents:'Parents',siblings:'Siblings',spouse:'Spouse / Partner',children:'Children',grandchildren:'Grandchildren',nieces_nephews:'Nieces & Nephews',others:'Others'};
+var FT_LABELS2={grandfather:'Grandfather',grandmother:'Grandmother',father:'Father',mother:'Mother',uncle:'Uncle',auntie:'Auntie',sibling:'Sibling',spouse:'Spouse','in-law':'In-law',child:'Child',grandchild:'Grandchild',nephew:'Nephew',niece:'Niece',cousin:'Cousin',biz:'Biz Partner',other:'Other',me:'Client'};
 
 // JSONP
 var _n=0;
@@ -505,223 +176,288 @@ function api(act,params,cb){
   var s=document.createElement('script');s.id=nm;s.src=url;s.onerror=function(){if(cb)cb(new Error('fail'),null);};document.head.appendChild(s);
 }
 
-// LOGIN
-function doLogin(){
-  var u=document.getElementById('lu').value.trim(),p=document.getElementById('lp').value,e=document.getElementById('lerr');
-  e.style.display='none';
-  if(!u||!p){e.textContent='Please enter your username and password.';e.style.display='block';return;}
-  e.textContent='Signing in...';e.style.display='block';e.style.background='transparent';e.style.border='none';e.style.color='#7A6455';
-  api('login',{username:u,password:p},function(err,r){
-    e.style.background='';e.style.border='';e.style.color='';
-    if(err||!r){e.textContent='Connection error. Please try again.';e.style.display='block';return;}
-    if(r.success){CC=r;initApp();}else{e.textContent=r.message||'Invalid username or password.';e.style.display='block';}
+function loadClients(){
+  document.getElementById('clientList').innerHTML='<div class="loading">Loading clients...</div>';
+  api('getAllClients',{},function(err,data){
+    if(err||!data||!data.clients){
+      document.getElementById('clientList').innerHTML='<div class="no-data">Could not load clients. Check your Apps Script deployment.</div>';return;
+    }
+    ALL=data.clients;
+    document.getElementById('stTotal').textContent=ALL.length;
+    document.getElementById('stAssets').textContent=ALL.filter(function(c){return c.hasAssets;}).length;
+    document.getElementById('stBen').textContent=ALL.filter(function(c){return c.hasBens;}).length;
+    document.getElementById('stAppt').textContent=ALL.filter(function(c){return c.hasAssets&&c.hasBens;}).length;
+    renderList(ALL);
   });
 }
 
-function doLogout(){CC=null;SD={a:{},c:{}};document.getElementById('appScreen').classList.remove('active');document.getElementById('loginScreen').classList.add('active');document.getElementById('lu').value='';document.getElementById('lp').value='';closeD();}
-
-// INIT
-function initApp(){
-  document.getElementById('loginScreen').classList.remove('active');
-  document.getElementById('appScreen').classList.add('active');
-  document.getElementById('dn').textContent=CC.name;
-  document.getElementById('dcn').textContent=CC.name;
-  document.getElementById('dca').textContent=CC.advisorName;
-  buildAT();buildBT();buildCX();renderFT();
-  api('getAssets',{clientId:CC.clientId},function(err,d){if(!err&&d&&d.v){SD.a=d;popA();updD();}});
-  api('getComplexity',{clientId:CC.clientId},function(err,d){if(!err&&d&&d.v){SD.c=d;popC();updD();}});
-  // Auto-save on any change
-  document.addEventListener('change',function(){schedSave();});
-  document.addEventListener('input',function(){schedSave();});
+function renderList(clients){
+  var el=document.getElementById('clientList');
+  if(!clients.length){el.innerHTML='<div class="no-data">No clients found.</div>';return;}
+  el.innerHTML=clients.map(function(c){
+    var status=c.hasAssets&&c.hasBens?'<span class="badge b-done">Active</span>':c.hasAssets||c.hasBens?'<span class="badge b-part">Started</span>':'<span class="badge b-none">Pending</span>';
+    return'<div class="client-row" onclick="showClient(\''+c.clientId+'\')"><div>'
+      +'<div class="client-name">'+c.name+'</div>'
+      +'<div class="client-meta">'+c.email+' &nbsp;·&nbsp; '+fmtDate(c.createdAt)+'</div>'
+      +'</div><div class="badges">'+status+'<span class="chev">›</span></div></div>';
+  }).join('');
 }
 
-function schedSave(){if(AST)clearTimeout(AST);AST=setTimeout(function(){saveAll(true);},2500);}
-
-function saveAll(auto){
-  if(!CC)return;
-  var ad=gatherA(),cd=gatherC();
-  api('saveAssets',{clientId:CC.clientId,data:JSON.stringify(ad)},function(){if(auto)flashSave();updD();});
-  api('saveComplexity',{clientId:CC.clientId,data:JSON.stringify(cd)},function(){});
+function filterClients(q){
+  renderList(ALL.filter(function(c){
+    return c.name.toLowerCase().includes(q.toLowerCase())||c.email.toLowerCase().includes(q.toLowerCase());
+  }));
 }
 
-function flashSave(){var e=document.getElementById('asMsg');e.classList.add('show');setTimeout(function(){e.classList.remove('show');},2000);}
-
-// NAV
-function openD(){document.getElementById('dr').classList.add('open');document.getElementById('ov').classList.add('open');}
-function closeD(){document.getElementById('dr').classList.remove('open');document.getElementById('ov').classList.remove('open');}
-function goSec(n){
-  ['dash','s1','s2','s3','s4'].forEach(function(x){
-    var s=document.getElementById('sec-'+x);if(s)s.classList.remove('active');
-    var di=document.getElementById('di-'+x);if(di)di.classList.remove('active');
-    var bn=document.getElementById('bn-'+x);if(bn)bn.classList.remove('active');
+function showClient(id){
+  var c=ALL.find(function(x){return x.clientId===id;});
+  if(!c)return;
+  document.getElementById('listView').style.display='none';
+  document.getElementById('detailView').style.display='block';
+  document.getElementById('dName').textContent=c.name;
+  document.getElementById('dEmail').textContent=c.email;
+  document.getElementById('dUser').textContent=c.username;
+  document.getElementById('dPass').textContent=c.password;
+  document.getElementById('dId').textContent=c.clientId;
+  document.getElementById('dCreated').textContent=fmtDate(c.createdAt);
+  document.getElementById('dContent').innerHTML='<div class="loading">Loading client data...</div>';
+  api('getAssets',{clientId:id},function(err,ad){
+    api('getComplexity',{clientId:id},function(err2,cd){
+      renderDetail(c,ad||{},cd||{});
+    });
   });
-  var s=document.getElementById('sec-'+n);if(s)s.classList.add('active');
-  var di=document.getElementById('di-'+n);if(di)di.classList.add('active');
-  var bn=document.getElementById('bn-'+n);if(bn)bn.classList.add('active');
-  closeD();window.scrollTo(0,0);
-}
-function tgSS(k){document.getElementById('ss-'+k).classList.toggle('open');}
-
-// BUILD
-function buildAT(){document.getElementById('ach').innerHTML=AT.map(function(a){return'<div class="aitem" id="ai-'+a.k+'" onclick="tgA(\''+a.k+'\',this)"><input type="checkbox" id="ac-'+a.k+'" onclick="event.stopPropagation();tgA(\''+a.k+'\',document.getElementById(\'ai-'+a.k+'\'))"><div><span class="an">'+a.n+'</span>'+(a.s?'<span class="as">'+a.s+'</span>':'')+'</div></div>';}).join('');}
-function tgA(k,el){var cb=document.getElementById('ac-'+k);if(event.target!==cb&&event.target.tagName!=='INPUT')cb.checked=!cb.checked;el.classList.toggle('checked',cb.checked);}
-
-function buildBT(){document.getElementById('benGrid').innerHTML=BT.map(function(b){return'<div class="ben-item" id="bi-'+b.k+'" onclick="tgB(\''+b.k+'\',this)"><input type="checkbox" id="bc-'+b.k+'" onclick="event.stopPropagation();tgB(\''+b.k+'\',document.getElementById(\'bi-'+b.k+'\'))"><div><span class="ben-name">'+b.n+'</span>'+(b.s?'<span class="ben-sub">'+b.s+'</span>':'')+'</div></div>';}).join('');}
-function tgB(k,el){var cb=document.getElementById('bc-'+k);if(event.target!==cb&&event.target.tagName!=='INPUT')cb.checked=!cb.checked;el.classList.toggle('checked',cb.checked);}
-
-// ENTRIES
-function addE(t){EN[t].push({});renderE(t);document.getElementById('ss-'+t).classList.add('open');}
-function removeE(t,i){EN[t].splice(i,1);renderE(t);}
-function updE(t,i,k,v){if(EN[t][i])EN[t][i][k]=v;}
-
-function renderE(t){
-  var sch=SCH[t],lbl=ELABELS[t];
-  document.getElementById('en-'+t).innerHTML=EN[t].map(function(ent,i){
-    var fields=sch.map(function(f){
-      var inp=f.t==='sel'?'<select id="e-'+t+'-'+i+'-'+f.k+'" onchange="updE(\''+t+'\','+i+',\''+f.k+'\',this.value)">'+f.o.map(function(o){return'<option value="'+o+'"'+(ent[f.k]===o?' selected':'')+'>'+o+'</option>';}).join('')+'</select>':'<input type="'+(f.t==='num'?'number':'text')+'" id="e-'+t+'-'+i+'-'+f.k+'" value="'+(ent[f.k]||'')+'" placeholder="'+(f.p||'')+'" oninput="updE(\''+t+'\','+i+',\''+f.k+'\',this.value)"/>';
-      return'<div class="fg"><label class="fl">'+f.l+'</label>'+inp+'</div>';
-    }).join('');
-    return'<div class="entry-card"><div class="entry-hdr"><span class="entry-num">'+lbl+' #'+(i+1)+'</span><button class="btn-d" onclick="removeE(\''+t+'\','+i+')">✕ Remove</button></div><div class="egrid">'+fields+'</div><div class="entry-cmt"><label class="fl" style="font-size:10px">Notes</label><textarea placeholder="Any notes for this '+(lbl||'entry').toLowerCase()+'..." oninput="updE(\''+t+'\','+i+',\'comment\',this.value)" style="min-height:55px">'+(ent.comment||'')+'</textarea></div></div>';
-
-}).join(’’);
-var c=EN[t].length;document.getElementById(‘st-’+t).textContent=c===0?‘0 recorded’:c+’ recorded’;
 }
 
-// FAMILY TREE
-function renderFT(){
-var wrap=document.getElementById(‘ftWrap’);
-var rows=Object.keys(FTLABELS).filter(function(r){return FTD[r]&&FTD[r].length;}).map(function(r){
-var tags=FTD[r].map(function(p,i){var ic=p.g===‘M’?‘♂’:p.g===‘F’?‘♀’:‘⚬’,cls=p.g===‘M’?‘gm’:p.g===‘F’?‘gf’:‘go’;return’<span class="ft-person"><span class="'+cls+'">’+ic+’</span>’+p.n+’<button class="rm-person" onclick="rmFT(\''+r+'\','+i+')">✕</button></span>’;}).join(’’);
-return’<div class="ft-row"><div class="ft-row-lbl">’+FTLABELS[r]+’</div><div class="ft-tags">’+tags+’</div></div>’;
-}).join(’’);
-wrap.innerHTML=rows||’<div class="ndm" style="text-align:center;padding:16px">No family members added yet. Use the form below.</div>’;
-}
-function addFT(){var n=document.getElementById(‘ftName’).value.trim(),r=document.getElementById(‘ftRel’).value,g=document.getElementById(‘ftGen’).value;if(!n)return;if(!FTD[r])FTD[r]=[];FTD[r].push({n:n,g:g});document.getElementById(‘ftName’).value=’’;renderFT();schedSave();}
-function rmFT(r,i){FTD[r].splice(i,1);renderFT();schedSave();}
-
-// YN BUTTONS
-function selYN(k,v,btn){
-YNS[k]=v;
-document.querySelectorAll(’[id^=”’+k+’-”]’).forEach(function(b){if(b.tagName===‘BUTTON’)b.className=‘yn-btn’;});
-btn.className=‘yn-btn ‘+(v===‘Yes’?‘sy’:v===‘No’?‘sn’:‘so’);
-}
-function selYNM(k,v,btn){YNS[k]=v;document.querySelectorAll(’[id^=”’+k+’-”]’).forEach(function(b){if(b.tagName===‘BUTTON’)b.className=‘yn-btn’;});btn.className=‘yn-btn so’;}
-function selW(el,v){WV=v;document.querySelectorAll(’.w-opt’).forEach(function(o){o.classList.remove(‘sel’);});el.classList.add(‘sel’);}
-
-// COMPLEXITY
-function buildCX(){
-document.getElementById(‘cxAcc’).innerHTML=CS.map(function(sec){
-var qs=sec.q.map(function(q){
-if(q.st)return’<div style="padding:10px 0;font-size:13px;font-weight:600;color:#4A3728;font-style:italic;border-bottom:1px solid #E8DFD0">’+q.l+’</div>’;
-return’<div style="padding:11px 0;border-bottom:1px solid #E8DFD0"><div style="font-size:13px;color:#1C1410;margin-bottom:9px;line-height:1.5">’+q.l+’</div><div class="yn-row">’+q.o.map(function(opt){var id=‘q-’+sec.k+’-’+q.k+’-’+opt.replace(/ /g,’_’).replace(///g,’-’);return’<button class="yn-btn" id="'+id+'" onclick="selCQ(\''+sec.k+'\',\''+q.k+'\',\''+opt+'\',this)">’+opt+’</button>’;}).join(’’)+’</div></div>’;
-}).join(’’);
-return’<div class="ssec" id="cx-'+sec.k+'"><div class="ssec-h" onclick="this.parentElement.classList.toggle(\'open\')"><div class="ssec-l"><span class="ssec-icon">’+sec.i+’</span><span class="ssec-title">’+sec.t+’</span>’+(sec.sg?’<span class="sg-badge">🇸🇬 SG only</span>’:’’)+’</div><div class="ssec-r"><span class="ssec-stat" id="acs-'+sec.k+'">Not started</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body">’+qs+’<div class="nf"><label>Comments</label><textarea placeholder="Any notes for this section..." style="min-height:55px" oninput="updCmt(\''+sec.k+'\',this.value)">’+(CQD[sec.k]&&CQD[sec.k].comment||’’)+’</textarea></div></div></div>’;
-}).join(’’);
+function showList(){
+  document.getElementById('detailView').style.display='none';
+  document.getElementById('listView').style.display='block';
+  document.getElementById('searchBar').value='';
+  renderList(ALL);
 }
 
-function selCQ(sk,qk,val,btn){
-if(!CQD[sk])CQD[sk]={};CQD[sk][qk]=val;
-var sec=CS.find(function(s){return s.k===sk;});
-sec.q.filter(function(q){return!q.st;}).forEach(function(q){q.o.forEach(function(opt){var b=document.getElementById(‘q-’+sk+’-’+q.k+’-’+opt.replace(/ /g,’*’).replace(///g,’-’));if(b)b.className=‘yn-btn’;});});
-Object.keys(CQD[sk]).forEach(function(k2){if(k2===‘comment’)return;var v=CQD[sk][k2];var b=document.getElementById(‘q-’+sk+’-’+k2+’-’+v.replace(/ /g,’*’).replace(///g,’-’));if(b)b.className=‘yn-btn ‘+(v===‘Yes’?‘sy’:v===‘No’?‘sn’:‘so’);});
-updAcs(sk);
-}
-function updCmt(sk,v){if(!CQD[sk])CQD[sk]={};CQD[sk].comment=v;}
-function updAcs(sk){
-var sec=CS.find(function(s){return s.k===sk;});
-var qs=sec.q.filter(function(q){return!q.st;});
-var d=CQD[sk]||{};
-var ans=qs.filter(function(q){return d[q.k];}).length;
-var el=document.getElementById(‘acs-’+sk);if(!el)return;
-if(ans===0){el.textContent=‘Not started’;el.style.color=’’;}
-else if(ans<qs.length){el.textContent=ans+’/’+qs.length+’ answered’;el.style.color=’#B8962E’;}
-else{el.textContent=‘Complete ✓’;el.style.color=’#2D7A4A’;}
+function renderDetail(c,ad,cd){
+  var html='';
+
+  // ── ASSET INVENTORY ─────────────────────────
+  html+='<div class="det-card"><div class="det-title">Asset Inventory</div>';
+  var types=ad.types||[];
+  if(!types.length){html+='<div class="ndm">No assets recorded.</div>';}
+  else{
+    html+='<div class="tags">'+types.map(function(k){return'<span class="tag">'+(AT_LABELS[k]||k)+'</span>';}).join('')+'</div>';
+    var rows=[];
+    if(ad.lsg||ad.los||ad.lot){
+      var locs=[];if(ad.lsg)locs.push('Singapore');if(ad.los)locs.push('Overseas');if(ad.lot&&ad.lotx)locs.push(ad.lotx);
+      rows.push(['Asset locations',locs.join(', ')]);
+    }
+    if(ad.sc)rows.push(['Planning scope',ad.sc+(ad.sotx?' ('+ad.sotx+')':'')]);
+    if(ad.wealth)rows.push(['Estimated net worth',ad.wealth+(ad.wealthCur?' '+ad.wealthCur:'')]);
+    if(ad.otherAssets)rows.push(['Other assets',ad.otherAssets]);
+    if(ad.assetNotes)rows.push(['Advisor notes',ad.assetNotes]);
+    rows.forEach(function(r){html+='<div class="det-row"><span class="det-lbl">'+r[0]+'</span><span class="det-val">'+r[1]+'</span></div>';});
+  }
+  html+='</div>';
+
+  // ── SCHEDULE ENTRIES ─────────────────────────
+  var entries=ad.entries||{};
+  var pqData=ad.pqData||{};
+  Object.keys(ENTRY_DEFS).forEach(function(t){
+    var arr=entries[t];if(!arr||!arr.length)return;
+    var def=ENTRY_DEFS[t];
+    html+='<div class="det-card"><div class="det-title">'+def.label+'</div>';
+    html+='<div style="overflow-x:auto"><table class="etbl"><thead><tr>';
+    def.headers.forEach(function(h){html+='<th>'+h+'</th>';});
+    html+='<th>Notes</th></tr></thead><tbody>';
+    arr.forEach(function(e,i){
+      html+='<tr>';
+      def.keys.forEach(function(k){html+='<td>'+(e[k]||'—')+'</td>';});
+      html+='<td>'+(e.comment||'—')+'</td></tr>';
+      // Planning questions for this entry
+      var pqs=PQ_LABELS[t];
+      if(pqs){
+        var pqAnswers=Object.keys(pqs).map(function(qk){
+          var val=pqData[t+'-'+i+'-'+qk];
+          return val?'<span style="font-size:11px;color:var(--ink-soft)">'+pqs[qk]+'</span> <strong style="font-size:12px">'+val+'</strong>':null;
+        }).filter(Boolean);
+        if(pqAnswers.length){
+          html+='<tr><td colspan="'+(def.keys.length+1)+'" style="background:var(--gold-pale);font-size:12px;padding:8px 10px">'
+            +'<span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--maroon);display:block;margin-bottom:4px">Planning Questions</span>'
+            +pqAnswers.join(' &nbsp;·&nbsp; ')+'</td></tr>';
+          if(pqData[t+'-'+i+'-pqNotes']){
+            html+='<tr><td colspan="'+(def.keys.length+1)+'" style="background:var(--gold-pale);font-size:12px;padding:4px 10px 8px;color:var(--ink-mid)">Note: '+pqData[t+'-'+i+'-pqNotes']+'</td></tr>';
+          }
+        }
+      }
+    });
+    html+='</tbody></table></div></div>';
+  });
+
+  // ── ASSET COMPLEXITY ─────────────────────────
+  var secs=cd.sections||{};
+  var hasAnyComplexity=CX_SECTIONS.some(function(sec){var d=secs[sec.k]||{};return Object.keys(d).filter(function(k){return k!=='comment';}).length>0;});
+  if(hasAnyComplexity){
+    html+='<div class="det-card"><div class="det-title">Asset Complexity</div>';
+    CX_SECTIONS.forEach(function(sec){
+      var d=secs[sec.k]||{};
+      var qs=sec.q.filter(function(q){return!q.st;});
+      var ans=qs.filter(function(q){return d[q.k];}).length;
+      if(!ans&&!d.comment)return;
+      html+='<div class="acc" id="adv-cx-'+sec.k+'">'
+        +'<div class="acc-h" onclick="tgAcc(\'adv-cx-'+sec.k+'\')">'
+        +'<span class="acc-t">'+sec.i+' '+sec.t+'</span>'
+        +'<div style="display:flex;align-items:center;gap:8px"><span style="font-size:11px;color:'+(ans===qs.length?'#2D7A4A':'#B8962E')+'">'+(ans===qs.length?'Complete ✓':ans+'/'+qs.length+'answered')+'</span><span class="acc-arr">▾</span></div>'
+        +'</div><div class="acc-body">';
+      qs.forEach(function(q){
+        var v=d[q.k]||'—';
+        var cls=v==='Yes'?'yes':v==='No'?'no':v==='—'?'':'oth';
+        html+='<div class="qa"><span class="qa-q">'+q.l+'</span><span class="qa-a '+cls+'">'+v+'</span></div>';
+      });
+      if(d.comment)html+='<div style="margin-top:8px;padding:8px;background:var(--gold-pale);border-radius:var(--radius-sm);font-size:12px;color:var(--ink-mid)"><strong>Comment:</strong> '+d.comment+'</div>';
+      html+='</div></div>';
+    });
+    html+='</div>';
+  }
+
+  // ── BENEFICIARIES ────────────────────────────
+  var bens=ad.bens||[];
+  html+='<div class="det-card"><div class="det-title">Beneficiaries</div>';
+  if(!bens.length){html+='<div class="ndm">No beneficiaries identified.</div>';}
+  else{
+    html+='<div class="tags">'+bens.map(function(k){return'<span class="tag">'+(BT_LABELS[k]||k)+'</span>';}).join('')+'</div>';
+    if(ad.benOverseas)html+='<div class="det-row"><span class="det-lbl">Overseas beneficiaries</span><span class="det-val">'+ad.benOverseas+'</span></div>';
+    if(ad.benNotes)html+='<div class="det-row"><span class="det-lbl">Notes</span><span class="det-val" style="text-align:left">'+ad.benNotes+'</span></div>';
+  }
+  html+='</div>';
+
+  // ── FAMILY TREE ──────────────────────────────
+  var ft=ad.ft||{};
+  var ftNodes=ft.nodes||[];
+  var ftEdges=ft.edges||[];
+  if(ftNodes.length>1){
+    html+='<div class="det-card"><div class="det-title">Family Tree</div>';
+    html+='<div class="ft-canvas-wrap"><canvas id="advFtCanvas" class="ft-mini"></canvas></div>';
+    // List view below canvas
+    html+='<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:6px">';
+    ftNodes.forEach(function(n){
+      if(n.role==='me')return;
+      var gi=n.gender==='M'?'♂':n.gender==='F'?'♀':'○';
+      html+='<span style="font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff">'+gi+' '+n.name+' <span style="color:var(--ink-soft);font-size:10px">('+(FT_LABELS2[n.role]||n.role)+')</span></span>';
+    });
+    html+='</div>';
+    // Connections
+    if(ftEdges.length){
+      html+='<div style="margin-top:8px;font-size:12px;color:var(--ink-soft)">';
+      ftEdges.forEach(function(e){
+        var a=ftNodes.find(function(n){return n.id===e.from;});
+        var b=ftNodes.find(function(n){return n.id===e.to;});
+        if(!a||!b)return;
+        var lbl=e.type==='spouse'?'Spouse/Partner':'Parent–child';
+        html+='<span style="display:inline-block;margin:2px 4px 2px 0">'+a.name+' ↔ '+b.name+' ('+lbl+')</span>';
+      });
+      html+='</div>';
+    }
+    html+='</div>';
+  }
+
+  // ── KEY APPOINTMENTS ─────────────────────────
+  var a=ad.appt||{};
+  if(a.e1n||a.t1n||a.g1n){
+    html+='<div class="det-card"><div class="det-title">Key Appointments</div>';
+    var arows=[];
+    if(a.ex)arows.push(['Executor appointed',a.ex]);
+    if(a.e1n)arows.push(['Executor #1',a.e1n+(a.e1r?' ('+a.e1r+')':'')]);
+    if(a.esub)arows.push(['Executor #2 role',a.esub]);
+    if(a.e2n)arows.push(['Executor #2',a.e2n+(a.e2r?' ('+a.e2r+')':'')]);
+    if(a.ep1)arows.push(['Precepts — Sole Executor','Yes']);
+    if(a.ep2)arows.push(['Precepts — Final Sub Executor','Yes']);
+    if(a.tc)arows.push(['Trustee selection',a.tc]);
+    if(a.t1n)arows.push(['Trustee #1',a.t1n+(a.t1r?' ('+a.t1r+')':'')]);
+    if(a.tsub)arows.push(['Trustee #2 role',a.tsub]);
+    if(a.t2n)arows.push(['Trustee #2',a.t2n+(a.t2r?' ('+a.t2r+')':'')]);
+    if(a.tp1)arows.push(['Precepts — Trustee','Yes']);
+    if(a.gu)arows.push(['Guardian appointed',a.gu]);
+    if(a.g1w)arows.push(['Guardian #1 when to act',a.g1w]);
+    if(a.g1n)arows.push(['Guardian #1',a.g1n+(a.g1r?' ('+a.g1r+')':'')]);
+    if(a.g2rl)arows.push(['Guardian #2 role',a.g2rl]);
+    if(a.g2n)arows.push(['Guardian #2',a.g2n+(a.g2r?' ('+a.g2r+')':'')]);
+    if(a.notes)arows.push(['Notes',a.notes]);
+    arows.forEach(function(r){html+='<div class="det-row"><span class="det-lbl">'+r[0]+'</span><span class="det-val">'+r[1]+'</span></div>';});
+    html+='</div>';
+  }
+
+  document.getElementById('dContent').innerHTML=html;
+
+  // Draw mini family tree
+  if(ftNodes.length>1){
+    setTimeout(function(){drawMiniTree(ftNodes,ftEdges);},100);
+  }
 }
 
-// GATHER
-function gatherA(){
-var types=AT.filter(function(a){var cb=document.getElementById(‘ac-’+a.k);return cb&&cb.checked;}).map(function(a){return a.k;});
-var bens=BT.filter(function(b){var cb=document.getElementById(‘bc-’+b.k);return cb&&cb.checked;}).map(function(b){return b.k;});
-var sc=document.querySelector(‘input[name=“sc”]:checked’);
-return{v:2,types:types,lsg:document.getElementById(‘lsg’).checked,los:document.getElementById(‘los’).checked,lot:document.getElementById(‘lot’).checked,lotx:document.getElementById(‘lotx’).value||’’,sc:sc?sc.value:’’,sotx:document.getElementById(‘sotx’).value||’’,wealth:WV,otherAssets:document.getElementById(‘otherAssets’).value||’’,assetNotes:document.getElementById(‘assetNotes’).value||’’,entries:JSON.parse(JSON.stringify(EN)),bens:bens,benOverseas:YNS[‘bov’]||’’,benNotes:document.getElementById(‘benNotes’).value||’’,ft:JSON.parse(JSON.stringify(FTD)),appt:{ex:YNS[‘ex’]||’’,e1n:document.getElementById(‘e1n’).value||’’,e1r:document.getElementById(‘e1r’).value||’’,esub:YNS[‘esub’]||’’,e2n:document.getElementById(‘e2n’).value||’’,e2r:document.getElementById(‘e2r’).value||’’,ep1:document.getElementById(‘ep1’).checked,ep2:document.getElementById(‘ep2’).checked,tc:(document.querySelector(‘input[name=“tc”]:checked’)||{}).value||’’,tr:YNS[‘tr’]||’’,t1n:document.getElementById(‘t1n’).value||’’,t1r:document.getElementById(‘t1r’).value||’’,tsub:YNS[‘tsub’]||’’,t2n:document.getElementById(‘t2n’).value||’’,t2r:document.getElementById(‘t2r’).value||’’,tp1:document.getElementById(‘tp1’).checked,tp2:document.getElementById(‘tp2’).checked,gu:YNS[‘gu’]||’’,g1w:YNS[‘g1w’]||’’,g1n:document.getElementById(‘g1n’).value||’’,g1r:document.getElementById(‘g1r’).value||’’,g2r:YNS[‘g2r’]||’’,g2n:document.getElementById(‘g2n’).value||’’,g2rel:document.getElementById(‘g2r’).value||’’,notes:document.getElementById(‘apptNotes’).value||’’}};
-}
-function gatherC(){return{v:2,sections:JSON.parse(JSON.stringify(CQD))};}
-
-// POPULATE
-function popA(){
-var d=SD.a;if(!d||!d.v)return;
-(d.types||[]).forEach(function(k){var cb=document.getElementById(‘ac-’+k);if(cb){cb.checked=true;document.getElementById(‘ai-’+k).classList.add(‘checked’);}});
-if(d.lsg)document.getElementById(‘lsg’).checked=true;
-if(d.los)document.getElementById(‘los’).checked=true;
-if(d.lot)document.getElementById(‘lot’).checked=true;
-if(d.lotx)document.getElementById(‘lotx’).value=d.lotx;
-if(d.sc){var sm={‘Worldwide’:‘sww’,‘Singapore Only’:‘ssg’,‘Others’:‘sot’};var el=document.getElementById(sm[d.sc]);if(el)el.checked=true;}
-if(d.sotx)document.getElementById(‘sotx’).value=d.sotx;
-if(d.wealth){WV=d.wealth;document.querySelectorAll(’.w-opt’).forEach(function(o){if(o.getAttribute(‘onclick’)&&o.getAttribute(‘onclick’).indexOf(”’”+d.wealth+”’”)>-1)o.classList.add(‘sel’);});}
-if(d.otherAssets)document.getElementById(‘otherAssets’).value=d.otherAssets;
-if(d.assetNotes)document.getElementById(‘assetNotes’).value=d.assetNotes;
-if(d.entries)Object.keys(d.entries).forEach(function(k){if(EN[k]!==undefined){EN[k]=d.entries[k]||[];renderE(k);}});
-if(d.bens)(d.bens||[]).forEach(function(k){var cb=document.getElementById(‘bc-’+k);if(cb){cb.checked=true;document.getElementById(‘bi-’+k).classList.add(‘checked’);}});
-if(d.benNotes)document.getElementById(‘benNotes’).value=d.benNotes;
-if(d.ft){FTD=d.ft;renderFT();}
-if(d.appt){
-var a=d.appt;
-var flds={e1n:‘e1n’,e1r:‘e1r’,e2n:‘e2n’,e2r:‘e2r’,t1n:‘t1n’,t1r:‘t1r’,t2n:‘t2n’,t2r:‘t2r’,g1n:‘g1n’,g1r:‘g1r’,g2n:‘g2n’};
-Object.keys(flds).forEach(function(k){var el=document.getElementById(flds[k]);if(el&&a[k])el.value=a[k];});
-if(a.apptNotes)document.getElementById(‘apptNotes’).value=a.apptNotes||a.notes||’’;
-[‘ep1’,‘ep2’,‘tp1’,‘tp2’].forEach(function(k){if(a[k])document.getElementById(k).checked=true;});
-if(a.tc){var tc=document.getElementById(‘tc-’+a.tc);if(tc)tc.checked=true;}
-var ynMap={ex:‘ex’,tr:‘tr’,gu:‘gu’,esub:‘esub’,tsub:‘tsub’,g1w:‘g1w’,g2r:‘g2r’,bov:‘bov’};
-Object.keys(ynMap).forEach(function(ak){
-var val=a[ak]||(d[ak])||’’;
-if(!val)return;
-YNS[ynMap[ak]]=val;
-var sfx=val===‘Yes’?’-y’:val===‘No’?’-n’:val===‘N/A’?’-na’:’-’+val.toLowerCase().replace(/ /g,’-’).substring(0,2);
-var btn=document.getElementById(ynMap[ak]+sfx);
-if(btn)btn.className=’yn-btn ’+(val===‘Yes’?‘sy’:val===‘No’?‘sn’:‘so’);
-});
-if(d.benOverseas){YNS[‘bov’]=d.benOverseas;var bb=document.getElementById(‘bov-’+(d.benOverseas===‘Yes’?‘y’:‘n’));if(bb)bb.className=’yn-btn ’+(d.benOverseas===‘Yes’?‘sy’:‘sn’);}
-}
-}
-
-function popC(){
-var d=SD.c;if(!d||!d.v||!d.sections)return;
-CQD=d.sections||{};
-CS.forEach(function(sec){
-var sd=CQD[sec.k]||{};
-sec.q.filter(function(q){return!q.st;}).forEach(function(q){var val=sd[q.k];if(val){var b=document.getElementById(‘q-’+sec.k+’-’+q.k+’-’+val.replace(/ /g,’_’).replace(///g,’-’));if(b)b.className=‘yn-btn ‘+(val===‘Yes’?‘sy’:val===‘No’?‘sn’:‘so’);}});
-if(sd.comment){var c=document.getElementById(‘cxAcc’).querySelector(’#cx-’+sec.k+’ textarea’);if(c)c.value=sd.comment;}
-updAcs(sec.k);
-});
-}
-
-// DASHBOARD
-function updD(){
-var d=SD.a||{};
-var ac=(d.types||[]).length;document.getElementById(‘dac’).textContent=ac||’—’;
-var bc=(d.bens||[]).length;document.getElementById(‘dbc’).textContent=bc||’—’;
-var a=d.appt||{};var apc=[a.e1n,a.t1n,a.g1n].filter(Boolean).length;document.getElementById(‘dappt’).textContent=apc+’/3’;
-var cd=SD.c||{};var done=CS.filter(function(sec){var qs=sec.q.filter(function(q){return!q.st;});var s=(cd.sections||{})[sec.k]||{};return qs.length>0&&qs.every(function(q){return s[q.k];});}).length;
-document.getElementById(‘dcc’).textContent=done+’/’+CS.length;
-var pct=Math.round(((ac>0?1:0)+(bc>0?1:0)+(apc>0?1:0)+(done===CS.length?1:0))/4*100);
-document.getElementById(‘ds’).textContent=pct+’%’;
-document.getElementById(‘progBar’).style.width=pct+’%’;
-document.getElementById(‘dal’).innerHTML=ac===0?’<span class="ndm">No assets recorded yet.</span>’:(d.types||[]).map(function(k){var a=AT.find(function(x){return x.k===k;});return’<span class="atag">’+(a?a.n:k)+’</span>’;}).join(’’);
-var sc=d.sc||’’;document.getElementById(‘dscope’).textContent=sc||(WV?’Wealth range: ’+WV:‘Not yet specified’);
-document.getElementById(‘bn-s1’).classList.toggle(‘done’,ac>0);
-document.getElementById(‘bn-s2’).classList.toggle(‘done’,bc>0);
-document.getElementById(‘bn-s3’).classList.toggle(‘done’,apc>0);
-document.getElementById(‘bn-s4’).classList.toggle(‘done’,done>0);
-if(ac>0)document.getElementById(‘chk-s1’).style.display=‘inline’;
-if(bc>0)document.getElementById(‘chk-s2’).style.display=‘inline’;
-if(apc>0)document.getElementById(‘chk-s3’).style.display=‘inline’;
-if(done>0)document.getElementById(‘chk-s4’).style.display=‘inline’;
+function drawMiniTree(nodes,edges){
+  var canvas=document.getElementById('advFtCanvas');
+  if(!canvas)return;
+  var w=canvas.offsetWidth||300,h=canvas.offsetHeight||280;
+  canvas.width=w;canvas.height=h;
+  var ctx=canvas.getContext('2d');
+  var NW=70,NH=30;
+  // Simple auto-layout by role
+  var genMap={'-3':[],'  -2':[],'  -1':[],'0':[],'1':[],'2':[],'3':[],'99':[]};
+  var roleGen={grandfather:-2,grandmother:-2,father:-1,mother:-1,uncle:-1,auntie:-1,sibling:0,spouse:0,'in-law':0,me:0,child:1,grandchild:2,nephew:1,niece:1,cousin:0,biz:99,other:0};
+  var byGen={};
+  nodes.forEach(function(n){
+    var g=roleGen[n.role]!==undefined?roleGen[n.role]:0;
+    if(!byGen[g])byGen[g]=[];
+    byGen[g].push(n);
+  });
+  var gens=Object.keys(byGen).map(Number).sort(function(a,b){return a-b;});
+  var totalGens=gens.length;
+  var levelH=Math.min(80,(h-40)/Math.max(totalGens,1));
+  var centerX=w/2,startY=20+levelH/2;
+  var posMap={};
+  gens.forEach(function(g,gi){
+    var row=byGen[g];
+    var totalW=row.length*NW+(row.length-1)*14;
+    var sx=centerX-totalW/2+NW/2;
+    row.forEach(function(n,i){
+      posMap[n.id]={x:sx+i*(NW+14),y:startY+gi*levelH};
+    });
+  });
+  // Draw edges
+  edges.forEach(function(e){
+    var a=posMap[e.from],b=posMap[e.to];
+    if(!a||!b)return;
+    ctx.save();
+    if(e.type==='spouse'){ctx.strokeStyle='#B8962E';ctx.lineWidth=2;ctx.setLineDash([]);}
+    else{ctx.strokeStyle='#7A6455';ctx.lineWidth=1.2;ctx.setLineDash([]);}
+    ctx.beginPath();
+    if(e.type==='spouse'){ctx.moveTo(a.x+(a.x<b.x?NW/2:-NW/2),a.y);ctx.lineTo(b.x+(b.x<a.x?NW/2:-NW/2),b.y);}
+    else{var py=a.y+(a.y<b.y?NH/2:-NH/2),cy=b.y+(b.y<a.y?NH/2:-NH/2),my=(py+cy)/2;ctx.moveTo(a.x,py);ctx.lineTo(a.x,my);ctx.lineTo(b.x,my);ctx.lineTo(b.x,cy);}
+    ctx.stroke();ctx.restore();
+  });
+  // Draw nodes
+  nodes.forEach(function(n){
+    var pos=posMap[n.id];if(!pos)return;
+    var isMe=n.role==='me';
+    ctx.save();
+    ctx.fillStyle=isMe?'#6B1A2A':'#fff';
+    ctx.strokeStyle=isMe?'#4A1019':'#D4AF5A';
+    ctx.lineWidth=isMe?1.5:0.8;
+    ctx.beginPath();ctx.roundRect(pos.x-NW/2,pos.y-NH/2,NW,NH,5);ctx.fill();ctx.stroke();
+    ctx.fillStyle=isMe?'#D4AF5A':'#1C1410';
+    ctx.font='500 11px sans-serif';ctx.textAlign='center';
+    ctx.fillText(n.name.length>8?n.name.slice(0,8)+'…':n.name,pos.x,pos.y+4);
+    ctx.restore();
+  });
 }
 
-document.addEventListener(‘DOMContentLoaded’,function(){
-var lp=document.getElementById(‘lp’);if(lp)lp.addEventListener(‘keydown’,function(e){if(e.key===‘Enter’)doLogin();});
-var lu=document.getElementById(‘lu’);if(lu)lu.addEventListener(‘keydown’,function(e){if(e.key===‘Enter’)lp.focus();});
-});
+function tgAcc(id){document.getElementById(id).classList.toggle('open');}
+
+function fmtDate(s){
+  if(!s)return'—';
+  try{var d=new Date(s);return d.toLocaleDateString('en-SG',{day:'numeric',month:'short',year:'numeric'});}
+  catch(e){return s;}
+}
+
+loadClients();
 </script>
 
 </body>
