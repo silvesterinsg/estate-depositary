@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Advisor Dashboard — Estate Planning with Silvester</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%;overflow-x:hidden;font-family:'DM Sans',sans-serif;font-size:15px;background:#FAF7F2;color:#1C1410;-webkit-text-size-adjust:100%}
+:root{
+  --gold:#B8962E;--gold-light:#D4AF5A;--gold-pale:#F5EDD6;
+  --maroon:#6B1A2A;--maroon-dark:#4A1019;--maroon-light:#8B2235;
+  --cream:#FAF7F2;--border:#E8DFD0;--success:#2D7A4A;--error:#B0312A;
+  --ink:#1C1410;--ink-mid:#4A3728;--ink-soft:#7A6455;
+}
+
+/* SCREENS */
+.screen{display:none}.screen.active{display:block}
+
+/* LOGIN */
+.login-bg{min-height:100vh;background:var(–maroon-dark);display:flex;align-items:center;justify-content:center;padding:24px 20px}
+.login-card{background:#fff;border-radius:8px;padding:32px 24px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.crest{width:44px;height:44px;min-width:44px;background:var(–maroon);color:var(–gold-light);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:‘Cormorant Garamond’,serif;font-size:24px;font-weight:500}
+.brand-name{font-family:‘Cormorant Garamond’,serif;font-size:16px;font-weight:600;color:#1C1410;line-height:1.3}
+.brand-sub{font-size:10px;color:#7A6455;letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}
+.login-intro{font-size:13px;color:#7A6455;line-height:1.6;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(–border)}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#4A3728;margin-bottom:5px}
+input[type=text],input[type=password]{width:100%;padding:13px 14px;border:1px solid var(–border);border-radius:6px;background:#FAF7F2;font-family:‘DM Sans’,sans-serif;font-size:16px;color:#1C1410;outline:none;-webkit-appearance:none}
+input:focus{border-color:var(–gold);background:#fff}
+.err{background:#FEF2F2;border:1px solid #FECACA;color:var(–error);padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:14px;display:none}
+.btn{display:block;width:100%;padding:15px;background:var(–maroon);color:var(–gold-light);border:none;border-radius:6px;font-family:‘DM Sans’,sans-serif;font-size:14px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;text-align:center}
+.btn:active{background:var(–maroon-light)}
+.btn.sm{width:auto;padding:10px 20px;font-size:12px}
+
+/* APP */
+#appScreen{min-height:100vh}
+.topbar{background:var(–maroon-dark);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-brand{font-family:‘Cormorant Garamond’,serif;font-size:15px;color:var(–gold-light);font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.advisor-badge{font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:0.05em;text-transform:uppercase}
+.btn-out{padding:8px 14px;background:transparent;border:1px solid rgba(184,150,46,0.3);color:var(–gold-light);border-radius:4px;font-size:11px;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;font-family:‘DM Sans’,sans-serif;-webkit-appearance:none}
+
+.main{padding:24px 20px 40px;max-width:900px;margin:0 auto}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.stat-card{background:#fff;border:1px solid var(–border);border-radius:6px;padding:16px}
+.stat-label{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:#7A6455;margin-bottom:4px}
+.stat-value{font-family:‘Cormorant Garamond’,serif;font-size:32px;font-weight:500;color:var(–maroon)}
+
+/* CLIENT LIST */
+.section-title{font-family:‘Cormorant Garamond’,serif;font-size:20px;font-weight:500;color:var(–ink);margin-bottom:14px}
+.search-bar{width:100%;padding:11px 14px;border:1px solid var(–border);border-radius:6px;background:#fff;font-family:‘DM Sans’,sans-serif;font-size:14px;color:var(–ink);outline:none;margin-bottom:14px;-webkit-appearance:none}
+.search-bar:focus{border-color:var(–gold)}
+.client-list{display:flex;flex-direction:column;gap:8px}
+.client-row{background:#fff;border:1px solid var(–border);border-radius:6px;padding:14px 16px;cursor:pointer;transition:border-color 0.2s;display:flex;align-items:center;justify-content:space-between}
+.client-row:hover{border-color:var(–gold)}
+.client-name{font-weight:500;font-size:15px;color:var(–ink)}
+.client-meta{font-size:12px;color:#7A6455;margin-top:2px}
+.client-badges{display:flex;gap:6px;flex-shrink:0;margin-left:12px}
+.badge{padding:3px 8px;border-radius:3px;font-size:11px;font-weight:500}
+.badge-done{background:#D1FAE5;color:#065F46}
+.badge-partial{background:#FEF3C7;color:#92400E}
+.badge-none{background:#F3F4F6;color:#6B7280}
+.chevron{color:#7A6455;font-size:14px;margin-left:8px;flex-shrink:0}
+.no-clients{text-align:center;padding:40px;color:#7A6455;font-size:14px;font-style:italic}
+
+/* CLIENT DETAIL */
+.back-btn{display:flex;align-items:center;gap:6px;color:var(–gold);font-size:13px;cursor:pointer;margin-bottom:20px;background:none;border:none;font-family:‘DM Sans’,sans-serif;padding:0}
+.client-header{background:#fff;border:1px solid var(–border);border-radius:6px;padding:20px;margin-bottom:16px}
+.client-header-name{font-family:‘Cormorant Garamond’,serif;font-size:24px;font-weight:500;color:var(–ink);margin-bottom:4px}
+.client-header-meta{font-size:13px;color:#7A6455}
+.client-header-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(–border)}
+.meta-item label{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:#7A6455;display:block;margin-bottom:2px}
+.meta-item span{font-size:13px;color:var(–ink);font-family:monospace}
+
+/* ASSET SECTION */
+.detail-card{background:#fff;border:1px solid var(–border);border-radius:6px;padding:18px;margin-bottom:14px}
+.detail-title{font-family:‘Cormorant Garamond’,serif;font-size:17px;font-weight:500;color:var(–maroon);margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(–border)}
+.asset-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.atag{background:var(–gold-pale);border:1px solid rgba(184,150,46,0.3);color:#4A3728;padding:5px 10px;border-radius:4px;font-size:12px;font-weight:500}
+.detail-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(–border);font-size:13px}
+.detail-row:last-child{border-bottom:none}
+.detail-row-label{color:#7A6455}
+.detail-row-val{color:var(–ink);font-weight:500;text-align:right;max-width:60%}
+.no-data{color:#7A6455;font-size:13px;font-style:italic}
+
+/* COMPLEXITY */
+.acc{border:1px solid var(–border);border-radius:6px;margin-bottom:8px;overflow:hidden;background:#fff}
+.acc-h{padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.acc-h:hover{background:var(–gold-pale)}
+.acc-title{font-family:‘Cormorant Garamond’,serif;font-size:15px;font-weight:500;color:var(–maroon);display:flex;align-items:center;gap:8px}
+.acc-status{font-size:11px;font-weight:500}
+.acc-arrow{color:var(–gold);transition:transform 0.3s}
+.acc.open .acc-arrow{transform:rotate(180deg)}
+.acc-body{display:none;padding:4px 14px 14px;border-top:1px solid var(–border)}
+.acc.open .acc-body{display:block}
+.qa-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(–border);font-size:13px}
+.qa-row:last-child{border-bottom:none}
+.qa-q{color:#7A6455;flex:1;padding-right:12px}
+.qa-a{font-weight:500;text-align:right;flex-shrink:0}
+.qa-a.yes{color:#065F46}.qa-a.no{color:#B0312A}.qa-a.other{color:var(–gold)}
+.qa-stmt{font-size:12px;font-style:italic;color:#7A6455;padding:8px 0;border-bottom:1px solid var(–border)}
+
+/* LOADING */
+.loading{text-align:center;padding:40px;color:#7A6455;font-size:14px}
+
+@media(max-width:600px){
+.stats-row{grid-template-columns:1fr 1fr}
+.client-header-grid{grid-template-columns:1fr}
+.topbar{padding:12px 16px}
+.main{padding:16px 14px 40px}
+}
+</style>
+
+</head>
+<body>
+
+<!-- LOGIN -->
+
+<div id="loginScreen" class="screen active">
+  <div class="login-bg">
+    <div class="login-card">
+      <div class="brand">
+        <div class="crest">S</div>
+        <div>
+          <div class="brand-name">Estate Planning with Silvester</div>
+          <div class="brand-sub">Advisor Dashboard</div>
+        </div>
+      </div>
+      <p class="login-intro">Restricted access. For advisor use only.</p>
+      <div class="fg">
+        <label>Advisor Password</label>
+        <input type="password" id="ap" placeholder="Enter advisor password"/>
+      </div>
+      <div id="aerr" class="err"></div>
+      <button class="btn" onclick="doAdvisorLogin()">Access Dashboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+
+<div id="appScreen" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">Advisor Dashboard</div>
+    <div class="topbar-right">
+      <span class="advisor-badge">Silvester Chua</span>
+      <button class="btn-out" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+```
+<!-- CLIENT LIST VIEW -->
+<div id="listView">
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Total Clients</div><div id="statTotal" class="stat-value">—</div></div>
+    <div class="stat-card"><div class="stat-label">Assets Filed</div><div id="statAssets" class="stat-value">—</div></div>
+    <div class="stat-card"><div class="stat-label">Fully Complete</div><div id="statComplete" class="stat-value">—</div></div>
+  </div>
+  <div class="section-title">All Clients</div>
+  <input type="text" class="search-bar" id="searchBar" placeholder="Search by name or email..." oninput="filterClients()"/>
+  <div class="client-list" id="clientList"><div class="loading">Loading clients...</div></div>
+</div>
+
+<!-- CLIENT DETAIL VIEW -->
+<div id="detailView" style="display:none">
+  <button class="back-btn" onclick="showList()">← Back to all clients</button>
+  <div class="client-header">
+    <div id="dName" class="client-header-name"></div>
+    <div id="dEmail" class="client-header-meta"></div>
+    <div class="client-header-grid">
+      <div class="meta-item"><label>Username</label><span id="dUser"></span></div>
+      <div class="meta-item"><label>Password</label><span id="dPass"></span></div>
+      <div class="meta-item"><label>Client ID</label><span id="dId"></span></div>
+      <div class="meta-item"><label>Created</label><span id="dCreated"></span></div>
+    </div>
+  </div>
+  <div id="dAssets"></div>
+  <div id="dComplexity"></div>
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbx2BScnbDAYx9nfGrLLFyxv7LiHa5o3H8xmcaeWSkQ7LzjE1V7gh04JdcSElnznK-8n/exec';
+var ADVISOR_PASSWORD = 'Precepts2024!'; // ← Change this to your preferred password
+
+var ALL_CLIENTS = [];
+
+// Asset type labels
+var AT_LABELS = {
+  property:'Property',vehicles:'Vehicles',bankAccounts:'Bank Accounts',
+  business:'Business Ownership',safeDeposit:'Safe Deposit Box',
+  collectibles:'Collectibles & Valuables',investments:'Investment Accounts',
+  digital:'Digital Assets',retirement:'Retirement Accounts',
+  ip:'Intellectual Property',insurance:'Life Insurance Policies',others:'Others'
+};
+
+// Complexity sections
+var CS=[
+  {k:'property',i:'🏠',t:'Property',q:[
+    {k:'ph',l:'How is your property being owned?',st:true},
+    {k:'pt',l:'Type of property'},{k:'po',l:'Ownership structure'},
+    {k:'at2',l:'Automatic transfer upon passing?'},{k:'ol',l:'Outstanding loan?'},
+    {k:'fh',l:'Remain as family home?'},{k:'cd',l:'Common disaster — who owns?'},
+    {k:'fm',l:'Beneficiaries have financial means?'},{k:'lm',l:'Limitations to transfer?'},
+    {k:'rl',l:'Will transfer affect relationships?'}
+  ]},
+  {k:'joint',i:'🤝',t:'Joint Account',q:[
+    {k:'hj',l:'Assets in joint names?'},{k:'ct',l:'Who contributed?'},
+    {k:'so',l:'Give to surviving joint owner?'}
+  ]},
+  {k:'loans',i:'💳',t:'Loans & Liabilities',q:[
+    {k:'hl',l:'Outstanding debts or liabilities?'},{k:'st2',l:'Loans/mortgages settlement planned?'},
+    {k:'di',l:'Insurance covering debts?'}
+  ]},
+  {k:'invest',i:'📈',t:'Investment Accounts',q:[
+    {k:'ih',l:'How would you like your investments to be managed?',st:true},
+    {k:'il',l:'Where are investments based?'},{k:'iw',l:'Subject to different inheritance laws?'},
+    {k:'ib',l:'Beneficiaries know how to manage?'}
+  ]},
+  {k:'overseas',i:'✈️',t:'Overseas Assets',q:[
+    {k:'ho',l:'Assets in multiple countries?'},{k:'fh2',l:'Checked forced heirship laws?'},
+    {k:'sw',l:'Separate Wills for each country?'}
+  ]},
+  {k:'cpf',i:'🏦',t:'CPF',q:[
+    {k:'ch',l:'How would you like your CPF monies to be distributed?',st:true},
+    {k:'cn',l:'CPF nomination done?'},{k:'cp',l:'Lump sum or Trust?'}
+  ]},
+  {k:'ins',i:'🛡️',t:'Life Insurance',q:[
+    {k:'ish',l:'How would you like your insurance payout to be distributed?',st:true},
+    {k:'in2',l:'Insurance nominations done?'},{k:'ic',l:'Consolidated through Will?'}
+  ]},
+  {k:'col',i:'💎',t:'Collectibles & Valuables',q:[
+    {k:'coh',l:'How will your beneficiaries manage each item?',st:true},
+    {k:'inf',l:'Beneficiary informed/labelled?'},{k:'apr',l:'Beneficiary will appreciate item?'}
+  ]},
+  {k:'biz',i:'🏢',t:'Business',q:[
+    {k:'hb',l:'Business needs succession planning?'},{k:'sc3',l:'Successor identified?'},
+    {k:'bs',l:'Buy-sell agreement considered?'},{k:'ke',l:'Key employees to inherit?'}
+  ]},
+  {k:'dig',i:'💻',t:'Digital Assets',q:[
+    {k:'dh',l:'How will your beneficiaries know the existence of these accounts?',st:true},
+    {k:'ac2',l:'Access codes written down?'}
+  ]}
+];
+
+// JSONP helper
+var _n=0;
+function api(action,params,cb){
+  var name='_cb'+(++_n);
+  var url=GAS_URL+'?action='+action+'&callback='+name;
+  Object.keys(params).forEach(function(k){url+='&'+k+'='+encodeURIComponent(params[k]);});
+  window[name]=function(d){delete window[name];document.head.removeChild(document.getElementById(name));cb(null,d);};
+  var s=document.createElement('script');s.id=name;s.src=url;
+  s.onerror=function(){cb(new Error('failed'),null);};
+  document.head.appendChild(s);
+}
+
+// LOGIN
+function doAdvisorLogin(){
+  var p=document.getElementById('ap').value;
+  var e=document.getElementById('aerr');
+  e.style.display='none';
+  if(p===ADVISOR_PASSWORD){
+    document.getElementById('loginScreen').classList.remove('active');
+    document.getElementById('appScreen').classList.add('active');
+    loadClients();
+  } else {
+    e.textContent='Incorrect password.';e.style.display='block';
+  }
+}
+
+function doLogout(){
+  document.getElementById('appScreen').classList.remove('active');
+  document.getElementById('loginScreen').classList.add('active');
+  document.getElementById('ap').value='';
+  ALL_CLIENTS=[];
+}
+
+// LOAD ALL CLIENTS
+function loadClients(){
+  api('getAllClients',{},function(err,data){
+    if(err||!data||!data.clients){
+      document.getElementById('clientList').innerHTML='<div class="no-clients">Could not load clients.</div>';
+      return;
+    }
+    ALL_CLIENTS=data.clients;
+    renderStats(data);
+    renderClientList(ALL_CLIENTS);
+  });
+}
+
+function renderStats(data){
+  document.getElementById('statTotal').textContent=data.clients.length;
+  document.getElementById('statAssets').textContent=data.clients.filter(function(c){return c.hasAssets;}).length;
+  document.getElementById('statComplete').textContent=data.clients.filter(function(c){return c.hasAssets&&c.hasComplexity;}).length;
+}
+
+function renderClientList(clients){
+  var el=document.getElementById('clientList');
+  if(!clients.length){el.innerHTML='<div class="no-clients">No clients found.</div>';return;}
+  el.innerHTML=clients.map(function(c){
+    var ab=c.hasAssets&&c.hasComplexity?'<span class="badge badge-done">Complete</span>':
+           c.hasAssets||c.hasComplexity?'<span class="badge badge-partial">In Progress</span>':
+           '<span class="badge badge-none">Not Started</span>';
+    return '<div class="client-row" onclick="showClient(\''+c.clientId+'\')"><div><div class="client-name">'+c.name+'</div><div class="client-meta">'+c.email+' &nbsp;·&nbsp; '+formatDate(c.createdAt)+'</div></div><div class="client-badges">'+ab+'<span class="chevron">›</span></div></div>';
+  }).join('');
+}
+
+function filterClients(){
+  var q=document.getElementById('searchBar').value.toLowerCase();
+  var filtered=ALL_CLIENTS.filter(function(c){
+    return c.name.toLowerCase().includes(q)||c.email.toLowerCase().includes(q);
+  });
+  renderClientList(filtered);
+}
+
+// CLIENT DETAIL
+function showClient(clientId){
+  var c=ALL_CLIENTS.find(function(x){return x.clientId===clientId;});
+  if(!c)return;
+  document.getElementById('listView').style.display='none';
+  document.getElementById('detailView').style.display='block';
+  document.getElementById('dName').textContent=c.name;
+  document.getElementById('dEmail').textContent=c.email;
+  document.getElementById('dUser').textContent=c.username;
+  document.getElementById('dPass').textContent=c.password;
+  document.getElementById('dId').textContent=c.clientId;
+  document.getElementById('dCreated').textContent=formatDate(c.createdAt);
+  document.getElementById('dAssets').innerHTML='<div class="loading">Loading assets...</div>';
+  document.getElementById('dComplexity').innerHTML='';
+
+  api('getAssets',{clientId:clientId},function(err,assets){
+    renderAssets(assets||{});
+  });
+  api('getComplexity',{clientId:clientId},function(err,complexity){
+    renderComplexity(complexity||{});
+  });
+}
+
+function showList(){
+  document.getElementById('detailView').style.display='none';
+  document.getElementById('listView').style.display='block';
+}
+
+function renderAssets(ad){
+  var types=(ad.types||[]);
+  var html='<div class="detail-card"><div class="detail-title">Asset Inventory</div>';
+  if(!types.length){html+='<div class="no-data">No assets recorded yet.</div>';}
+  else{
+    html+='<div class="asset-tags">'+types.map(function(k){return'<span class="atag">'+(AT_LABELS[k]||k)+'</span>';}).join('')+'</div>';
+    if(ad.ot)html+='<div class="detail-row"><span class="detail-row-label">Other assets</span><span class="detail-row-val">'+ad.ot+'</span></div>';
+    var locs=[];
+    if(ad.lsg)locs.push('Singapore');
+    if(ad.los)locs.push('Overseas');
+    if(ad.lot)locs.push(ad.lotx||'Others');
+    if(locs.length)html+='<div class="detail-row"><span class="detail-row-label">Asset locations</span><span class="detail-row-val">'+locs.join(', ')+'</span></div>';
+    if(ad.sc)html+='<div class="detail-row"><span class="detail-row-label">Planning scope</span><span class="detail-row-val">'+ad.sc+(ad.sotx?' ('+ad.sotx+')'):'')+'</span></div>';
+    if(ad.notes)html+='<div class="detail-row"><span class="detail-row-label">Notes</span><span class="detail-row-val">'+ad.notes+'</span></div>';
+  }
+  html+='</div>';
+  document.getElementById('dAssets').innerHTML=html;
+}
+
+function renderComplexity(cd){
+  var html='<div class="detail-title" style="font-family:Cormorant Garamond,serif;font-size:17px;font-weight:500;color:#6B1A2A;margin-bottom:10px;">Asset Complexity Responses</div>';
+  html+=CS.map(function(sec){
+    var secData=cd[sec.k]||{};
+    var answerableQs=sec.q.filter(function(q){return !q.st;});
+    var answered=answerableQs.filter(function(q){return secData[q.k];}).length;
+    var statusTxt=answered===0?'Not started':answered<answerableQs.length?answered+'/'+answerableQs.length+' answered':'Complete ✓';
+    var statusColor=answered===0?'#6B7280':answered<answerableQs.length?'#92400E':'#065F46';
+    var qsHtml=sec.q.map(function(q){
+      if(q.st)return'<div class="qa-stmt">'+q.l+'</div>';
+      var val=secData[q.k]||'—';
+      var cls=val==='Yes'?'yes':val==='No'?'no':val==='—'?'':'other';
+      return'<div class="qa-row"><span class="qa-q">'+q.l+'</span><span class="qa-a '+cls+'">'+val+'</span></div>';
+    }).join('');
+    return'<div class="acc" id="acc-'+sec.k+'"><div class="acc-h" onclick="tgAcc(\''+sec.k+'\')"><span class="acc-title">'+sec.i+' '+sec.t+'</span><div style="display:flex;align-items:center;gap:8px"><span class="acc-status" style="color:'+statusColor+'">'+statusTxt+'</span><span class="acc-arrow">▾</span></div></div><div class="acc-body">'+qsHtml+'</div></div>';
+  }).join('');
+  document.getElementById('dComplexity').innerHTML=html;
+}
+
+function tgAcc(k){document.getElementById('acc-'+k).classList.toggle('open');}
+
+function formatDate(str){
+  if(!str)return'—';
+  try{var d=new Date(str);return d.toLocaleDateString('en-SG',{day:'numeric',month:'short',year:'numeric'});}
+  catch(e){return str;}
+}
+
+document.getElementById('ap').addEventListener('keydown',function(e){if(e.key==='Enter')doAdvisorLogin();});
+</script>
+
+</body>
+</html>
