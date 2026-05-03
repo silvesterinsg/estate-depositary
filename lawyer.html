@@ -294,36 +294,120 @@ function addNote(){
   });
 }
 
+var ENTRY_DEFS={
+  property:{label:'Properties',headers:['Country','Type','Ownership','Co-owner','Loan','Value','Currency'],keys:['country','type','ownership','coowner','loan','value','currency']},
+  vehicles:{label:'Vehicles & High-Value Assets',headers:['Type','Make/Model','Reg No.','Country','Value','Currency','Loan'],keys:['type','make','regNo','country','value','currency','loan']},
+  bank:{label:'Bank Accounts',headers:['Bank','Type','Country','Currency','Ownership','Balance'],keys:['bank','type','country','currency','ownership','value']},
+  joint:{label:'Joint Accounts',headers:['Institution','Type','Joint Owner','Country','Currency','Contribution'],keys:['institution','type','jointOwner','country','currency','contribution']},
+  invest:{label:'Investments',headers:['Institution','Type','Country','Currency','Value','Bens Aware'],keys:['institution','type','country','currency','value','aware']},
+  insurance:{label:'Insurance Policies',headers:['Insurer','Type','Policy No.','Sum Assured','Currency','Nomination','Nominee'],keys:['insurer','type','policy_no','sum','currency','nomination','nominee']},
+  business:{label:'Business Interests',headers:['Name','Type','Country','Role','Ownership %','Co-owners','Value','Currency'],keys:['name','type','country','role','ownership_pct','coowners','value','currency']},
+  loans:{label:'Loans & Liabilities',headers:['Type','Institution','Country','Outstanding','Currency','Covered'],keys:['type','institution','country','outstanding','currency','covered']},
+  digital:{label:'Digital Assets',headers:['Platform','Type','Value','Currency','Access'],keys:['platform','type','value','currency','access']}
+};
+
+var PQ_LABELS={
+  property:{autoTransfer:'Auto-transfer on passing?',familyHome:'Remain as family home?',maintainMeans:'Beneficiaries can maintain?'},
+  vehicles:{nominee:'Identified who should inherit?'},
+  joint:{survivorWish:'Give to surviving joint owner?'},
+  invest:{differentLaw:'Subject to overseas inheritance laws?',managePref:'Management preference'},
+  insurance:{throughWill:'Payout through Will?'},
+  business:{successor:'Successor identified?',buySell:'Buy-sell agreement?',continuity:'If you pass away preference'},
+  loans:{settlement:'Settlement planned?'},
+  digital:{beneficiaryAware:'Beneficiaries know it exists?'}
+};
+
 function renderDetail(ad){
   var html='';
   var types=ad.types||[];
+  var pqData=ad.pqData||{};
+
+  // Overview
   html+='<div class="det-card"><div class="det-title">Asset Overview</div>';
   if(!types.length){html+='<div class="ndm">No assets recorded yet.</div>';}
   else{
     html+='<div class="tags">'+types.map(function(k){return'<span class="tag">'+(AT_LABELS[k]||k)+'</span>';}).join('')+'</div>';
-    if(ad.sc)html+='<div class="det-row"><span class="det-lbl">Planning scope</span><span class="det-val">'+ad.sc+'</span></div>';
+    var sc=Array.isArray(ad.sc)?ad.sc.join(', '):(ad.sc||'');
+    if(sc)html+='<div class="det-row"><span class="det-lbl">Planning scope</span><span class="det-val">'+sc+'</span></div>';
     if(ad.wealth)html+='<div class="det-row"><span class="det-lbl">Est. net worth</span><span class="det-val">'+ad.wealth+'</span></div>';
+    if(ad.otherAssets)html+='<div class="det-row"><span class="det-lbl">Other assets</span><span class="det-val">'+ad.otherAssets+'</span></div>';
+    if(ad.assetNotes)html+='<div class="det-row"><span class="det-lbl">Notes</span><span class="det-val" style="text-align:left">'+ad.assetNotes+'</span></div>';
   }
   html+='</div>';
+
+  // Schedule entries
+  var entries=ad.entries||{};
+  Object.keys(ENTRY_DEFS).forEach(function(t){
+    var arr=entries[t];if(!arr||!arr.length)return;
+    var def=ENTRY_DEFS[t];
+    html+='<div class="det-card"><div class="det-title">'+def.label+'</div>';
+    html+='<div style="overflow-x:auto"><table class="etbl"><thead><tr>';
+    def.headers.forEach(function(h){html+='<th>'+h+'</th>';});
+    html+='<th>Notes</th></tr></thead><tbody>';
+    arr.forEach(function(e,i){
+      html+='<tr>';
+      def.keys.forEach(function(k){html+='<td>'+(e[k]||'—')+'</td>';});
+      html+='<td>'+(e.comment||'—')+'</td></tr>';
+      // Planning questions
+      var pqs=PQ_LABELS[t];
+      if(pqs){
+        var answers=Object.keys(pqs).map(function(qk){
+          var val=pqData[t+'-'+i+'-'+qk];
+          return val?'<span style="font-size:11px;color:var(--ink-soft)">'+pqs[qk]+'</span> <strong style="font-size:12px">'+val+'</strong>':null;
+        }).filter(Boolean);
+        if(answers.length){
+          html+='<tr><td colspan="'+(def.keys.length+1)+'" style="background:var(--gold-pale);font-size:12px;padding:8px 10px">'
+            +'<span style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--maroon);display:block;margin-bottom:4px">Planning Questions</span>'
+            +answers.join(' &nbsp;·&nbsp; ')+'</td></tr>';
+        }
+      }
+    });
+    html+='</tbody></table></div></div>';
+  });
+
+  // Beneficiaries
   var bens=ad.bens||[];
-  if(bens.length){
-    html+='<div class="det-card"><div class="det-title">Beneficiaries</div>';
+  html+='<div class="det-card"><div class="det-title">Beneficiaries</div>';
+  if(!bens.length){html+='<div class="ndm">No beneficiaries identified yet.</div>';}
+  else{
     html+='<div class="tags">'+bens.map(function(k){return'<span class="tag">'+(BT_LABELS[k]||k)+'</span>';}).join('')+'</div>';
-    if(ad.benNotes)html+='<div style="font-size:14px;color:var(--ink-mid);line-height:1.6;margin-top:8px">'+ad.benNotes+'</div>';
-    html+='</div>';
+    if(ad.benOverseas)html+='<div class="det-row"><span class="det-lbl">Overseas beneficiaries</span><span class="det-val">'+ad.benOverseas+'</span></div>';
+    if(ad.benNotes)html+='<div class="det-row"><span class="det-lbl">Notes</span><span class="det-val" style="text-align:left">'+ad.benNotes+'</span></div>';
   }
+  html+='</div>';
+
+  // Family tree
+  var ft=ad.ft||{};
+  var ftNodes=ft.nodes||[];
+  var FT_LABELS2={grandfather:'Grandfather',grandmother:'Grandmother',father:'Father',mother:'Mother',uncle:'Uncle',auntie:'Auntie',sibling:'Sibling',spouse:'Spouse','in-law':'In-law',child:'Child',grandchild:'Grandchild',nephew:'Nephew',niece:'Niece',cousin:'Cousin',biz:'Biz Partner',other:'Other',me:'Client'};
+  if(ftNodes.length>1){
+    html+='<div class="det-card"><div class="det-title">Family Tree</div><div style="display:flex;flex-wrap:wrap;gap:6px">';
+    ftNodes.forEach(function(n){
+      if(n.role==='me')return;
+      var gi=n.gender==='M'?'♂':n.gender==='F'?'♀':'○';
+      html+='<span style="font-size:13px;padding:4px 9px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff">'+gi+' '+n.name+' <span style="color:var(--ink-soft);font-size:11px">('+(FT_LABELS2[n.role]||n.role)+')</span></span>';
+    });
+    html+='</div></div>';
+  }
+
+  // Appointments
   var a=ad.appt||{};
   if(a.e1n||a.t1n||a.g1n){
     html+='<div class="det-card"><div class="det-title">Key Appointments</div>';
     if(a.e1n)html+='<div class="det-row"><span class="det-lbl">Executor</span><span class="det-val">'+a.e1n+(a.e1r?' ('+a.e1r+')':'')+'</span></div>';
+    if(a.esub)html+='<div class="det-row"><span class="det-lbl">Executor #2 role</span><span class="det-val">'+a.esub+'</span></div>';
+    if(a.e2n)html+='<div class="det-row"><span class="det-lbl">Executor #2</span><span class="det-val">'+a.e2n+(a.e2r?' ('+a.e2r+')':'')+'</span></div>';
+    if(a.ep1)html+='<div class="det-row"><span class="det-lbl">Precepts — Sole Executor</span><span class="det-val">Yes</span></div>';
+    if(a.tc)html+='<div class="det-row"><span class="det-lbl">Trustee selection</span><span class="det-val">'+a.tc+'</span></div>';
     if(a.t1n)html+='<div class="det-row"><span class="det-lbl">Trustee</span><span class="det-val">'+a.t1n+(a.t1r?' ('+a.t1r+')':'')+'</span></div>';
+    if(a.gu)html+='<div class="det-row"><span class="det-lbl">Guardian appointed</span><span class="det-val">'+a.gu+'</span></div>';
     if(a.g1n)html+='<div class="det-row"><span class="det-lbl">Guardian</span><span class="det-val">'+a.g1n+(a.g1r?' ('+a.g1r+')':'')+'</span></div>';
     if(a.notes)html+='<div class="det-row"><span class="det-lbl">Notes</span><span class="det-val" style="text-align:left">'+a.notes+'</span></div>';
     html+='</div>';
   }
+
   document.getElementById('dContent').innerHTML=html;
 }
-
 document.addEventListener('DOMContentLoaded',function(){
   var lp=document.getElementById('lp');if(lp)lp.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 });
