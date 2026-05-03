@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Lawyer Portal — Estate Planning with Silvester</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:16px;background:#FAF7F2;color:#1C1410;-webkit-text-size-adjust:100%}
+:root{--gold:#B8962E;--gold-light:#D4AF5A;--gold-pale:#F5EDD6;--gold-border:rgba(184,150,46,0.25);--maroon:#6B1A2A;--maroon-dark:#4A1019;--border:#E8DFD0;--ink:#1C1410;--ink-soft:#7A6455;--ink-mid:#4A3728;--success:#2D7A4A;--error:#B0312A;--radius:8px;--radius-sm:4px}
+.screen{display:none}.screen.active{display:block}
+/* LOGIN */
+.login-bg{min-height:100vh;background:var(--maroon-dark);background-image:radial-gradient(ellipse at 25% 75%,rgba(184,150,46,0.12) 0%,transparent 55%);display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{background:#fff;border-radius:var(--radius);padding:36px 28px;width:100%;max-width:400px;box-shadow:0 24px 80px rgba(0,0,0,0.4)}
+.crest{width:46px;height:46px;background:var(--maroon);color:var(--gold-light);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.brand-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--ink)}
+.brand-sub{font-size:10px;color:var(--ink-soft);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px}
+.login-intro{font-size:13px;color:var(--ink-soft);line-height:1.6;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.fl{display:block;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:6px}
+.fg{margin-bottom:14px}
+input[type=text],input[type=password],input[type=email],textarea,select{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#FAF7F2;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--ink);outline:none;-webkit-appearance:none;appearance:none}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);background:#fff}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
+.err-msg{background:#FEF2F2;border:1px solid #FECACA;color:var(--error);padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;margin-bottom:14px;display:none}
+.btn-p{display:block;width:100%;padding:14px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;text-align:center}
+.btn-p:active{opacity:0.9}
+.login-footer{margin-top:16px;text-align:center;font-size:12px;color:var(--ink-soft)}
+.login-footer a{color:var(--gold);text-decoration:none}
+/* RESET */
+#resetScreen{display:none}
+#resetScreen.active{display:block}
+/* APP */
+.topbar{background:var(--maroon-dark);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-brand{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold-light);font-weight:500}
+.topbar-sub{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.05em}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.tbtn{padding:7px 13px;background:transparent;border:1px solid rgba(184,150,46,0.3);color:var(--gold-light);border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.main{padding:20px 16px 40px;max-width:900px;margin:0 auto}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.stat{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.stat-label{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:var(--maroon)}
+/* CLIENT LIST */
+.search-bar{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--ink);outline:none;margin-bottom:12px}
+.search-bar:focus{border-color:var(--gold)}
+.client-row{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.client-row:hover{border-color:var(--gold)}
+.client-name{font-weight:500;font-size:16px;color:var(--ink);margin-bottom:2px}
+.client-meta{font-size:12px;color:var(--ink-soft)}
+.badge{padding:3px 8px;border-radius:3px;font-size:11px;font-weight:500}
+.b-done{background:#D1FAE5;color:#065F46}.b-part{background:#FEF3C7;color:#92400E}.b-none{background:#F3F4F6;color:#6B7280}
+/* DETAIL */
+.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--gold);font-size:13px;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;margin-bottom:16px}
+.det-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px}
+.det-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--maroon);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.det-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px}
+.det-row:last-child{border-bottom:none}
+.det-lbl{color:var(--ink-soft)}
+.det-val{font-weight:500;text-align:right;max-width:60%}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.tag{background:var(--gold-pale);border:1px solid var(--gold-border);color:var(--ink-mid);padding:4px 9px;border-radius:var(--radius-sm);font-size:12px;font-weight:500}
+.ndm{color:var(--ink-soft);font-size:13px;font-style:italic}
+/* NOTES */
+.notes-section{background:var(--gold-pale);border:1px solid var(--gold-border);border-radius:var(--radius);padding:16px;margin-bottom:10px}
+.notes-title{font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--maroon);margin-bottom:10px}
+.note-item{background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;font-size:14px;line-height:1.6;color:var(--ink)}
+.note-meta{font-size:11px;color:var(--ink-soft);margin-top:6px}
+.note-form{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.note-form textarea{font-size:15px;min-height:80px;background:#fff}
+.note-form button{padding:11px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none}
+/* ENTRY TABLE */
+.etbl{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:13px}
+.etbl th{padding:7px 10px;background:var(--gold-pale);border:1px solid var(--border);font-size:11px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-mid);text-align:left}
+.etbl td{padding:7px 10px;border:1px solid var(--border);color:var(--ink);vertical-align:top}
+.etbl tr:nth-child(even) td{background:#FAFAF8}
+.loading{text-align:center;padding:40px;color:var(--ink-soft);font-size:14px;font-style:italic}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;padding:20px;overflow-y:auto}
+.modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;padding-top:60px}
+.modal-box{background:#fff;border-radius:var(--radius);padding:24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.25)}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--maroon);margin-bottom:16px}
+@media(max-width:600px){.stats-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="screen active">
+  <div class="login-bg">
+    <div class="login-card">
+      <div class="brand">
+        <div class="crest">S</div>
+        <div><div class="brand-name">Lawyer Portal</div><div class="brand-sub">Estate Planning with Silvester</div></div>
+      </div>
+      <p class="login-intro">Access your clients' estate planning records. Contact Silvester if you need help logging in.</p>
+      <div class="fg"><label class="fl">Username</label><input type="text" id="lu" placeholder="Your username" autocomplete="username"/></div>
+      <div class="fg"><label class="fl">Password</label><input type="password" id="lp" placeholder="Your password" autocomplete="current-password"/></div>
+      <div id="lerr" class="err-msg"></div>
+      <button class="btn-p" onclick="doLogin()">Sign In</button>
+      <div class="login-footer"><a href="#" onclick="showReset()">Forgot password?</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD RESET -->
+<div id="resetScreen">
+  <div class="login-bg">
+    <div class="login-card">
+      <div class="brand">
+        <div class="crest">S</div>
+        <div><div class="brand-name">Reset Password</div><div class="brand-sub">Lawyer Portal</div></div>
+      </div>
+      <p class="login-intro">Enter your email address and we'll send you a reset link.</p>
+      <div class="fg"><label class="fl">Email Address</label><input type="email" id="resetEmail" placeholder="Your email address"/></div>
+      <div id="resetMsg" style="font-size:13px;margin-bottom:12px;min-height:18px;text-align:center"></div>
+      <button class="btn-p" onclick="doReset()">Send Reset Link</button>
+      <div class="login-footer"><a href="#" onclick="showLogin()">← Back to login</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen" class="screen">
+  <div class="topbar">
+    <div>
+      <div class="topbar-brand" id="lawyerName">Lawyer Portal</div>
+      <div class="topbar-sub" id="lawyerFirm"></div>
+    </div>
+    <div class="topbar-right">
+      <button class="tbtn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+  <div class="main">
+    <!-- LIST VIEW -->
+    <div id="listView">
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-label">Your Clients</div><div id="stTotal" class="stat-val">—</div></div>
+        <div class="stat"><div class="stat-label">Filed Assets</div><div id="stAssets" class="stat-val">—</div></div>
+        <div class="stat"><div class="stat-label">Notes Added</div><div id="stNotes" class="stat-val">—</div></div>
+      </div>
+      <input type="text" class="search-bar" placeholder="Search clients..." oninput="filterClients(this.value)"/>
+      <div id="clientList"><div class="loading">Loading your clients...</div></div>
+    </div>
+    <!-- DETAIL VIEW -->
+    <div id="detailView" style="display:none">
+      <button class="back-btn" onclick="showList()">← Back</button>
+      <div class="det-card">
+        <div class="det-title" id="dName"></div>
+        <div id="dMeta" style="font-size:13px;color:var(--ink-soft);margin-bottom:10px"></div>
+        <div id="dRisk" style="font-size:13px;font-weight:500;color:var(--maroon)"></div>
+      </div>
+      <!-- LAWYER NOTES -->
+      <div class="notes-section">
+        <div class="notes-title">Your Notes</div>
+        <div id="notesList"></div>
+        <div class="note-form">
+          <textarea id="noteInput" placeholder="Add a note about this client..."></textarea>
+          <button onclick="addNote()">+ Add Note</button>
+        </div>
+      </div>
+      <!-- CLIENT DATA -->
+      <div id="dContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var GAS_URL='https://script.google.com/macros/s/AKfycbx2BScnbDAYx9nfGrLLFyxv7LiHa5o3H8xmcaeWSkQ7LzjE1V7gh04JdcSElnznK-8n/exec';
+var LC=null,ALL=[],CURRENT_CLIENT=null;
+
+var AT_LABELS={property:'Property',vehicles:'Vehicles',bankAccounts:'Bank Accounts',business:'Business Ownership',safeDeposit:'Safe Deposit Box',collectibles:'Collectibles & Valuables',investments:'Investment Accounts',digital:'Digital Assets',retirement:'Retirement Accounts',ip:'Intellectual Property',insurance:'Life Insurance Policies',others:'Others'};
+var BT_LABELS={spouse:'Spouse',children_bio:'Children (Bio)',children_adopted:'Children (Adopted)',parents:'Parents',siblings:'Siblings',extended:'Extended Family',legally_entitled:'Legally Entitled',charity:'Charity',business_partners:'Business Partners',friends:'Friends/Others',special_needs:'Special Needs',others:'Others'};
+
+var _n=0;
+function api(act,params,cb){
+  var nm='_cb'+(++_n),url=GAS_URL+'?action='+act+'&callback='+nm;
+  Object.keys(params).forEach(function(k){url+='&'+k+'='+encodeURIComponent(params[k]);});
+  window[nm]=function(d){try{document.head.removeChild(document.getElementById(nm));}catch(e){}delete window[nm];if(cb)cb(null,d);};
+  var s=document.createElement('script');s.id=nm;s.src=url;s.onerror=function(){if(cb)cb(new Error('fail'),null);};document.head.appendChild(s);
+}
+
+function showReset(){document.getElementById('loginScreen').classList.remove('active');document.getElementById('resetScreen').style.display='block';}
+function showLogin(){document.getElementById('resetScreen').style.display='none';document.getElementById('loginScreen').classList.add('active');}
+
+function doReset(){
+  var email=document.getElementById('resetEmail').value.trim();
+  var msg=document.getElementById('resetMsg');
+  if(!email){msg.style.color='var(--error)';msg.textContent='Please enter your email address.';return;}
+  msg.style.color='var(--ink-soft)';msg.textContent='Sending...';
+  api('lawyerResetPassword',{email:email},function(err,r){
+    if(!err&&r&&r.success){msg.style.color='var(--success)';msg.textContent='Reset link sent. Check your email.';}
+    else{msg.style.color='var(--error)';msg.textContent='Email not found. Please contact Silvester.';}
+  });
+}
+
+function doLogin(){
+  var u=document.getElementById('lu').value.trim(),p=document.getElementById('lp').value;
+  var e=document.getElementById('lerr');e.style.display='none';
+  if(!u||!p){e.textContent='Please enter your username and password.';e.style.display='block';return;}
+  e.textContent='Signing in...';e.style.display='block';e.style.background='transparent';e.style.border='none';e.style.color='#7A6455';
+  api('lawyerLogin',{username:u,password:p},function(err,r){
+    e.style.background='';e.style.border='';e.style.color='';
+    if(err||!r){e.textContent='Connection error. Please try again.';e.style.display='block';return;}
+    if(r.success){LC=r;initApp();}
+    else{e.textContent=r.message||'Invalid username or password.';e.style.display='block';}
+  });
+}
+
+function doLogout(){LC=null;ALL=[];document.getElementById('appScreen').classList.remove('active');document.getElementById('loginScreen').classList.add('active');document.getElementById('lu').value='';document.getElementById('lp').value='';}
+
+function initApp(){
+  document.getElementById('loginScreen').classList.remove('active');
+  document.getElementById('appScreen').classList.add('active');
+  document.getElementById('lawyerName').textContent=LC.name;
+  document.getElementById('lawyerFirm').textContent=LC.firm||'';
+  loadClients();
+}
+
+function loadClients(){
+  document.getElementById('clientList').innerHTML='<div class="loading">Loading your clients...</div>';
+  api('getLawyerClients',{lawyerId:LC.lawyerId},function(err,data){
+    if(err||!data||!data.clients){document.getElementById('clientList').innerHTML='<div class="loading">Could not load clients.</div>';return;}
+    ALL=data.clients;
+    document.getElementById('stTotal').textContent=ALL.length;
+    document.getElementById('stAssets').textContent=ALL.filter(function(c){return c.hasAssets;}).length;
+    var totalNotes=ALL.reduce(function(acc,c){return acc+(c.noteCount||0);},0);
+    document.getElementById('stNotes').textContent=totalNotes;
+    renderList(ALL);
+  });
+}
+
+function renderList(clients){
+  var el=document.getElementById('clientList');
+  if(!clients.length){el.innerHTML='<div class="loading">No clients found yet.</div>';return;}
+  el.innerHTML=clients.map(function(c){
+    var b=c.hasAssets?'<span class="badge b-done">Active</span>':'<span class="badge b-none">Pending</span>';
+    return'<div class="client-row" onclick="showClient(\''+c.clientId+'\')">'
+      +'<div><div class="client-name">'+c.name+'</div><div class="client-meta">'+c.email+'</div></div>'
+      +'<div style="display:flex;align-items:center;gap:8px">'+b+'<span style="color:var(--ink-soft);font-size:16px">›</span></div></div>';
+  }).join('');
+}
+
+function filterClients(q){renderList(ALL.filter(function(c){return c.name.toLowerCase().includes(q.toLowerCase())||c.email.toLowerCase().includes(q.toLowerCase());}));}
+
+function showClient(id){
+  CURRENT_CLIENT=ALL.find(function(x){return x.clientId===id;});
+  if(!CURRENT_CLIENT)return;
+  document.getElementById('listView').style.display='none';
+  document.getElementById('detailView').style.display='block';
+  document.getElementById('dName').textContent=CURRENT_CLIENT.name;
+  document.getElementById('dMeta').textContent=CURRENT_CLIENT.email;
+  document.getElementById('dContent').innerHTML='<div class="loading">Loading...</div>';
+  renderNotes(CURRENT_CLIENT.notes||[]);
+  api('getAssets',{clientId:id},function(err,ad){
+    renderDetail(ad||{});
+  });
+}
+
+function showList(){document.getElementById('detailView').style.display='none';document.getElementById('listView').style.display='block';loadClients();}
+
+function renderNotes(notes){
+  var el=document.getElementById('notesList');
+  if(!notes.length){el.innerHTML='<div class="ndm" style="margin-bottom:10px">No notes yet.</div>';return;}
+  el.innerHTML=notes.map(function(n){
+    return'<div class="note-item">'+n.text+'<div class="note-meta">'+n.date+'</div></div>';
+  }).join('');
+}
+
+function addNote(){
+  var txt=document.getElementById('noteInput').value.trim();
+  if(!txt||!CURRENT_CLIENT)return;
+  var note={text:txt,date:new Date().toLocaleDateString('en-SG',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})};
+  var notes=(CURRENT_CLIENT.notes||[]).concat([note]);
+  api('saveLawyerNote',{lawyerId:LC.lawyerId,clientId:CURRENT_CLIENT.clientId,notes:JSON.stringify(notes)},function(err,r){
+    if(!err&&r&&r.success){
+      CURRENT_CLIENT.notes=notes;
+      renderNotes(notes);
+      document.getElementById('noteInput').value='';
+    }
+  });
+}
+
+function renderDetail(ad){
+  var html='';
+  var types=ad.types||[];
+  html+='<div class="det-card"><div class="det-title">Asset Overview</div>';
+  if(!types.length){html+='<div class="ndm">No assets recorded yet.</div>';}
+  else{
+    html+='<div class="tags">'+types.map(function(k){return'<span class="tag">'+(AT_LABELS[k]||k)+'</span>';}).join('')+'</div>';
+    if(ad.sc)html+='<div class="det-row"><span class="det-lbl">Planning scope</span><span class="det-val">'+ad.sc+'</span></div>';
+    if(ad.wealth)html+='<div class="det-row"><span class="det-lbl">Est. net worth</span><span class="det-val">'+ad.wealth+'</span></div>';
+  }
+  html+='</div>';
+  var bens=ad.bens||[];
+  if(bens.length){
+    html+='<div class="det-card"><div class="det-title">Beneficiaries</div>';
+    html+='<div class="tags">'+bens.map(function(k){return'<span class="tag">'+(BT_LABELS[k]||k)+'</span>';}).join('')+'</div>';
+    if(ad.benNotes)html+='<div style="font-size:14px;color:var(--ink-mid);line-height:1.6;margin-top:8px">'+ad.benNotes+'</div>';
+    html+='</div>';
+  }
+  var a=ad.appt||{};
+  if(a.e1n||a.t1n||a.g1n){
+    html+='<div class="det-card"><div class="det-title">Key Appointments</div>';
+    if(a.e1n)html+='<div class="det-row"><span class="det-lbl">Executor</span><span class="det-val">'+a.e1n+(a.e1r?' ('+a.e1r+')':'')+'</span></div>';
+    if(a.t1n)html+='<div class="det-row"><span class="det-lbl">Trustee</span><span class="det-val">'+a.t1n+(a.t1r?' ('+a.t1r+')':'')+'</span></div>';
+    if(a.g1n)html+='<div class="det-row"><span class="det-lbl">Guardian</span><span class="det-val">'+a.g1n+(a.g1r?' ('+a.g1r+')':'')+'</span></div>';
+    if(a.notes)html+='<div class="det-row"><span class="det-lbl">Notes</span><span class="det-val" style="text-align:left">'+a.notes+'</span></div>';
+    html+='</div>';
+  }
+  document.getElementById('dContent').innerHTML=html;
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var lp=document.getElementById('lp');if(lp)lp.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+});
+</script>
+</body>
+</html>
