@@ -124,8 +124,10 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
   </div>
   <div class="topbar-right">
     <button class="refresh-btn" onclick="loadClients()">↻ Refresh</button>
+    <button class="refresh-btn" onclick="exportData()" style="background:rgba(45,122,74,0.2);border-color:rgba(45,122,74,0.5)" id="exportBtn">⬇ Export</button>
     <button class="refresh-btn" onclick="showLawyers()" style="background:rgba(184,150,46,0.15);border-color:rgba(184,150,46,0.4)">⚖ Lawyers</button>
     <button class="refresh-btn" onclick="showSettings()" style="background:rgba(184,150,46,0.15);border-color:rgba(184,150,46,0.4)">⚙ Dates</button>
+    <button class="refresh-btn" onclick="showBackup()" style="background:rgba(45,122,74,0.2);border-color:rgba(45,122,74,0.5);color:#6dc987">⬇ Backup</button>
   </div>
 </div>
 
@@ -193,6 +195,48 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
     <!-- Lawyer list -->
     <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px">Current Lawyers</div>
     <div id="lwList"><div style="font-size:13px;color:var(--ink-soft);font-style:italic">Loading...</div></div>
+  </div>
+</div>
+
+<!-- BACKUP MODAL -->
+<div id="backupOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;padding:20px;overflow-y:auto">
+  <div style="max-width:460px;margin:40px auto;background:#fff;border-radius:var(--radius);padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--maroon)">Data Backup</div>
+      <button onclick="closeBackup()" style="background:none;border:none;font-size:20px;color:var(--ink-soft);cursor:pointer">✕</button>
+    </div>
+
+    <!-- Auto backup info -->
+    <div style="background:var(--gold-pale);border:1px solid var(--gold-border);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--maroon);margin-bottom:6px">⏰ Weekly Auto-Backup</div>
+      <div style="font-size:13px;color:var(--ink-mid);line-height:1.6">Runs every day at midnight (SGT). Saves to your Google Drive folder <strong>"Depositary Backups — Estate Planning with Silvester"</strong>. Keeps last 30 days automatically.</div>
+      <div style="font-size:12px;color:var(--ink-soft);margin-top:8px">Status: <span id="autoBackupStatus">Set up trigger below to activate</span></div>
+    </div>
+
+    <!-- Manual backup to Drive -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:8px">💾 Backup to Google Drive Now</div>
+      <button onclick="runManualBackup()" id="backupDriveBtn" style="width:100%;padding:12px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;margin-bottom:6px">Save Backup to Google Drive</button>
+      <div id="backupDriveStatus" style="font-size:12px;text-align:center;min-height:16px;color:var(--ink-soft)"></div>
+    </div>
+
+    <!-- Export JSON -->
+    <div style="margin-bottom:14px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:8px">📥 Export All Data as JSON</div>
+      <button onclick="exportData()" id="exportBtn" style="width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink-mid);cursor:pointer">Download JSON File</button>
+      <div style="font-size:11px;color:var(--ink-soft);margin-top:5px">Downloads all client data as a .json file you can store anywhere.</div>
+    </div>
+
+    <!-- How to set up auto trigger -->
+    <div style="background:#F3F4F6;border-radius:var(--radius-sm);padding:12px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px">How to activate weekly auto-backup</div>
+      <div style="font-size:12px;color:var(--ink-soft);line-height:1.8">
+        1. Open your Depositary Apps Script<br>
+        2. Left sidebar → ⏰ Triggers<br>
+        3. Add trigger → Function: <strong>dailyBackup</strong><br>
+        4. Event: Time-driven → Day timer → Midnight to 1am
+      </div>
+    </div>
   </div>
 </div>
 
@@ -556,6 +600,70 @@ loadClients();
 </script>
 
 <script>
+// BACKUP
+function showBackup(){
+  document.getElementById('backupOverlay').style.display='block';
+  document.getElementById('backupDriveStatus').textContent='';
+}
+function closeBackup(){document.getElementById('backupOverlay').style.display='none';}
+
+function runManualBackup(){
+  var btn=document.getElementById('backupDriveBtn');
+  var status=document.getElementById('backupDriveStatus');
+  btn.disabled=true;btn.textContent='Saving...';
+  status.style.color='var(--ink-soft)';status.textContent='Connecting to Google Drive...';
+  api('manualBackup',{},function(err,r){
+    btn.disabled=false;btn.textContent='Save Backup to Google Drive';
+    if(!err&&r&&r.success){
+      status.style.color='var(--success)';
+      status.textContent='✓ Saved: '+r.filename+' ('+r.timestamp+')';
+    } else {
+      status.style.color='var(--error)';
+      status.textContent='Error: '+(r&&r.error?r.error:'Could not connect. Check Apps Script permissions.');
+    }
+  });
+}
+
+function exportData(){
+  var btn=document.getElementById('exportBtn');
+  btn.textContent='Preparing...';btn.disabled=true;
+  api('exportAllData',{},function(err,r){
+    btn.textContent='Download JSON File';btn.disabled=false;
+    if(err||!r){alert('Export failed. Please try again.');return;}
+    var json=JSON.stringify(r,null,2);
+    var blob=new Blob([json],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    var d=new Date();
+    a.href=url;
+    a.download='Depositary_Export_'+d.getFullYear()+''+String(d.getMonth()+1).padStart(2,'0')+''+String(d.getDate()).padStart(2,'0')+'.json';
+    document.body.appendChild(a);a.click();
+    document.body.removeChild(a);URL.revokeObjectURL(url);
+  });
+}
+
+// EXPORT / BACKUP
+function exportData(){
+  var btn=document.getElementById('exportBtn');
+  var orig=btn.textContent;
+  btn.textContent='Exporting...';btn.disabled=true;
+  api('getBackupData',{},function(err,data){
+    btn.textContent=orig;btn.disabled=false;
+    if(err||!data){alert('Export failed. Please try again.');return;}
+    // Download as JSON
+    var json=JSON.stringify(data,null,2);
+    var blob=new Blob([json],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;
+    var date=new Date().toISOString().slice(0,10);
+    a.download='Depositary_Backup_'+date+'.json';
+    document.body.appendChild(a);a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+}
+
 // LAWYER MANAGEMENT
 var lwCreds=null;
 function showLawyers(){
