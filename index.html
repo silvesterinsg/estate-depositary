@@ -294,15 +294,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
           </div>
         </div>
         <div class="fg" style="margin-top:12px"><label class="fl">Estimated net worth (optional)</label>
-          <div class="wealth-row">
-            <div class="wealth-opts">
-              <div class="w-opt" onclick="selW(this,'lt1M')">Below 1M</div>
-              <div class="w-opt" onclick="selW(this,'1M-5M')">1M – 5M</div>
-              <div class="w-opt" onclick="selW(this,'5M-20M')">5M – 20M</div>
-              <div class="w-opt" onclick="selW(this,'gt20M')">Above 20M</div>
-            </div>
-            <select id="wealthCur" class="wealth-cur"><option value="">CCY</option><option value="SGD">SGD</option><option value="THB">THB</option><option value="USD">USD</option><option value="IDR">IDR</option><option value="Other">Other</option></select>
-          </div>
+          <input type="text" id="wealthFree" placeholder="e.g. SGD 3M, USD 2M, THB 50M" style="margin-top:6px"/>
+          <div style="font-size:11px;color:var(--ink-soft);margin-top:4px">Include currency — e.g. SGD 5M, USD 2M, THB 80M</div>
         </div>
       </div>
       <div class="ssec" id="ss-property"><div class="ssec-h" onclick="tgSS('property')"><div class="ssec-l"><span class="ssec-icon">🏠</span><span class="ssec-title">Properties</span></div><div class="ssec-r"><span class="ssec-stat" id="st-property">0 recorded</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body"><div class="card-sub">Record each property separately. Planning questions inside each entry.</div><div id="en-property"></div><button class="add-btn" onclick="addE('property')">+ Add Property</button></div></div>
@@ -372,6 +365,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
           </select>
           <select id="ftGen2" style="width:70px;padding:9px 6px;font-size:13px"><option value="M">M ♂</option><option value="F">F ♀</option><option value="O">Other</option></select>
           <button onclick="ftAddNode()" style="padding:9px 14px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;-webkit-appearance:none;white-space:nowrap">+ Add</button>
+          <button id="ftDeleteModeBtn" onclick="ftToggleDeleteMode()" style="padding:9px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink-soft);cursor:pointer;-webkit-appearance:none;white-space:nowrap">✂ Delete line</button>
           <button onclick="ftClearAll()" style="padding:9px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:11px;color:var(--ink-soft);cursor:pointer;-webkit-appearance:none;white-space:nowrap">⊗ Clear</button>
         </div>
         <div style="position:relative;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--cream);overflow:hidden;height:420px;touch-action:none" id="ftOuter">
@@ -384,7 +378,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
           <div id="ftZoomLbl" style="position:absolute;bottom:10px;left:10px;font-size:11px;color:var(--ink-soft)">100%</div>
         </div>
         <div style="margin-top:8px;font-size:11px;color:var(--ink-soft)">
-          💡 Drag onto top/bottom of a node = parent–child &nbsp;·&nbsp; Left/right = spouse &nbsp;·&nbsp; Long-press to delete &nbsp;·&nbsp; Pinch to zoom
+          💡 Drag top/bottom = parent–child &nbsp;·&nbsp; Drag left/right = spouse &nbsp;·&nbsp; Tap <strong>✂ Delete line</strong> then tap a line to remove &nbsp;·&nbsp; Long-press a node to delete it &nbsp;·&nbsp; Pinch to zoom
         </div>
       </div>
     </div>
@@ -489,6 +483,36 @@ var FT_COLORS={
 };
 var FT_LABELS={grandfather:'Grandfather',grandmother:'Grandmother',father:'Father',mother:'Mother',uncle:'Uncle',auntie:'Auntie',sibling:'Sibling',spouse:'Spouse','in-law':'In-law',child:'Child',grandchild:'Grandchild',nephew:'Nephew',niece:'Niece',cousin:'Cousin',biz:'Biz Partner',other:'Other',me:'Client'};
 
+var ftDeleteMode=false;
+function ftToggleDeleteMode(){
+  ftDeleteMode=!ftDeleteMode;
+  var btn=document.getElementById('ftDeleteModeBtn');
+  if(btn){
+    btn.style.background=ftDeleteMode?'#B0312A':'transparent';
+    btn.style.color=ftDeleteMode?'#fff':'var(--ink-soft)';
+    btn.style.borderColor=ftDeleteMode?'#B0312A':'var(--border)';
+    btn.textContent=ftDeleteMode?'✂ Tap a line to delete':'✂ Delete line';
+  }
+  ftDraw();
+}
+
+function ftEdgeNear(cx,cy){
+  for(var i=0;i<ftEdges.length;i++){
+    var e=ftEdges[i];
+    var a=ftNodes.find(function(n){return n.id===e.from;});
+    var b=ftNodes.find(function(n){return n.id===e.to;});
+    if(!a||!b)continue;
+    var pts=ftEdgePts(a,b,e.type);
+    for(var j=0;j<pts.length-1;j++){
+      var x1=pts[j][0],y1=pts[j][1],x2=pts[j+1][0],y2=pts[j+1][1];
+      var dx=x2-x1,dy=y2-y1,l=dx*dx+dy*dy;
+      var t=l?Math.max(0,Math.min(1,((cx-x1)*dx+(cy-y1)*dy)/l)):0;
+      var dist=Math.hypot(cx-x1-t*dx,cy-y1-t*dy);
+      if(dist<14/ftScale)return i;
+    }
+  }return -1;
+}
+
 function ftInit(){
   var outer=document.getElementById('ftOuter');
   var canvas=document.getElementById('ftCanvas');
@@ -514,7 +538,14 @@ function ftDraw(){
   // Grid dots
   ctx.fillStyle='rgba(120,100,80,0.06)';
   for(var gx=0;gx<FT_CW;gx+=40)for(var gy=0;gy<FT_CH;gy+=40)ctx.fillRect(gx,gy,1.5,1.5);
-  // Snap highlight
+  // Delete mode indicator
+  if(ftDeleteMode){
+    ctx.save();
+    ctx.fillStyle='rgba(176,49,42,0.08)';ctx.fillRect(0,0,FT_CW,FT_CH);
+    ctx.fillStyle='#B0312A';ctx.font='bold 13px sans-serif';ctx.textAlign='center';
+    ctx.fillText('✂ DELETE MODE — Tap a line to remove it',FT_CW/2,30);
+    ctx.restore();
+  }
   if(ftSnap&&ftSnapSide){
     ctx.save();
     ctx.strokeStyle='#B8962E';ctx.lineWidth=2;ctx.setLineDash([4,3]);
@@ -670,6 +701,11 @@ function ftBindEvents(canvas,outer){
   }
   function startDrag(e,touch){
     var cp=getPos(e,touch);
+    if(ftDeleteMode){
+      var ei=ftEdgeNear(cp.x,cp.y);
+      if(ei>=0){ftEdges.splice(ei,1);ftDraw();schedSave();}
+      return;
+    }
     var n=ftNodeAt(cp.x,cp.y);
     if(n){ftDrag=n;ftDragOx=cp.x-n.x;ftDragOy=cp.y-n.y;}
     else{ftPan=true;var r=outer.getBoundingClientRect();ftPanStart={x:touch?e.touches[0].clientX:e.clientX,y:touch?e.touches[0].clientY:e.clientY};ftPanOrig={x:ftOffX,y:ftOffY};}
@@ -773,21 +809,29 @@ var AT=[{k:'property',n:'Property',s:'Family home, rental, land, vacation home'}
 var BT=[{k:'spouse',n:'Spouse',s:'Legally married partner'},{k:'children_bio',n:'Children (Biological)',s:'Biological children'},{k:'children_adopted',n:'Children (Adopted/Step)',s:'Adopted or stepchildren'},{k:'parents',n:'Parents',s:'Are they financially dependent on you?'},{k:'siblings',n:'Siblings',s:'Do they require financial support?'},{k:'extended',n:'Extended Family',s:'Nieces, nephews, cousins, etc.'},{k:'legally_entitled',n:'Legally Entitled Person',s:'Whom you do not intend to include'},{k:'charity',n:'Charity / Non-Profit',s:'Which causes matter to you?'},{k:'business_partners',n:'Business Partners',s:'Exit or succession plan in place?'},{k:'friends',n:'Friends or Others',s:'Non-relatives you like to give to'},{k:'special_needs',n:'Special Needs Dependents',s:'Requiring lifelong care or assistance?'},{k:'others',n:'Others',s:''}];
 
 var SCH={
-  property:{fields:[{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'type',l:'Property Type',t:'sel',o:['HDB','Private Condo','Landed','Thailand — Condo','Thailand — House/Land','Outside Singapore — Other','Commercial']},{k:'ownership',l:'Ownership Structure',t:'sel',o:['Sole','Joint Tenancy','Tenancy-in-Common','Company-owned','Trust-owned']},{k:'coowner',l:'Co-owner Name',t:'text',p:'Full name (if any)'},{k:'loan',l:'Outstanding Loan',t:'sel',o:['Yes','No']},{k:'value',l:'Estimated Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']}],pq:[{k:'autoTransfer',l:'Does your ownership type allow automatic transfer upon your passing?',o:['Yes','No','Unsure']},{k:'familyHome',l:'Will you like it to remain as a family home?',o:['Yes','No']},{k:'commonDisaster',l:'In a common disaster, who should own this property?',o:['Specify in notes','Unsure']},{k:'maintainMeans',l:'Will your beneficiaries have financial means to maintain this property?',o:['Yes','No','Unsure']},{k:'transferLimit',l:'Are there legal limitations to transferring this property?',o:['Yes','No','Unsure']},{k:'relationshipEffect',l:'Will transferring this property affect relationships between beneficiaries?',o:['Yes','No','Unsure']}]},
-  bank:{fields:[{k:'bank',l:'Bank Name',t:'text',p:'e.g. DBS, UOB, Bangkok Bank'},{k:'type',l:'Account Type',t:'sel',o:['Savings','Current','Fixed Deposit']},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'ownership',l:'Sole or Joint',t:'sel',o:['Sole','Joint']},{k:'value',l:'Approximate Balance',t:'num',p:'Amount'}],pq:[{k:'beneficiaryAware',l:'Are your beneficiaries aware this account exists?',o:['Yes','No']},{k:'nomination',l:'Have you done a nomination or set a beneficiary for this account?',o:['Yes','No','Not Available']}]},
-  joint:{fields:[{k:'institution',l:'Bank / Institution',t:'text',p:'e.g. DBS, UOB'},{k:'type',l:'Account / Asset Type',t:'sel',o:['Savings Account','Investment Account','Property','Business','Other']},{k:'jointOwner',l:'Joint Owner Name',t:'text',p:'Full name'},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'contribution',l:'Who Contributed',t:'sel',o:['Myself — Sole contributor','Shared Equally','Partner contributed more','Other']}],pq:[{k:'survivorWish',l:'Would you like to give to the surviving joint owner upon your passing?',o:['Yes','No','Depends']},{k:'conflictRisk',l:'Could this joint ownership create conflict among other beneficiaries?',o:['Yes','No','Unsure']}]},
-  invest:{fields:[{k:'institution',l:'Institution / Platform',t:'text',p:'e.g. Phillip Securities, Endowus, Binance'},{k:'type',l:'Investment Type',t:'sel',o:['Stocks','Bonds','Unit Trusts','REITs','ETFs','Cryptocurrency','Options','Others']},{k:'country',l:'Country / Exchange',t:'text',p:'e.g. Singapore, US, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'value',l:'Approximate Value',t:'num',p:'Amount'},{k:'aware',l:'Beneficiaries Aware',t:'sel',o:['Yes','No','Partially']}],pq:[{k:'differentLaw',l:'May this investment be subject to different inheritance laws (e.g. US situs)?',o:['Yes','No','Unsure']},{k:'canManage',l:'Can your beneficiaries manage or liquidate this investment?',o:['Yes','No','Unsure']},{k:'managePref',l:'How would you like this investment handled?',o:['Liquidate','Continue holding','Advisor to decide']}]},
-  insurance:{fields:[{k:'insurer',l:'Insurance Company',t:'text',p:'e.g. AIA, Prudential, Great Eastern'},{k:'type',l:'Policy Type',t:'sel',o:['Term','Whole Life','Endowment','ILP','Universal Life','Group Insurance']},{k:'policy_no',l:'Policy Number',t:'text',p:'Optional'},{k:'sum',l:'Sum Assured / Death Benefit',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','Other']},{k:'nomination',l:'Nomination Done',t:'sel',o:['Yes','No','Partial']},{k:'nominee',l:'Nominee Name',t:'text',p:'Full name of nominee'}],pq:[{k:'throughWill',l:'Do you prefer this payout to be consolidated through your Will?',o:['Yes','No','Unsure']},{k:'trustPayout',l:'Should payout be held in trust (e.g. for minor beneficiaries)?',o:['Yes','No','Unsure']}]},
-  business:{fields:[{k:'name',l:'Business Name',t:'text',p:'Registered company name'},{k:'type',l:'Entity Type',t:'sel',o:['Sole Proprietorship','Partnership','Private Ltd (Pte Ltd)','Public Listed','Thai Co. Ltd','Overseas — Other']},{k:'country',l:'Country of Incorporation',t:'text',p:'e.g. Singapore, Thailand'},{k:'role',l:'Your Role',t:'sel',o:['Sole Owner','Director & Shareholder','Shareholder only','Partner','Silent Partner']},{k:'ownership_pct',l:'Your Ownership %',t:'text',p:'e.g. 100%, 51%'},{k:'coowners',l:'Co-owners / Partners',t:'text',p:'Names and % (if any)'},{k:'value',l:'Estimated Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','Other']}],pq:[{k:'successor',l:'Have you identified a successor?',o:['Yes','No','In Progress']},{k:'buySell',l:'Is there a buy-sell or shareholders agreement in place?',o:['Yes','No','In Progress']},{k:'keyPerson',l:'Key employees/partners to inherit shares or ownership?',o:['Yes','No']},{k:'continuity',l:'Preference if you pass away?',o:['Continue operations','Sell / wind up','Family to decide']}]},
-  loans:{fields:[{k:'type',l:'Loan Type',t:'sel',o:['Mortgage','Car Loan','Personal Loan','Credit Card','Business Loan','Student Loan','Other']},{k:'institution',l:'Institution',t:'text',p:'e.g. DBS, OCBC, Bangkok Bank'},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'outstanding',l:'Outstanding Amount',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','Other']},{k:'covered',l:'Insurance Covering This',t:'sel',o:['Yes','No']}],pq:[{k:'settlement',l:'Have you planned how this liability will be settled upon your passing?',o:['Yes','No','Partially']}]},
-  digital:{fields:[{k:'platform',l:'Platform / Exchange',t:'text',p:'e.g. Coinbase, MetaMask, PayPal'},{k:'type',l:'Asset Type',t:'sel',o:['Cryptocurrency','NFT','Online Business','E-wallet','Social Media Account','Domain/Website','Other']},{k:'value',l:'Approximate Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','USD','BTC','ETH','THB','Other']},{k:'access',l:'Access Codes Stored',t:'sel',o:['Yes — Securely stored','Yes — Written down','No','In Progress']}],pq:[{k:'beneficiaryAware',l:'Will your beneficiaries know this account exists?',o:['Yes','No','Partially']},{k:'legacyContact',l:'Have you set up a legacy contact or digital executor?',o:['Yes','No','In Progress']}]}
+  property:{fields:[{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'type',l:'Property Type',t:'sel',o:['HDB','Private Condo','Landed','Thailand — Condo','Thailand — House/Land','Outside Singapore — Other','Commercial']},{k:'ownership',l:'Ownership Structure',t:'sel',o:['Sole','Joint Tenancy','Tenancy-in-Common','Company-owned','Trust-owned']},{k:'coowner',l:'Co-owner Name',t:'text',p:'Full name (if any)'},{k:'loan',l:'Outstanding Loan',t:'sel',o:['Yes','No']},{k:'value',l:'Estimated Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']}],
+    pq:[{k:'autoTransfer',l:'Does your ownership allow automatic transfer on passing?',o:['Yes','No','Unsure']},{k:'familyHome',l:'Should it remain as a family home?',o:['Yes','No']},{k:'maintainMeans',l:'Can beneficiaries afford to maintain it?',o:['Yes','No','Unsure']}]},
+  bank:{fields:[{k:'bank',l:'Bank Name',t:'text',p:'e.g. DBS, UOB, Bangkok Bank'},{k:'type',l:'Account Type',t:'sel',o:['Savings','Current','Fixed Deposit']},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'ownership',l:'Sole or Joint',t:'sel',o:['Sole','Joint']},{k:'value',l:'Approximate Balance',t:'num',p:'Amount'}],
+    pq:[{k:'nomination',l:'Have you done a nomination for this account?',o:['Yes','No','Not Available']}]},
+  joint:{fields:[{k:'institution',l:'Bank / Institution',t:'text',p:'e.g. DBS, UOB'},{k:'type',l:'Account / Asset Type',t:'sel',o:['Savings Account','Investment Account','Property','Business','Other']},{k:'jointOwner',l:'Joint Owner Name',t:'text',p:'Full name'},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'contribution',l:'Who Contributed',t:'sel',o:['Myself — Sole contributor','Shared Equally','Partner contributed more','Other']}],
+    pq:[{k:'survivorWish',l:'Should the surviving joint owner inherit this?',o:['Yes','No','Depends']}]},
+  invest:{fields:[{k:'institution',l:'Institution / Platform',t:'text',p:'e.g. Phillip Securities, Endowus, Binance'},{k:'type',l:'Investment Type',t:'sel',o:['Stocks','Bonds','Unit Trusts','REITs','ETFs','Cryptocurrency','Options','Others']},{k:'country',l:'Country / Exchange',t:'text',p:'e.g. Singapore, US, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'value',l:'Approximate Value',t:'num',p:'Amount'},{k:'aware',l:'Beneficiaries Aware',t:'sel',o:['Yes','No','Partially']}],
+    pq:[{k:'differentLaw',l:'Could this be subject to overseas inheritance laws (e.g. US situs)?',o:['Yes','No','Unsure']},{k:'managePref',l:'How should this be handled?',o:['Liquidate','Continue holding','Advisor to decide']}]},
+  insurance:{fields:[{k:'insurer',l:'Insurance Company',t:'text',p:'e.g. AIA, Prudential, Great Eastern'},{k:'type',l:'Policy Type',t:'sel',o:['Term','Whole Life','Endowment','ILP','Universal Life','Group Insurance']},{k:'policy_no',l:'Policy Number',t:'text',p:'Optional'},{k:'sum',l:'Sum Assured / Death Benefit',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','Other']},{k:'nomination',l:'Nomination Done',t:'sel',o:['Yes','No','Partial']},{k:'nominee',l:'Nominee Name',t:'text',p:'Full name of nominee'}],
+    pq:[{k:'throughWill',l:'Should this payout go through your Will instead of direct nomination?',o:['Yes','No','Unsure']}]},
+  business:{fields:[{k:'name',l:'Business Name',t:'text',p:'Registered company name'},{k:'type',l:'Entity Type',t:'sel',o:['Sole Proprietorship','Partnership','Private Ltd (Pte Ltd)','Public Listed','Thai Co. Ltd','Overseas — Other']},{k:'country',l:'Country of Incorporation',t:'text',p:'e.g. Singapore, Thailand'},{k:'role',l:'Your Role',t:'sel',o:['Sole Owner','Director & Shareholder','Shareholder only','Partner','Silent Partner']},{k:'ownership_pct',l:'Your Ownership %',t:'text',p:'e.g. 100%, 51%'},{k:'coowners',l:'Co-owners / Partners',t:'text',p:'Names and % (if any)'},{k:'value',l:'Estimated Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','Other']}],
+    pq:[{k:'successor',l:'Have you identified a successor?',o:['Yes','No','In Progress']},{k:'buySell',l:'Is there a buy-sell or shareholders agreement?',o:['Yes','No','In Progress']},{k:'continuity',l:'Preference if you pass away?',o:['Continue operations','Sell / wind up','Family to decide']}]},
+  loans:{fields:[{k:'type',l:'Loan Type',t:'sel',o:['Mortgage','Car Loan','Personal Loan','Credit Card','Business Loan','Student Loan','Other']},{k:'institution',l:'Institution',t:'text',p:'e.g. DBS, OCBC, Bangkok Bank'},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'outstanding',l:'Outstanding Amount',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','Other']},{k:'covered',l:'Insurance Covering This',t:'sel',o:['Yes','No']}],
+    pq:[{k:'settlement',l:'Is there a plan to settle this liability on your passing?',o:['Yes','No','Partially']}]},
+  digital:{fields:[{k:'platform',l:'Platform / Exchange',t:'text',p:'e.g. Coinbase, MetaMask, PayPal'},{k:'type',l:'Asset Type',t:'sel',o:['Cryptocurrency','NFT','Online Business','E-wallet','Social Media Account','Domain/Website','Other']},{k:'value',l:'Approximate Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','USD','BTC','ETH','THB','Other']},{k:'access',l:'Access Codes Stored',t:'sel',o:['Yes — Securely stored','Yes — Written down','No','In Progress']}],
+    pq:[{k:'beneficiaryAware',l:'Will your beneficiaries know this account exists?',o:['Yes','No']}]}
 };
 
 var CX_SECTIONS=[
-  {k:'cpf',i:'🏦',t:'CPF',q:[{k:'ch',l:'How would you like your CPF monies to be distributed?',st:1},{k:'cn',l:'Have you done your CPF nomination?',o:['Yes','No']},{k:'cp',l:'Payout preference',o:['Lump Sum','Trust','Unsure']}]},
-  {k:'overseas',i:'✈️',t:'Overseas Assets',q:[{k:'ho',l:'Do you own assets in multiple countries?',o:['Yes','No']},{k:'fh2',l:'Have you checked for forced heirship laws in those countries?',o:['Yes','No','N/A']},{k:'sw',l:'Warrant separate Wills for each country?',o:['Yes','No','Unsure']}]},
-  {k:'col',i:'💎',t:'Collectibles & Valuables',q:[{k:'coh',l:'How will your beneficiaries manage or divide each item?',st:1},{k:'inf',l:'Have you informed the beneficiary or labelled the item?',o:['Yes','No']},{k:'apr',l:'Will your beneficiary appreciate or value the item?',o:['Yes','No','Unsure']}]},
-  {k:'dig',i:'💻',t:'Digital Assets — General',q:[{k:'dh',l:'How will your beneficiaries know your digital accounts exist?',st:1},{k:'ac2',l:'Have you written down access codes or set up legacy contacts?',o:['Yes','No','In Progress']}]}
+  {k:'cpf',i:'🏦',t:'CPF',q:[{k:'cn',l:'Have you done your CPF nomination?',o:['Yes','No']},{k:'cp',l:'Payout preference',o:['Lump Sum','Trust','Unsure']}]},
+  {k:'overseas',i:'✈️',t:'Overseas Assets',q:[{k:'fh2',l:'Have you checked for forced heirship laws in countries where you hold assets?',o:['Yes','No','N/A']},{k:'sw',l:'Is the value significant enough to warrant separate Wills for each country?',o:['Yes','No','Unsure']}]},
+  {k:'col',i:'💎',t:'Collectibles & Valuables',q:[{k:'inf',l:'Have you informed beneficiaries or labelled items with their names?',o:['Yes','No']},{k:'apr',l:'Will your beneficiary appreciate or value the item?',o:['Yes','No','Unsure']}]},
+  {k:'dig',i:'💻',t:'Digital Assets',q:[{k:'ac2',l:'Have you written down access codes or set up legacy contacts?',o:['Yes','No','In Progress']}]}
 ];
 
 var ELABELS={property:'Property',bank:'Account',joint:'Joint Account',invest:'Investment',insurance:'Policy',business:'Business',loans:'Liability',digital:'Asset'};
@@ -967,7 +1011,7 @@ function gatherA(){
   var bens=BT.filter(function(b){var cb=document.getElementById('bc-'+b.k);return cb&&cb.checked;}).map(function(b){return b.k;});
   var sc=document.querySelector('input[name="sc"]:checked');
   var entriesCopy={};Object.keys(EN).forEach(function(t){entriesCopy[t]=EN[t].map(function(e){return Object.assign({},e);});});
-  return{v:3,types:types,lsg:document.getElementById('lsg').checked,los:document.getElementById('los').checked,lot:document.getElementById('lot').checked,lotx:document.getElementById('lotx').value||'',sc:sc?sc.value:'',sotx:document.getElementById('sotx').value||'',wealth:WV,wealthCur:document.getElementById('wealthCur').value||'',otherAssets:document.getElementById('otherAssets').value||'',assetNotes:document.getElementById('assetNotes').value||'',entries:entriesCopy,pqData:JSON.parse(JSON.stringify(PQD)),bens:bens,benOverseas:YNS['bov']||'',benNotes:document.getElementById('benNotes').value||'',ft:{nodes:JSON.parse(JSON.stringify(ftNodes)),edges:JSON.parse(JSON.stringify(ftEdges))},appt:{ex:YNS['ex']||'',e1n:document.getElementById('e1n').value||'',e1r:document.getElementById('e1r').value||'',esub:YNS['esub']||'',e2n:document.getElementById('e2n').value||'',e2r:document.getElementById('e2r').value||'',ep1:document.getElementById('ep1').checked,ep2:document.getElementById('ep2').checked,tc:(document.querySelector('input[name="tc"]:checked')||{}).value||'',tr:YNS['tr']||'',t1n:document.getElementById('t1n').value||'',t1r:document.getElementById('t1r').value||'',tsub:YNS['tsub']||'',t2n:document.getElementById('t2n').value||'',t2r:document.getElementById('t2r').value||'',tp1:document.getElementById('tp1').checked,tp2:document.getElementById('tp2').checked,gu:YNS['gu']||'',g1w:YNS['g1w']||'',g1n:document.getElementById('g1n').value||'',g1r:document.getElementById('g1r').value||'',g2rl:YNS['g2rl']||'',g2n:document.getElementById('g2n').value||'',g2r:document.getElementById('g2r').value||'',notes:document.getElementById('apptNotes').value||''}};
+  return{v:3,types:types,lsg:document.getElementById('lsg').checked,los:document.getElementById('los').checked,lot:document.getElementById('lot').checked,lotx:document.getElementById('lotx').value||'',sc:sc?sc.value:'',sotx:document.getElementById('sotx').value||'',wealth:document.getElementById('wealthFree').value||'',otherAssets:document.getElementById('otherAssets').value||'',assetNotes:document.getElementById('assetNotes').value||'',entries:entriesCopy,pqData:JSON.parse(JSON.stringify(PQD)),bens:bens,benOverseas:YNS['bov']||'',benNotes:document.getElementById('benNotes').value||'',ft:{nodes:JSON.parse(JSON.stringify(ftNodes)),edges:JSON.parse(JSON.stringify(ftEdges))},appt:{ex:YNS['ex']||'',e1n:document.getElementById('e1n').value||'',e1r:document.getElementById('e1r').value||'',esub:YNS['esub']||'',e2n:document.getElementById('e2n').value||'',e2r:document.getElementById('e2r').value||'',ep1:document.getElementById('ep1').checked,ep2:document.getElementById('ep2').checked,tc:(document.querySelector('input[name="tc"]:checked')||{}).value||'',tr:YNS['tr']||'',t1n:document.getElementById('t1n').value||'',t1r:document.getElementById('t1r').value||'',tsub:YNS['tsub']||'',t2n:document.getElementById('t2n').value||'',t2r:document.getElementById('t2r').value||'',tp1:document.getElementById('tp1').checked,tp2:document.getElementById('tp2').checked,gu:YNS['gu']||'',g1w:YNS['g1w']||'',g1n:document.getElementById('g1n').value||'',g1r:document.getElementById('g1r').value||'',g2rl:YNS['g2rl']||'',g2n:document.getElementById('g2n').value||'',g2r:document.getElementById('g2r').value||'',notes:document.getElementById('apptNotes').value||''}};
 }
 function gatherC(){return{v:2,sections:JSON.parse(JSON.stringify(CQD))};}
 
@@ -981,8 +1025,8 @@ function popA(){
   if(d.lotx)document.getElementById('lotx').value=d.lotx;
   if(d.sc){var sm={'Worldwide':'sww','Singapore Only':'ssg','Others':'sot'};var el=document.getElementById(sm[d.sc]);if(el)el.checked=true;}
   if(d.sotx)document.getElementById('sotx').value=d.sotx;
-  if(d.wealth){WV=d.wealth;document.querySelectorAll('.w-opt').forEach(function(o){if(o.getAttribute('onclick')&&o.getAttribute('onclick').indexOf("'"+d.wealth+"'")>-1)o.classList.add('sel');});}
-  if(d.wealthCur)document.getElementById('wealthCur').value=d.wealthCur;
+  if(d.wealth)document.getElementById('wealthFree').value=d.wealth;
+  
   if(d.otherAssets)document.getElementById('otherAssets').value=d.otherAssets;
   if(d.assetNotes)document.getElementById('assetNotes').value=d.assetNotes;
   if(d.entries)Object.keys(d.entries).forEach(function(t){if(EN[t]!==undefined)EN[t]=d.entries[t]||[];});
