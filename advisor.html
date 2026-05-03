@@ -84,6 +84,18 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
   .stats-grid{grid-template-columns:1fr 1fr}
   .cred-grid{grid-template-columns:1fr}
 }
+.print-btn{padding:7px 13px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;display:none}
+@media print{
+  .topbar,.back-btn,.print-btn,.search-bar,.stat,.refresh-btn,#listView,.notes-form button{display:none!important}
+  body{background:#fff;font-size:12px}
+  .det-card,.notes-section{break-inside:avoid;border:0.5px solid #ccc;margin-bottom:8px;padding:10px}
+  .det-title{font-size:14px}
+  .det-row{font-size:11px;padding:4px 0}
+  .main{padding:0;max-width:100%}
+  .etbl{font-size:10px}
+  .etbl th,.etbl td{padding:4px 6px}
+  @page{size:A4;margin:15mm}
+}
 </style>
 </head>
 <body>
@@ -134,6 +146,7 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
 
   <div id="detailView" style="display:none">
     <button class="back-btn" onclick="showList()">← Back to all clients</button>
+      <button onclick="window.print()" style="float:right;padding:7px 13px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif" id="printBtn">⬇ Save as PDF</button>
     <div class="client-hdr">
       <div id="dName" class="client-hdr-name"></div>
       <div id="dEmail" class="client-hdr-email"></div>
@@ -302,6 +315,7 @@ function showClient(id){
   document.getElementById('dId').textContent=c.clientId;
   document.getElementById('dCreated').textContent=fmtDate(c.createdAt);
   document.getElementById('dContent').innerHTML='<div class="loading">Loading client data...</div>';
+  var pb=document.getElementById('printBtn');if(pb)pb.style.display='inline-block';
   api('getAssets',{clientId:id},function(err,ad){
     api('getComplexity',{clientId:id},function(err2,cd){
       renderDetail(c,ad||{},cd||{});
