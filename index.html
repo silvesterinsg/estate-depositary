@@ -299,6 +299,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         </div>
       </div>
       <div class="ssec" id="ss-property"><div class="ssec-h" onclick="tgSS('property')"><div class="ssec-l"><span class="ssec-icon">🏠</span><span class="ssec-title">Properties</span></div><div class="ssec-r"><span class="ssec-stat" id="st-property">0 recorded</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body"><div class="card-sub">Record each property separately. Planning questions inside each entry.</div><div id="en-property"></div><button class="add-btn" onclick="addE('property')">+ Add Property</button></div></div>
+      <div class="ssec" id="ss-vehicles"><div class="ssec-h" onclick="tgSS('vehicles')"><div class="ssec-l"><span class="ssec-icon">🚗</span><span class="ssec-title">Vehicles & High-Value Assets</span></div><div class="ssec-r"><span class="ssec-stat" id="st-vehicles">0 recorded</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body"><div class="card-sub">Cars, motorcycles, boats, yachts, jets, aircraft, and other high-value movable assets.</div><div id="en-vehicles"></div><button class="add-btn" onclick="addE('vehicles')">+ Add Vehicle / Asset</button></div></div>
       <div class="ssec" id="ss-bank"><div class="ssec-h" onclick="tgSS('bank')"><div class="ssec-l"><span class="ssec-icon">🏦</span><span class="ssec-title">Bank Accounts</span></div><div class="ssec-r"><span class="ssec-stat" id="st-bank">0 recorded</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body"><div class="card-sub">All accounts across all countries and currencies.</div><div id="en-bank"></div><button class="add-btn" onclick="addE('bank')">+ Add Bank Account</button></div></div>
       <div class="ssec" id="ss-joint"><div class="ssec-h" onclick="tgSS('joint')"><div class="ssec-l"><span class="ssec-icon">🤝</span><span class="ssec-title">Joint Accounts</span></div><div class="ssec-r"><span class="ssec-stat" id="st-joint">0 recorded</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body"><div class="card-sub">Assets or accounts held jointly with another person.</div><div id="en-joint"></div><button class="add-btn" onclick="addE('joint')">+ Add Joint Account</button></div></div>
       <div class="ssec" id="ss-invest"><div class="ssec-h" onclick="tgSS('invest')"><div class="ssec-l"><span class="ssec-icon">📈</span><span class="ssec-title">Investment Accounts</span></div><div class="ssec-r"><span class="ssec-stat" id="st-invest">0 recorded</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body"><div class="card-sub">Stocks, bonds, unit trusts, REITs, ETFs, crypto and other investments.</div><div id="en-invest"></div><button class="add-btn" onclick="addE('invest')">+ Add Investment</button></div></div>
@@ -448,7 +449,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 <script>
 var GAS_URL='https://script.google.com/macros/s/AKfycbx2BScnbDAYx9nfGrLLFyxv7LiHa5o3H8xmcaeWSkQ7LzjE1V7gh04JdcSElnznK-8n/exec';
 var CC=null,SD={a:{},c:{}},AST=null,WV='',YNS={};
-var EN={property:[],bank:[],joint:[],invest:[],insurance:[],business:[],loans:[],digital:[]};
+var EN={property:[],vehicles:[],bank:[],joint:[],invest:[],insurance:[],business:[],loans:[],digital:[]};
 var PQD={},CQD={};
 
 // FAMILY TREE — canvas engine
@@ -811,6 +812,8 @@ var BT=[{k:'spouse',n:'Spouse',s:'Legally married partner'},{k:'children_bio',n:
 var SCH={
   property:{fields:[{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'type',l:'Property Type',t:'sel',o:['HDB','Private Condo','Landed','Thailand — Condo','Thailand — House/Land','Outside Singapore — Other','Commercial']},{k:'ownership',l:'Ownership Structure',t:'sel',o:['Sole','Joint Tenancy','Tenancy-in-Common','Company-owned','Trust-owned']},{k:'coowner',l:'Co-owner Name',t:'text',p:'Full name (if any)'},{k:'loan',l:'Outstanding Loan',t:'sel',o:['Yes','No']},{k:'value',l:'Estimated Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']}],
     pq:[{k:'autoTransfer',l:'Does your ownership allow automatic transfer on passing?',o:['Yes','No','Unsure']},{k:'familyHome',l:'Should it remain as a family home?',o:['Yes','No']},{k:'maintainMeans',l:'Can beneficiaries afford to maintain it?',o:['Yes','No','Unsure']}]},
+  vehicles:{fields:[{k:'type',l:'Asset Type',t:'sel',o:['Car','Motorcycle','Boat','Yacht','Jet / Aircraft','Caravan / RV','Other']},{k:'make',l:'Make / Model',t:'text',p:'e.g. Mercedes S-Class, Sunseeker 55'},{k:'regNo',l:'Registration / Serial No.',t:'text',p:'Optional'},{k:'country',l:'Country / Location',t:'text',p:'e.g. Singapore, Thailand'},{k:'value',l:'Estimated Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','Other']},{k:'loan',l:'Outstanding Loan',t:'sel',o:['Yes','No']}],
+    pq:[{k:'nominee',l:'Have you identified who should inherit this?',o:['Yes','No']}]},
   bank:{fields:[{k:'bank',l:'Bank Name',t:'text',p:'e.g. DBS, UOB, Bangkok Bank'},{k:'type',l:'Account Type',t:'sel',o:['Savings','Current','Fixed Deposit']},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'ownership',l:'Sole or Joint',t:'sel',o:['Sole','Joint']},{k:'value',l:'Approximate Balance',t:'num',p:'Amount'}],
     pq:[{k:'nomination',l:'Have you done a nomination for this account?',o:['Yes','No','Not Available']}]},
   joint:{fields:[{k:'institution',l:'Bank / Institution',t:'text',p:'e.g. DBS, UOB'},{k:'type',l:'Account / Asset Type',t:'sel',o:['Savings Account','Investment Account','Property','Business','Other']},{k:'jointOwner',l:'Joint Owner Name',t:'text',p:'Full name'},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'contribution',l:'Who Contributed',t:'sel',o:['Myself — Sole contributor','Shared Equally','Partner contributed more','Other']}],
@@ -827,6 +830,8 @@ var SCH={
     pq:[{k:'beneficiaryAware',l:'Will your beneficiaries know this account exists?',o:['Yes','No']}]}
 };
 
+var ELABELS={property:'Property',vehicles:'Vehicle/Asset',bank:'Account',joint:'Joint Account',invest:'Investment',insurance:'Policy',business:'Business',loans:'Liability',digital:'Asset'};
+
 var CX_SECTIONS=[
   {k:'cpf',i:'🏦',t:'CPF',q:[{k:'cn',l:'Have you done your CPF nomination?',o:['Yes','No']},{k:'cp',l:'Payout preference',o:['Lump Sum','Trust','Unsure']}]},
   {k:'overseas',i:'✈️',t:'Overseas Assets',q:[{k:'fh2',l:'Have you checked for forced heirship laws in countries where you hold assets?',o:['Yes','No','N/A']},{k:'sw',l:'Is the value significant enough to warrant separate Wills for each country?',o:['Yes','No','Unsure']}]},
@@ -834,7 +839,7 @@ var CX_SECTIONS=[
   {k:'dig',i:'💻',t:'Digital Assets',q:[{k:'ac2',l:'Have you written down access codes or set up legacy contacts?',o:['Yes','No','In Progress']}]}
 ];
 
-var ELABELS={property:'Property',bank:'Account',joint:'Joint Account',invest:'Investment',insurance:'Policy',business:'Business',loans:'Liability',digital:'Asset'};
+var ELABELS={property:'Property',vehicles:'Vehicle/Asset',bank:'Account',joint:'Joint Account',invest:'Investment',insurance:'Policy',business:'Business',loans:'Liability',digital:'Asset'};
 
 // JSONP
 var _n=0;
@@ -860,7 +865,7 @@ function doLogin(){
 }
 
 function doLogout(){
-  CC=null;SD={a:{},c:{}};EN={property:[],bank:[],joint:[],invest:[],insurance:[],business:[],loans:[],digital:[]};
+  CC=null;SD={a:{},c:{}};EN={property:[],vehicles:[],bank:[],joint:[],invest:[],insurance:[],business:[],loans:[],digital:[]};
   PQD={};CQD={};WV='';YNS={};
   ftNodes=[{id:0,name:'Me',role:'me',gender:'M',x:FT_CW/2,y:FT_CH/2}];
   ftEdges=[];ftIdSeq=1;
