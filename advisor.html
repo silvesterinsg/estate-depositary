@@ -112,6 +112,7 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
   </div>
   <div class="topbar-right">
     <button class="refresh-btn" onclick="loadClients()">↻ Refresh</button>
+    <button class="refresh-btn" onclick="showLawyers()" style="background:rgba(184,150,46,0.15);border-color:rgba(184,150,46,0.4)">⚖ Lawyers</button>
     <button class="refresh-btn" onclick="showSettings()" style="background:rgba(184,150,46,0.15);border-color:rgba(184,150,46,0.4)">⚙ Dates</button>
   </div>
 </div>
@@ -146,6 +147,42 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
     <div id="dContent"></div>
   </div>
 </div>
+<!-- LAWYERS MODAL -->
+<div id="lawyersOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;padding:20px;overflow-y:auto">
+  <div style="max-width:540px;margin:40px auto;background:#fff;border-radius:var(--radius);padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--maroon)">Manage Lawyers</div>
+      <button onclick="closeLawyers()" style="background:none;border:none;font-size:20px;color:var(--ink-soft);cursor:pointer">✕</button>
+    </div>
+    <!-- Add lawyer form -->
+    <div style="background:var(--gold-pale);border:1px solid var(--gold-border);border-radius:var(--radius-sm);padding:16px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--maroon);margin-bottom:12px">Add New Lawyer</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div><label style="font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mid);display:block;margin-bottom:4px">Full Name</label>
+          <input type="text" id="lwName" placeholder="e.g. David Lim" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);outline:none"/></div>
+        <div><label style="font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mid);display:block;margin-bottom:4px">Firm Name</label>
+          <input type="text" id="lwFirm" placeholder="e.g. LegalUnit.Legal" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);outline:none"/></div>
+        <div><label style="font-size:11px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-mid);display:block;margin-bottom:4px">Email (becomes username)</label>
+          <input type="email" id="lwEmail" placeholder="e.g. david@legalunit.legal" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--ink);outline:none"/></div>
+        <button onclick="addLawyerAdvisor()" style="padding:11px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer">+ Add Lawyer</button>
+      </div>
+      <div id="lwAddStatus" style="font-size:13px;margin-top:10px;min-height:16px;text-align:center"></div>
+    </div>
+    <!-- Credentials result -->
+    <div id="lwCredsBox" style="display:none;background:#EAF3DE;border:1px solid #C0DD97;border-radius:var(--radius-sm);padding:14px;margin-bottom:16px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#27500A;margin-bottom:10px">Credentials Generated — Share with Lawyer</div>
+      <div style="font-size:14px;color:#1C1410;line-height:2;font-family:monospace" id="lwCredsText"></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="copyLawyerCreds()" style="flex:1;padding:10px;background:#27500A;color:#fff;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer">📋 Copy Credentials</button>
+        <button onclick="whatsappLawyerCreds()" style="flex:1;padding:10px;background:#25D366;color:#fff;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer">💬 Send via WhatsApp</button>
+      </div>
+    </div>
+    <!-- Lawyer list -->
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px">Current Lawyers</div>
+    <div id="lwList"><div style="font-size:13px;color:var(--ink-soft);font-style:italic">Loading...</div></div>
+  </div>
+</div>
+
 <!-- DATES SETTINGS MODAL -->
 <div id="settingsOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;padding:20px;overflow-y:auto">
   <div style="max-width:500px;margin:40px auto;background:#fff;border-radius:var(--radius);padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
@@ -505,6 +542,79 @@ loadClients();
 </script>
 
 <script>
+// LAWYER MANAGEMENT
+var lwCreds=null;
+function showLawyers(){
+  document.getElementById('lawyersOverlay').style.display='block';
+  document.getElementById('lwAddStatus').textContent='';
+  document.getElementById('lwCredsBox').style.display='none';
+  loadLawyerList();
+}
+function closeLawyers(){document.getElementById('lawyersOverlay').style.display='none';}
+
+function loadLawyerList(){
+  document.getElementById('lwList').innerHTML='<div style="font-size:13px;color:var(--ink-soft);font-style:italic">Loading...</div>';
+  api('getLawyers',{},function(err,data){
+    if(err||!data||!data.lawyers){document.getElementById('lwList').innerHTML='<div style="font-size:13px;color:var(--ink-soft)">Could not load lawyers.</div>';return;}
+    var lawyers=data.lawyers;
+    if(!lawyers.length){document.getElementById('lwList').innerHTML='<div style="font-size:13px;color:var(--ink-soft);font-style:italic">No lawyers added yet.</div>';return;}
+    document.getElementById('lwList').innerHTML=lawyers.map(function(l){
+      return'<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:7px">'
+        +'<div><div style="font-weight:500;font-size:14px;color:var(--ink)">'+l.name+'</div>'
+        +'<div style="font-size:12px;color:var(--ink-soft)">'+l.firm+(l.firm?' · ':'')+l.email+'</div></div>'
+        +'<button onclick="removeLawyerAdvisor(\''+l.lawyerId+'\',\''+l.name+'\')" style="padding:5px 10px;background:transparent;border:1px solid #FECACA;border-radius:var(--radius-sm);color:var(--error);font-size:12px;cursor:pointer;font-family:\'DM Sans\',sans-serif">Remove</button>'
+        +'</div>';
+    }).join('');
+  });
+}
+
+function addLawyerAdvisor(){
+  var name=document.getElementById('lwName').value.trim();
+  var firm=document.getElementById('lwFirm').value.trim();
+  var email=document.getElementById('lwEmail').value.trim();
+  var status=document.getElementById('lwAddStatus');
+  if(!name||!email){status.style.color='var(--error)';status.textContent='Please enter name and email.';return;}
+  status.style.color='var(--ink-soft)';status.textContent='Adding...';
+  api('addLawyer',{data:JSON.stringify({name:name,firm:firm,email:email})},function(err,r){
+    if(!err&&r&&r.success){
+      status.style.color='var(--success)';status.textContent='Lawyer added.';
+      document.getElementById('lwName').value='';
+      document.getElementById('lwFirm').value='';
+      document.getElementById('lwEmail').value='';
+      lwCreds={name:name,firm:firm,email:email,username:r.username,password:r.password};
+      var portalUrl='https://silvesterinsg.github.io/estate-depositary/lawyer.html';
+      document.getElementById('lwCredsText').innerHTML=
+        'Portal: '+portalUrl+'<br>'
+        +'Username: '+r.username+'<br>'
+        +'Password: '+r.password;
+      document.getElementById('lwCredsBox').style.display='block';
+      loadLawyerList();
+    } else {
+      status.style.color='var(--error)';status.textContent='Error adding lawyer. Please try again.';
+    }
+  });
+}
+
+function copyLawyerCreds(){
+  if(!lwCreds)return;
+  var text='Lawyer Portal: https://silvesterinsg.github.io/estate-depositary/lawyer.html\nUsername: '+lwCreds.username+'\nPassword: '+lwCreds.password;
+  navigator.clipboard?navigator.clipboard.writeText(text).then(function(){alert('Copied!');}):prompt('Copy these credentials:',text);
+}
+
+function whatsappLawyerCreds(){
+  if(!lwCreds)return;
+  var msg='Hi '+lwCreds.name+', here are your login details for the Estate Planning client portal:\n\nPortal: https://silvesterinsg.github.io/estate-depositary/lawyer.html\nUsername: '+lwCreds.username+'\nPassword: '+lwCreds.password+'\n\nYou will be able to view and add notes to clients who have listed you as their lawyer. — Silvester';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+function removeLawyerAdvisor(id,name){
+  if(!confirm('Remove '+name+' from the lawyer list?'))return;
+  api('removeLawyer',{lawyerId:id},function(err,r){
+    if(!err&&r&&r.success)loadLawyerList();
+    else alert('Error removing lawyer.');
+  });
+}
+
 // ADVISOR PASSWORD — change this to whatever you want
 var ADV_PW = 'Precepts2025!';
 
