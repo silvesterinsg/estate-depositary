@@ -7,12 +7,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;min-height:100%;overflow-x:hidden;font-family:'DM Sans',sans-serif;font-size:15px;background:#FAF7F2;color:#1C1410;-webkit-text-size-adjust:100%}
+html,body{width:100%;min-height:100%;overflow-x:hidden;font-family:'DM Sans',sans-serif;font-size:16px;background:#FAF7F2;color:#1C1410;-webkit-text-size-adjust:100%}
 :root{--gold:#B8962E;--gold-light:#D4AF5A;--gold-pale:#F5EDD6;--gold-border:rgba(184,150,46,0.25);--maroon:#6B1A2A;--maroon-dark:#4A1019;--cream:#FAF7F2;--ink:#1C1410;--ink-mid:#4A3728;--ink-soft:#7A6455;--border:#E8DFD0;--success:#2D7A4A;--error:#B0312A;--radius:8px;--radius-sm:4px}
 .screen{display:none}.screen.active{display:block}
 #appScreen{min-height:100vh;flex-direction:column}
 #appScreen.active{display:flex}
-input[type=text],input[type=password],input[type=number],textarea,select{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--cream);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);outline:none;-webkit-appearance:none;appearance:none}
+input[type=text],input[type=password],input[type=number],textarea,select{width:100%;padding:11px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--cream);font-family:'DM Sans',sans-serif;font-size:16px;color:var(--ink);outline:none;-webkit-appearance:none;appearance:none}
 input:focus,textarea:focus,select:focus{border-color:var(--gold);background:#fff}
 textarea{resize:vertical;min-height:65px;line-height:1.5}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A6455' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
@@ -133,7 +133,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .crow{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;cursor:pointer;font-size:14px;color:var(--ink-mid);-webkit-tap-highlight-color:transparent}
 .crow.checked{border-color:var(--gold);background:var(--gold-pale)}
 .crow input[type=checkbox],.crow input[type=radio]{width:20px;height:20px;min-width:20px;accent-color:var(--maroon);-webkit-appearance:auto;flex-shrink:0}
-.ii{flex:1;border:none;border-bottom:1px solid var(--border);background:transparent;font-size:14px;padding:2px 4px;outline:none;font-family:'DM Sans',sans-serif;color:var(--ink);min-width:0}
+.ii{flex:1;border:none;border-bottom:1px solid var(--border);background:#fff;font-size:14px;padding:2px 4px;outline:none;font-family:'DM Sans',sans-serif;color:var(--ink);min-width:0}
 /* YN BUTTONS */
 .yn-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
 .yn-btn{padding:8px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--cream);font-size:13px;font-weight:500;color:var(--ink-mid);cursor:pointer;-webkit-appearance:none;font-family:'DM Sans',sans-serif}
@@ -286,11 +286,12 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
             <label class="crow"><input type="checkbox" id="lot"> Others: <input type="text" class="ii" id="lotx" placeholder="specify..." onclick="event.stopPropagation()"/></label>
           </div>
         </div>
-        <div class="fg" style="margin-top:12px"><label class="fl">Planning scope</label>
+        <div class="fg" style="margin-top:12px"><label class="fl">Planning scope (select all that apply)</label>
           <div class="clist">
-            <label class="crow"><input type="radio" name="sc" id="sww" value="Worldwide"> Worldwide — Primary Will</label>
-            <label class="crow"><input type="radio" name="sc" id="ssg" value="Singapore Only"> Singapore Only</label>
-            <label class="crow"><input type="radio" name="sc" id="sot" value="Others"> Others: <input type="text" class="ii" id="sotx" placeholder="specify..." onclick="event.stopPropagation()"/></label>
+            <label class="crow"><input type="checkbox" id="scww" value="Worldwide"> Worldwide — Primary Will</label>
+            <label class="crow"><input type="checkbox" id="scsg" value="Singapore Only"> Singapore</label>
+            <label class="crow"><input type="checkbox" id="scth" value="Thailand"> Thailand</label>
+            <label class="crow"><input type="checkbox" id="scot"> Others: <input type="text" class="ii" id="scotx" placeholder="specify..." onclick="event.stopPropagation()" style="background:#fff"/></label>
           </div>
         </div>
         <div class="fg" style="margin-top:12px"><label class="fl">Estimated net worth (optional)</label>
@@ -313,7 +314,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     <!-- STEP 2: ASSET COMPLEXITY -->
     <div id="sec-s2" class="sec">
       <div class="step-badge">◉ Step 2</div>
-      <div class="ph"><h1>Asset Complexity</h1><p>General planning questions across your estate. Property-specific questions are inside each property entry in Step 1.</p></div>
+      <div class="ph"><h1>Asset Complexity</h1><p>Sections below are shown based on the assets you selected in Step 1. Only relevant questions are shown.</p></div>
       <div class="ssec" id="cx-cpf"><div class="ssec-h" onclick="this.parentElement.classList.toggle('open')"><div class="ssec-l"><span class="ssec-icon">🏦</span><span class="ssec-title">CPF <span class="sg-badge">🇸🇬 SG only</span></span></div><div class="ssec-r"><span class="ssec-stat" id="acs-cpf">Not started</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body" id="cxb-cpf"></div></div>
       <div class="ssec" id="cx-overseas"><div class="ssec-h" onclick="this.parentElement.classList.toggle('open')"><div class="ssec-l"><span class="ssec-icon">✈️</span><span class="ssec-title">Overseas Assets</span></div><div class="ssec-r"><span class="ssec-stat" id="acs-overseas">Not started</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body" id="cxb-overseas"></div></div>
       <div class="ssec" id="cx-col"><div class="ssec-h" onclick="this.parentElement.classList.toggle('open')"><div class="ssec-l"><span class="ssec-icon">💎</span><span class="ssec-title">Collectibles & Valuables</span></div><div class="ssec-r"><span class="ssec-stat" id="acs-col">Not started</span><span class="ssec-arr">▾</span></div></div><div class="ssec-body" id="cxb-col"></div></div>
@@ -815,7 +816,7 @@ var SCH={
   vehicles:{fields:[{k:'type',l:'Asset Type',t:'sel',o:['Car','Motorcycle','Boat','Yacht','Jet / Aircraft','Caravan / RV','Other']},{k:'make',l:'Make / Model',t:'text',p:'e.g. Mercedes S-Class, Sunseeker 55'},{k:'regNo',l:'Registration / Serial No.',t:'text',p:'Optional'},{k:'country',l:'Country / Location',t:'text',p:'e.g. Singapore, Thailand'},{k:'value',l:'Estimated Value',t:'num',p:'Amount'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','Other']},{k:'loan',l:'Outstanding Loan',t:'sel',o:['Yes','No']}],
     pq:[{k:'nominee',l:'Have you identified who should inherit this?',o:['Yes','No']}]},
   bank:{fields:[{k:'bank',l:'Bank Name',t:'text',p:'e.g. DBS, UOB, Bangkok Bank'},{k:'type',l:'Account Type',t:'sel',o:['Savings','Current','Fixed Deposit']},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'ownership',l:'Sole or Joint',t:'sel',o:['Sole','Joint']},{k:'value',l:'Approximate Balance',t:'num',p:'Amount'}],
-    pq:[{k:'nomination',l:'Have you done a nomination for this account?',o:['Yes','No','Not Available']}]},
+    pq:[]},
   joint:{fields:[{k:'institution',l:'Bank / Institution',t:'text',p:'e.g. DBS, UOB'},{k:'type',l:'Account / Asset Type',t:'sel',o:['Savings Account','Investment Account','Property','Business','Other']},{k:'jointOwner',l:'Joint Owner Name',t:'text',p:'Full name'},{k:'country',l:'Country',t:'text',p:'e.g. Singapore, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'contribution',l:'Who Contributed',t:'sel',o:['Myself — Sole contributor','Shared Equally','Partner contributed more','Other']}],
     pq:[{k:'survivorWish',l:'Should the surviving joint owner inherit this?',o:['Yes','No','Depends']}]},
   invest:{fields:[{k:'institution',l:'Institution / Platform',t:'text',p:'e.g. Phillip Securities, Endowus, Binance'},{k:'type',l:'Investment Type',t:'sel',o:['Stocks','Bonds','Unit Trusts','REITs','ETFs','Cryptocurrency','Options','Others']},{k:'country',l:'Country / Exchange',t:'text',p:'e.g. Singapore, US, Thailand'},{k:'currency',l:'Currency',t:'sel',o:['SGD','THB','USD','IDR','AUD','GBP','EUR','HKD','Other']},{k:'value',l:'Approximate Value',t:'num',p:'Amount'},{k:'aware',l:'Beneficiaries Aware',t:'sel',o:['Yes','No','Partially']}],
@@ -908,6 +909,7 @@ function goSec(n){
   document.getElementById('sec-'+n).classList.add('active');
   document.getElementById('di-'+n).classList.add('active');
   document.getElementById('bn-'+n).classList.add('active');
+  if(n==='s2')updComplexityVisibility();
   closeD();window.scrollTo(0,0);
 }
 function tgSS(k){document.getElementById('ss-'+k).classList.toggle('open');}
@@ -1012,12 +1014,25 @@ function updAcs(sk){
 }
 
 // GATHER
+function getScopes(){var scopes=[];['scww','scsg','scth','scot'].forEach(function(id){var el=document.getElementById(id);if(el&&el.checked){if(id==='scot'){var tx=document.getElementById('scotx').value.trim();if(tx)scopes.push(tx);}else scopes.push(el.value);}});return scopes;}
+
+function updComplexityVisibility(){
+  var hasCPF=document.getElementById('ac-retirement')&&document.getElementById('ac-retirement').checked;
+  var hasOverseasLoc=document.getElementById('los')&&document.getElementById('los').checked;
+  var hasCollectibles=document.getElementById('ac-collectibles')&&document.getElementById('ac-collectibles').checked;
+  var hasDigital=document.getElementById('ac-digital')&&document.getElementById('ac-digital').checked;
+  var cpf=document.getElementById('cx-cpf');if(cpf)cpf.style.display=hasCPF?'':'none';
+  var ov=document.getElementById('cx-overseas');if(ov)ov.style.display=hasOverseasLoc?'':'none';
+  var col=document.getElementById('cx-col');if(col)col.style.display=hasCollectibles?'':'none';
+  var dig=document.getElementById('cx-dig');if(dig)dig.style.display=hasDigital?'':'none';
+}
+
 function gatherA(){
   var types=AT.filter(function(a){var cb=document.getElementById('ac-'+a.k);return cb&&cb.checked;}).map(function(a){return a.k;});
   var bens=BT.filter(function(b){var cb=document.getElementById('bc-'+b.k);return cb&&cb.checked;}).map(function(b){return b.k;});
-  var sc=document.querySelector('input[name="sc"]:checked');
+  
   var entriesCopy={};Object.keys(EN).forEach(function(t){entriesCopy[t]=EN[t].map(function(e){return Object.assign({},e);});});
-  return{v:3,types:types,lsg:document.getElementById('lsg').checked,los:document.getElementById('los').checked,lot:document.getElementById('lot').checked,lotx:document.getElementById('lotx').value||'',sc:sc?sc.value:'',sotx:document.getElementById('sotx').value||'',wealth:document.getElementById('wealthFree').value||'',otherAssets:document.getElementById('otherAssets').value||'',assetNotes:document.getElementById('assetNotes').value||'',entries:entriesCopy,pqData:JSON.parse(JSON.stringify(PQD)),bens:bens,benOverseas:YNS['bov']||'',benNotes:document.getElementById('benNotes').value||'',ft:{nodes:JSON.parse(JSON.stringify(ftNodes)),edges:JSON.parse(JSON.stringify(ftEdges))},appt:{ex:YNS['ex']||'',e1n:document.getElementById('e1n').value||'',e1r:document.getElementById('e1r').value||'',esub:YNS['esub']||'',e2n:document.getElementById('e2n').value||'',e2r:document.getElementById('e2r').value||'',ep1:document.getElementById('ep1').checked,ep2:document.getElementById('ep2').checked,tc:(document.querySelector('input[name="tc"]:checked')||{}).value||'',tr:YNS['tr']||'',t1n:document.getElementById('t1n').value||'',t1r:document.getElementById('t1r').value||'',tsub:YNS['tsub']||'',t2n:document.getElementById('t2n').value||'',t2r:document.getElementById('t2r').value||'',tp1:document.getElementById('tp1').checked,tp2:document.getElementById('tp2').checked,gu:YNS['gu']||'',g1w:YNS['g1w']||'',g1n:document.getElementById('g1n').value||'',g1r:document.getElementById('g1r').value||'',g2rl:YNS['g2rl']||'',g2n:document.getElementById('g2n').value||'',g2r:document.getElementById('g2r').value||'',notes:document.getElementById('apptNotes').value||''}};
+  return{v:3,types:types,lsg:document.getElementById('lsg').checked,los:document.getElementById('los').checked,lot:document.getElementById('lot').checked,lotx:document.getElementById('lotx').value||'',sc:getScopes(),scotx:document.getElementById('scotx').value||'',wealth:document.getElementById('wealthFree').value||'',otherAssets:document.getElementById('otherAssets').value||'',assetNotes:document.getElementById('assetNotes').value||'',entries:entriesCopy,pqData:JSON.parse(JSON.stringify(PQD)),bens:bens,benOverseas:YNS['bov']||'',benNotes:document.getElementById('benNotes').value||'',ft:{nodes:JSON.parse(JSON.stringify(ftNodes)),edges:JSON.parse(JSON.stringify(ftEdges))},appt:{ex:YNS['ex']||'',e1n:document.getElementById('e1n').value||'',e1r:document.getElementById('e1r').value||'',esub:YNS['esub']||'',e2n:document.getElementById('e2n').value||'',e2r:document.getElementById('e2r').value||'',ep1:document.getElementById('ep1').checked,ep2:document.getElementById('ep2').checked,tc:(document.querySelector('input[name="tc"]:checked')||{}).value||'',tr:YNS['tr']||'',t1n:document.getElementById('t1n').value||'',t1r:document.getElementById('t1r').value||'',tsub:YNS['tsub']||'',t2n:document.getElementById('t2n').value||'',t2r:document.getElementById('t2r').value||'',tp1:document.getElementById('tp1').checked,tp2:document.getElementById('tp2').checked,gu:YNS['gu']||'',g1w:YNS['g1w']||'',g1n:document.getElementById('g1n').value||'',g1r:document.getElementById('g1r').value||'',g2rl:YNS['g2rl']||'',g2n:document.getElementById('g2n').value||'',g2r:document.getElementById('g2r').value||'',notes:document.getElementById('apptNotes').value||''}};
 }
 function gatherC(){return{v:2,sections:JSON.parse(JSON.stringify(CQD))};}
 
@@ -1029,8 +1044,8 @@ function popA(){
   if(d.los)document.getElementById('los').checked=true;
   if(d.lot)document.getElementById('lot').checked=true;
   if(d.lotx)document.getElementById('lotx').value=d.lotx;
-  if(d.sc){var sm={'Worldwide':'sww','Singapore Only':'ssg','Others':'sot'};var el=document.getElementById(sm[d.sc]);if(el)el.checked=true;}
-  if(d.sotx)document.getElementById('sotx').value=d.sotx;
+  if(d.sc){var scs=Array.isArray(d.sc)?d.sc:[d.sc];scs.forEach(function(v){var m={'Worldwide':'scww','Singapore Only':'scsg','Thailand':'scth','Others':'scot'};var el=document.getElementById(m[v]);if(el)el.checked=true;});}
+  if(d.scotx)document.getElementById('scotx').value=d.scotx;
   if(d.wealth)document.getElementById('wealthFree').value=d.wealth;
   
   if(d.otherAssets)document.getElementById('otherAssets').value=d.otherAssets;
