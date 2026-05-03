@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -88,6 +87,24 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
 </style>
 </head>
 <body>
+
+<!-- ADVISOR LOGIN -->
+<div id="loginScreen" style="min-height:100vh;background:var(--maroon-dark);background-image:radial-gradient(ellipse at 25% 75%,rgba(184,150,46,0.12) 0%,transparent 55%);display:flex;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#fff;border-radius:var(--radius);padding:36px 28px;width:100%;max-width:380px;box-shadow:0 24px 80px rgba(0,0,0,0.4)">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <div style="width:46px;height:46px;background:var(--maroon);color:var(--gold-light);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;flex-shrink:0">S</div>
+      <div><div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--ink)">Advisor Dashboard</div><div style="font-size:10px;color:var(--ink-soft);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px">Estate Planning with Silvester</div></div>
+    </div>
+    <div style="margin-bottom:14px"><label style="display:block;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:6px">Advisor Password</label>
+      <input type="password" id="advPw" placeholder="Enter advisor password" style="width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);background:#FAF7F2;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--ink);outline:none;-webkit-appearance:none" onkeydown="if(event.key==='Enter')doAdvLogin()"/>
+    </div>
+    <div id="advErr" style="background:#FEF2F2;border:1px solid #FECACA;color:var(--error);padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;margin-bottom:14px;display:none">Incorrect password.</div>
+    <button onclick="doAdvLogin()" style="display:block;width:100%;padding:14px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer">Sign In</button>
+  </div>
+</div>
+
+<!-- MAIN APP (hidden until login) -->
+<div id="appScreen" style="display:none">
 <div class="topbar">
   <div>
     <div class="topbar-brand">Advisor Dashboard</div>
@@ -128,6 +145,7 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
     <div id="dContent"></div>
   </div>
 </div>
+</div><!-- end appScreen -->
 
 <script>
 var GAS_URL='https://script.google.com/macros/s/AKfycbx2BScnbDAYx9nfGrLLFyxv7LiHa5o3H8xmcaeWSkQ7LzjE1V7gh04JdcSElnznK-8n/exec';
@@ -460,5 +478,26 @@ function fmtDate(s){
 loadClients();
 </script>
 
+<script>
+// ADVISOR PASSWORD — change this to whatever you want
+var ADV_PW = 'Precepts2025!';
+
+function doAdvLogin(){
+  var pw = document.getElementById('advPw').value;
+  var err = document.getElementById('advErr');
+  if(pw === ADV_PW){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appScreen').style.display = 'block';
+  } else {
+    err.style.display = 'block';
+    document.getElementById('advPw').value = '';
+    document.getElementById('advPw').focus();
+  }
+}
+
+document.getElementById('advPw').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') doAdvLogin();
+});
+</script>
 </body>
 </html>
