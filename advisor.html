@@ -112,6 +112,7 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
   </div>
   <div class="topbar-right">
     <button class="refresh-btn" onclick="loadClients()">↻ Refresh</button>
+    <button class="refresh-btn" onclick="showSettings()" style="background:rgba(184,150,46,0.15);border-color:rgba(184,150,46,0.4)">⚙ Dates</button>
   </div>
 </div>
 
@@ -145,6 +146,31 @@ html,body{width:100%;min-height:100%;font-family:'DM Sans',sans-serif;font-size:
     <div id="dContent"></div>
   </div>
 </div>
+<!-- DATES SETTINGS MODAL -->
+<div id="settingsOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;padding:20px;overflow-y:auto">
+  <div style="max-width:500px;margin:40px auto;background:#fff;border-radius:var(--radius);padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--maroon)">Advisor Travel Dates</div>
+      <button onclick="closeSettings()" style="background:none;border:none;font-size:20px;color:var(--ink-soft);cursor:pointer">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:18px;line-height:1.5">These dates appear on the risk assessment results page and in client emails. One date range per line.</p>
+    <div style="margin-bottom:16px">
+      <label style="display:block;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--maroon);margin-bottom:8px">&#127481;&#127469; Silvester in Bangkok</label>
+      <textarea id="bangkokDates" rows="5" style="width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--cream);resize:vertical;outline:none;line-height:1.8" placeholder="17 – 24 May&#10;17 – 24 June&#10;11 – 19 July&#10;14 – 23 August"></textarea>
+      <div style="font-size:11px;color:var(--ink-soft);margin-top:4px">One date range per line e.g. 17 – 24 May</div>
+    </div>
+    <div style="margin-bottom:20px">
+      <label style="display:block;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:8px">&#127480;&#127468; Silvester in Singapore</label>
+      <textarea id="singaporeDates" rows="6" style="width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--cream);resize:vertical;outline:none;line-height:1.8" placeholder="1 – 16 May&#10;25 May – 16 June&#10;25 June – 10 July&#10;20 July – 13 Aug&#10;24 Aug onwards"></textarea>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="saveDatesAdvisor()" style="flex:1;padding:13px;background:var(--maroon);color:var(--gold-light);border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer">Save Dates</button>
+      <button onclick="closeSettings()" style="padding:13px 18px;background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink-soft);cursor:pointer">Cancel</button>
+    </div>
+    <div id="datesSaveStatus" style="text-align:center;font-size:13px;margin-top:12px;min-height:18px"></div>
+  </div>
+</div>
+
 </div><!-- end appScreen -->
 
 <script>
@@ -498,6 +524,38 @@ function doAdvLogin(){
 document.getElementById('advPw').addEventListener('keydown', function(e){
   if(e.key === 'Enter') doAdvLogin();
 });
+
+// DATES SETTINGS
+function showSettings(){
+  api('getDates',{},function(err,d){
+    if(!err&&d){
+      document.getElementById('bangkokDates').value=(d.bangkok||[]).join('\n');
+      document.getElementById('singaporeDates').value=(d.singapore||[]).join('\n');
+    }
+  });
+  document.getElementById('settingsOverlay').style.display='block';
+  document.getElementById('datesSaveStatus').textContent='';
+}
+
+function closeSettings(){
+  document.getElementById('settingsOverlay').style.display='none';
+}
+
+function saveDatesAdvisor(){
+  var bk=document.getElementById('bangkokDates').value.split('\n').map(function(s){return s.trim();}).filter(Boolean);
+  var sg=document.getElementById('singaporeDates').value.split('\n').map(function(s){return s.trim();}).filter(Boolean);
+  var data={bangkok:bk,singapore:sg};
+  var status=document.getElementById('datesSaveStatus');
+  status.textContent='Saving...';status.style.color='var(--ink-soft)';
+  api('saveDates',{data:JSON.stringify(data)},function(err,r){
+    if(!err&&r&&r.success){
+      status.textContent='✓ Saved successfully';status.style.color='var(--success)';
+      setTimeout(function(){closeSettings();},1200);
+    } else {
+      status.textContent='Error saving. Please try again.';status.style.color='var(--error)';
+    }
+  });
+}
 </script>
 </body>
 </html>
